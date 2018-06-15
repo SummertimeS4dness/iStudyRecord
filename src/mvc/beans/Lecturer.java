@@ -1,4 +1,4 @@
-package MVC.beans;
+package mvc.beans;
 
 public class Lecturer {
     private String lecturerLogin;
