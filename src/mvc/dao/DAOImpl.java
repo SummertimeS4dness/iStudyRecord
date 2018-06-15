@@ -1,10 +1,9 @@
-package MVC.dao;
+package mvc.dao;
 
-import MVC.beans.Lesson;
-import MVC.beans.Lecturer;
-import MVC.beans.Mark;
-import MVC.beans.Student;
-import MVC.controllers.Controllers;
+import mvc.beans.Lesson;
+import mvc.beans.Lecturer;
+import mvc.beans.Mark;
+import mvc.beans.Student;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 

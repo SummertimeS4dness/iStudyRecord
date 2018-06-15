@@ -1,10 +1,10 @@
-package MVC.controllers;
+package mvc.controllers;
 
 
-import MVC.beans.Lesson;
-import MVC.beans.Mark;
-import MVC.beans.Student;
-import MVC.dao.DAOImpl;
+import mvc.beans.Lesson;
+import mvc.beans.Mark;
+import mvc.beans.Student;
+import mvc.dao.DAOImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

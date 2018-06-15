@@ -1,4 +1,4 @@
-package MVC.beans;
+package mvc.beans;
 
 public class Mark {
     private int score;

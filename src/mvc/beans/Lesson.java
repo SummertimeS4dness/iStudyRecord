@@ -1,4 +1,4 @@
-package MVC.beans;
+package mvc.beans;
 
 import java.util.Date;
 
