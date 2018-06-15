@@ -1,0 +1,2 @@
+# iStudyRecord
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/6a08957d734e4bea8a52297842139eb8)](https://app.codacy.com/app/SummertimeS4dness/iStudyRecord?utm_source=github.com&utm_medium=referral&utm_content=SummertimeS4dness/iStudyRecord&utm_campaign=badger)
