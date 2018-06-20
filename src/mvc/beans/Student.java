@@ -6,16 +6,16 @@ public class Student {
     private String password;
     private String name;
     private String group;
-    private boolean isStarosta;
+    private int starosta;
 
 
-    public Student(int id, String studentLogin, String password, String name, String group, boolean isStarosta) {
+    public Student(int id, String studentLogin, String password, String name, String group, int starosta) {
         this.id = id;
         this.studentLogin = studentLogin;
         this.password = password;
         this.name = name;
         this.group = group;
-        this.isStarosta = isStarosta;
+        this.starosta = starosta;
     }
 
     public Student() {
@@ -42,8 +42,8 @@ public class Student {
         this.group = group;
     }
 
-    public void setStarosta(boolean starosta) {
-        isStarosta = starosta;
+    public void setStarosta(int starosta) {
+        this.starosta = starosta;
     }
 
     public int getId() {
@@ -66,7 +66,7 @@ public class Student {
         return group;
     }
 
-    public boolean isStarosta() {
-        return isStarosta;
+    public int getStarosta() {
+        return starosta;
     }
 }

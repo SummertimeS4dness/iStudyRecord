@@ -1,5 +1,6 @@
 package mvc.dao;
 
+import mvc.beans.Lecturer;
 import mvc.beans.Mark;
 import mvc.beans.Student;
 
@@ -16,5 +17,8 @@ public interface DAO {
     public void registerStudentForSubject();
     public void registerLecturerForSubject();
 
-
+    public void registerStudent(Student student);
+    public void registerLecturer(Lecturer lecturer);
+    public Student validateStudent(String login, String password);
+    public Lecturer validateLecturer(String login, String password);
 }

@@ -1,7 +1,7 @@
 package mvc.dao;
 
-import mvc.beans.Lesson;
 import mvc.beans.Lecturer;
+import mvc.beans.Lesson;
 import mvc.beans.Mark;
 import mvc.beans.Student;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -73,5 +73,43 @@ public class DAOImpl implements DAO {
     @Override
     public void registerLecturerForSubject() {
 
+    }
+
+    @Override
+    public void registerStudent(Student student) {
+        String sql = "insert into STUDENTS values(?,?,?,?,?)";
+        template.update(sql, student.getStudentLogin(), student.getPassword(), student.getName(),
+                student.getGroup(), student.getStarosta());
+    }
+
+    @Override
+    public void registerLecturer(Lecturer lecturer) {
+
+    }
+
+    @Override
+    public Student validateStudent(String login, String password) {
+        String sql = "select * from STUDENTS where STUDENTLOGIN='" + login + "' and PASSWORD='" + password + "'";
+
+        List<Student> users = template.query(sql, new StudentMapper());
+
+        return users.size() > 0 ? users.get(0) : null;
+    }
+    class StudentMapper implements RowMapper<Student> {
+        public Student mapRow(ResultSet rs, int arg1) throws SQLException {
+            Student user = new Student();
+
+            user.setStudentLogin(rs.getString("studentlogin"));
+            user.setPassword(rs.getString("password"));
+            user.setName(rs.getString("name"));
+            user.setGroup(rs.getString("groupname"));
+            user.setStarosta(rs.getInt("isstarosta"));
+
+            return user;
+        }
+    }
+    @Override
+    public Lecturer validateLecturer(String login, String password) {
+        return null;
     }
 }
