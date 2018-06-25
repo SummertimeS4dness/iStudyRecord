@@ -109,7 +109,7 @@ public class Controllers {
         Student student = null;
         Lecturer lecturer = null;
         this.login = new Login(login.getNickname(), login.getPassword());
-        if (type.equals("student")) {
+        if ("student".equals(type)) {
             student = dao.validateStudent(login.getNickname(), login.getPassword());
             if (student != null) {
                 mav = new ModelAndView("studentPage");
@@ -121,7 +121,7 @@ public class Controllers {
                 mav.addObject("message", "Username or Password is wrong!!");
             }
         }
-        else if (type.equals("lecturer")) {
+        else if ("lecturer".equals(type)) {
             lecturer = dao.validateLecturer(login.getNickname(), login.getPassword());
             if (lecturer != null) {
                 int y = 0;
