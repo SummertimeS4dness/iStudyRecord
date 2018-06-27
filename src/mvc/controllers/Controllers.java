@@ -8,13 +8,18 @@ import mvc.beans.Student;
 import mvc.dao.DAOImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.springframework.http.MediaType;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-@RestController
+@Controller
 public class Controllers {
     @Autowired
     private DAOImpl dao;
@@ -31,8 +36,18 @@ public class Controllers {
         List<Mark> marks = dao.getMarks(login.getNickname());
         return new ModelAndView("studentPage", "list", marks);
     }*/
+    @RequestMapping(value = "/marks", method = RequestMethod.GET, produces = {"application/json"}, headers="Accept=*/*")
+    public @ResponseBody List<Mark>/*String*/ showMarksForStudent(){
+        return dao.getMarks(login.getNickname());
+    }
 
-    @RequestMapping("/viewAll1")
+    @RequestMapping(value = "/test", produces = "application/json")
+    @ResponseBody
+    public String test(){
+        return "test";
+    }
+
+    /*@RequestMapping("/viewAll1")
     public ModelAndView showMarksForGroup(){
         return null;
     }
@@ -63,10 +78,10 @@ public class Controllers {
     }
 
     @RequestMapping("/viewAll1")
-    public void createLesson(){}
+    public void createLesson(){}*/
 
     @RequestMapping(value = "/registerStudent", method = RequestMethod.GET)
-    public ModelAndView registerStuden() {
+    public ModelAndView registerStudent() {
         ModelAndView mav = new ModelAndView("registerStudent");
         mav.addObject("student", new Student());
 
