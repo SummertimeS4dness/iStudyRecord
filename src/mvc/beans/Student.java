@@ -2,20 +2,17 @@ package mvc.beans;
 
 public class Student {
     private int id;
-    private String studentLogin;
+    private String login;
     private String password;
     private String name;
-    private String group;
-    private int starosta;
+    
 
 
-    public Student(int id, String studentLogin, String password, String name, String group, int starosta) {
+    public Student(int id, String login, String password, String name) {
         this.id = id;
-        this.studentLogin = studentLogin;
+        this.login=login;
         this.password = password;
         this.name = name;
-        this.group = group;
-        this.starosta = starosta;
     }
 
     public Student() {
@@ -26,11 +23,15 @@ public class Student {
         this.id = id;
     }
 
-    public void setStudentLogin(String studentLogin) {
-        this.studentLogin = studentLogin;
-    }
+public String getLogin() {
+    return login;
+}
 
-    public void setPassword(String password) {
+public void setLogin(String login) {
+    this.login = login;
+}
+
+public void setPassword(String password) {
         this.password = password;
     }
 
@@ -38,20 +39,8 @@ public class Student {
         this.name = name;
     }
 
-    public void setGroup(String group) {
-        this.group = group;
-    }
-
-    public void setStarosta(int starosta) {
-        this.starosta = starosta;
-    }
-
     public int getId() {
         return id;
-    }
-
-    public String getStudentLogin() {
-        return studentLogin;
     }
 
     public String getPassword() {
@@ -62,11 +51,4 @@ public class Student {
         return name;
     }
 
-    public String getGroup() {
-        return group;
-    }
-
-    public int getStarosta() {
-        return starosta;
-    }
 }

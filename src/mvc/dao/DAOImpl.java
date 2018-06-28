@@ -83,8 +83,8 @@ public class DAOImpl implements DAO {
     @Override
     public void registerStudent(Student student) {
         String sql = "insert into STUDENTS values(?,?,?,?,?)";
-        template.update(sql, student.getStudentLogin(), student.getPassword(), student.getName(),
-                student.getGroup(), student.getStarosta());
+//        template.update(sql, student.getStudentLogin(), student.getPassword(), student.getName(),
+//                student.getGroup(), student.getStarosta());
     }
 
     @Override
@@ -107,11 +107,10 @@ public class DAOImpl implements DAO {
         public Student mapRow(ResultSet rs, int arg1) throws SQLException {
             Student student = new Student();
 
-            student.setStudentLogin(rs.getString("studentlogin"));
+            
             student.setPassword(rs.getString("password"));
             student.setName(rs.getString("name"));
-            student.setGroup(rs.getString("groupname"));
-            student.setStarosta(rs.getInt("isstarosta"));
+           
 
             return student;
         }
