@@ -13,6 +13,7 @@
                     dataType: "json",
                     complete: [
                         function (response) {
+                            $("#personDataTable").find("tr:not(:first)").remove();
                             alert(response.responseText);
                             var trHTML = '';
                             var tr = '';
@@ -31,7 +32,8 @@
         <title>Welcome</title>
     </head>
     <body>
-        <button name="objectType" id="ot" onclick="test()" class="lft2"></button>
+        <button name="objectType" id="ot" onclick="test()" class="lft2">Marks</button>
+        <button name="objectType" id="ot" onclick="test()" class="lft2">Lessons</button>
         <table id="personDataTable" border = "2" align="center">
             <tr>
                 <th>Subject</th>

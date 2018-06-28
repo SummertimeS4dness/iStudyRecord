@@ -9,27 +9,22 @@
 <body>
 	<form:form id="regForm" modelAttribute="student" action="registerStudentProcess" method="post">
 		<table align="center">
-			<tr>
-				<td><form:label path="studentLogin">StudentLogin</form:label></td>
-				<td><form:input path="studentLogin" studentLogin="studentLogin" id="studentLogin" /></td>
-			</tr>
-			<tr>
-				<td><form:label path="password">Password</form:label></td>
-				<td><form:password path="password" name="password" id="password" /></td>
-			</tr>
+            <tr>
+                <td><form:label path="id">ID</form:label></td>
+                <td><form:input path="id" name="id" id="id" /></td>
+            </tr>
 			<tr>
 				<td><form:label path="name">Name</form:label></td>
 				<td><form:input path="name" name="name" id="name" /></td>
 			</tr>
 			<tr>
-				<td><form:label path="group">Group</form:label></td>
-				<td><form:input path="group" name="group" id="group" /></td>
+				<td><form:label path="login">Login</form:label></td>
+				<td><form:input path="login" name="login" id="login" /></td>
 			</tr>
 			<tr>
-				<td><form:label path="starosta">isStarosta(0 - нет, 1 - да)</form:label></td>
-				<td><form:input path="starosta" name="starosta" id="starosta" pattern="[0-1]{1}" title="Введите \"0\" для \"Нет\" или \"1\" для \"Да\""/></td>
+				<td><form:label path="password">Password</form:label></td>
+				<td><form:password path="password" name="password" id="password" /></td>
 			</tr>
-
 			<tr>
 				<td></td>
 				<td><form:button id="registerStudent" name="registerStudent">Register</form:button></td>

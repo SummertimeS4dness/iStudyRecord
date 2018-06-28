@@ -52,7 +52,7 @@ public class DAOImpl implements DAO {
 
     @Override
     public void createLesson() {
-        Lesson lesson = new Lesson();
+
     }
 
     @Override
@@ -90,7 +90,7 @@ public class DAOImpl implements DAO {
     @Override
     public void registerLecturer(Lecturer lecturer) {
         String sql = "insert into LECTURER values(?,?,?,?)";
-        template.update(sql, lecturer.getLecturerID(), lecturer.getLecturerLogin(), lecturer.getPassword(),
+        template.update(sql, lecturer.getId(), lecturer.getLogin(), lecturer.getPassword(),
                 lecturer.getName());
     }
 
@@ -129,8 +129,8 @@ public class DAOImpl implements DAO {
         public Lecturer mapRow(ResultSet rs, int arg1) throws SQLException {
             Lecturer lecturer = new Lecturer();
 
-            lecturer.setLecturerID(rs.getString("lecturer_id"));
-            lecturer.setLecturerLogin(rs.getString("lecturer_login"));
+            lecturer.setId(Integer.parseInt(rs.getString("lecturer_id")));
+            lecturer.setLogin(rs.getString("lecturer_login"));
             lecturer.setPassword(rs.getString("lecturer_password"));
             lecturer.setName(rs.getString("lecturer_name"));
 

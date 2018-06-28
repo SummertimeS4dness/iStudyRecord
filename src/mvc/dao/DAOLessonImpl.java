@@ -46,7 +46,7 @@ public List<Lesson> getLessonForStudent(Student student) {
 @Override
 public List<Lesson> getLessonForLecturer(Lecturer lecturer) {
 	String sql = "SELECT * FROM LESSONS JOIN STUDENT_SUBJECT_LISTS ON" +
-			" (LESSONS.SUBJECT_ID=STUDENT_SUBJECT_LISTS.SUBJECT_ID) WHERE LESSONS.LECTURER_ID="+lecturer.getLecturerID();
+			" (LESSONS.SUBJECT_ID=STUDENT_SUBJECT_LISTS.SUBJECT_ID) WHERE LESSONS.LECTURER_ID="+lecturer.getId();
 	List<Lesson> lessons = template.query(sql,new LessonMapper());
 	return lessons;
 }

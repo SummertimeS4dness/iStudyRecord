@@ -15,7 +15,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.http.MediaType;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -123,7 +122,7 @@ public class Controllers {
         ModelAndView mav = null;
         Student student = null;
         Lecturer lecturer = null;
-        this.login = new Login(login.getNickname(), login.getPassword());
+        this.login = new Login(login.getNickname(), login.getPassword(), type);
         if ("student".equals(type)) {
             student = dao.validateStudent(login.getNickname(), login.getPassword());
             if (student != null) {
