@@ -36,12 +36,12 @@ public class DAOImpl implements DAO {
 
     class MarkMapper implements RowMapper<Mark> {
         public Mark mapRow(ResultSet rs, int arg1) throws SQLException {
-            Mark mark = new Mark();
+            //Mark mark = new Mark();
 
-            mark.setScore(Integer.parseInt(rs.getString("mark_score")));
-            mark.setSubject(rs.getString("mark_subject"));
+          //  mark.setScore(Integer.parseInt(rs.getString("mark_score")));
+            //mark.setSubject(rs.getString("mark_subject"));
 
-            return mark;
+            return null;
         }
     }
 

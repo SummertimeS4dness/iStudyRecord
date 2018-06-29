@@ -1,8 +1,10 @@
-package mvc.dao;
+package mvc.dao.DAOImplementation;
 
 import mvc.beans.Lecturer;
 import mvc.beans.Lesson;
 import mvc.beans.Student;
+import mvc.beans.Subject;
+import mvc.dao.DAOInterfaces.DAOLesson;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
@@ -50,6 +52,15 @@ public List<Lesson> getLessonForLecturer(Lecturer lecturer) {
 	List<Lesson> lessons = template.query(sql,new LessonMapper());
 	return lessons;
 }
+
+@Override
+public List<Lesson> getLessonForSubject(Subject subject) {
+	String sql = "SELECT * FROM LESSONS JOIN STUDENT_SUBJECT_LISTS ON" +
+			" (LESSONS.SUBJECT_ID=STUDENT_SUBJECT_LISTS.SUBJECT_ID) WHERE LESSONS.SUBJECT_ID="+subject.getId();
+	List<Lesson> lessons = template.query(sql,new LessonMapper());
+	return lessons;
+}
+
 class LessonMapper implements RowMapper<Lesson> {
 	public Lesson mapRow(ResultSet rs, int arg1) throws SQLException {
 		int lessonId = rs.getInt("lesson_id");

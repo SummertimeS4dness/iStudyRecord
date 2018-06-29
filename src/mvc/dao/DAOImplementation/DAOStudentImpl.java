@@ -1,17 +1,18 @@
-package mvc.dao;
+package mvc.dao.DAOImplementation;
 
 import mvc.beans.Login;
 import mvc.beans.Object;
 import mvc.beans.Student;
 import mvc.beans.Subject;
+import mvc.dao.DAOInterfaces.DAOStudent;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-
+import mvc.dao.DAOImplementation.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-public class DAOStudentImpl implements DAOStudent{
+public class DAOStudentImpl implements DAOStudent {
 private JdbcTemplate template;
 
 public void setTemplate(JdbcTemplate template) {
@@ -46,7 +47,7 @@ public List<Student> getStudents() {
 
 @Override
 public Student validateStudent(Login login) {
-	String studentValidate= "DELETE FROM STUDENT_INFO WHERE STUDENT_LOGIN = ? AND STUDENT_PASSWORD=&";
+	String studentValidate= "SELECT * FROM STUDENT_INFO WHERE STUDENT_LOGIN = ? AND STUDENT_PASSWORD=?";
 	Student student = template.query(studentValidate,new StudentMapper()).get(0);
 	return student;
 }

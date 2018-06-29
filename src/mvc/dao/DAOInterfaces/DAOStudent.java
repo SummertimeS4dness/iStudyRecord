@@ -1,4 +1,4 @@
-package mvc.dao;
+package mvc.dao.DAOInterfaces;
 
 import mvc.beans.Login;
 import mvc.beans.Object;
