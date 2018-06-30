@@ -25,6 +25,9 @@
                     <label  class="radio-inline">
                         <input  type="radio" name="radioName"  id="lecturer" value="lecturer"/>Lecturer
                     </label>
+					<label  class="radio-inline">
+						<input  type="radio" name="radioName"  id="admin" value="admin"/>Admin
+					</label>
                 </td>
             <tr>
 			<tr>

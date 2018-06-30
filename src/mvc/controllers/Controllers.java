@@ -6,15 +6,18 @@ import mvc.beans.Login;
 import mvc.beans.Mark;
 import mvc.beans.Student;
 import mvc.dao.DAOImpl;
+import mvc.dao.DAOInterfaces.DAOStudent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.http.MediaType;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +25,9 @@ import java.util.List;
 public class Controllers {
     @Autowired
     private DAOImpl dao;
-
+    
+    @Autowired
+    private DAOStudent daoStudent;
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
@@ -45,7 +50,12 @@ public class Controllers {
     public String test(){
         return "test";
     }
-
+    
+    @RequestMapping(value = "/students", method = RequestMethod.GET, produces = {"application/json"}, headers="Accept=*/*")
+    @ResponseBody
+    public List<Student> showStudents(){
+        return daoStudent.getStudents();
+    }
     /*@RequestMapping("/viewAll1")
     public ModelAndView showMarksForGroup(){
         return null;
@@ -146,7 +156,17 @@ public class Controllers {
                 mav.addObject("message", "Username or Password is wrong!!");
             }
         }
-
+        else if(type.equals("admin")){
+            if(login.getPassword().equals("admin")&& login.getNickname().equals("admin")){
+                mav= new ModelAndView("adminPage");
+            }
+        }
         return mav;
     }
+@RequestMapping(value="/testAdmin", method = RequestMethod.POST,consumes = "application/json")
+public ModelAndView testAdmin(@RequestBody Student student) {
+    System.out.println(student.getName()+" "+student.getId()+" "+student.getLogin()+" "+student.getPassword());
+    return new ModelAndView("showString", "student", student.getName());
+    //return new ModelAndView("login");
+}
 }

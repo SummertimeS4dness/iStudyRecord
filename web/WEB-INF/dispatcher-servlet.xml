@@ -29,6 +29,8 @@
     <bean id = "dao" class = "mvc.dao.DAOImpl">
         <property name = "template" ref = "jdbcTemplate"/>
     </bean>
-
+    <bean id = "daoStudent" class = "mvc.dao.DAOImplementation.DAOStudentImpl">
+        <property name = "template" ref = "jdbcTemplate"/>
+    </bean>
 
 </beans>
