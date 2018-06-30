@@ -6,12 +6,14 @@ public class Login {
     private String password;
     private String status;
 
-    public Login() { super();}
+    public Login() {
+        super();
+    }
 
     public Login(String nickname, String password, String status) {
-      this.nickname = nickname;
-      this.password = password;
-      this.status = status;
+        this.nickname = nickname;
+        this.password = password;
+        this.status = status;
     }
 
     public String getNickname() {
@@ -19,15 +21,15 @@ public class Login {
     }
 
     public void setNickname(String nickname) {
-    this.nickname = nickname;
+        this.nickname = nickname;
     }
 
     public String getPassword() {
-    return password;
+        return password;
     }
 
     public void setPassword(String password) {
-    this.password = password;
+        this.password = password;
     }
 
     public String getStatus() {

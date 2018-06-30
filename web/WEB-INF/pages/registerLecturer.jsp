@@ -10,10 +10,6 @@
 	<form:form id="regForm" modelAttribute="lecturer" action="registerLecturerProcess" method="post">
 		<table align="center">
             <tr>
-                <td><form:label path="id">ID</form:label></td>
-                <td><form:input path="id" name="id" id="id" /></td>
-            </tr>
-            <tr>
                 <td><form:label path="login">Login</form:label></td>
                 <td><form:input path="login" name="login" id="login" /></td>
             </tr>

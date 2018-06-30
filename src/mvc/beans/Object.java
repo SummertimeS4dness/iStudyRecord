@@ -1,47 +1,57 @@
 package mvc.beans;
 
 public class Object {
-	private int id;
-	private String desctiption;
-	private String type;
-	private int parantId;
+    private int id;
+    private String description;
+    private String type;
+    private int parentId;
 
-public Object(int id, String desctiption, String type, int parantId) {
-	this.id = id;
-	this.desctiption = desctiption;
-	this.type = type;
-	this.parantId = parantId;
-}
+    public Object() {
+        super();
+    }
 
-public int getId() {
-	return id;
-}
+    public Object(int id, String description, String type, int parentId) {
+        this.id = id;
+        this.description = description;
+        this.type = type;
+        this.parentId = parentId;
+    }
 
-public void setId(int id) {
-	this.id = id;
-}
+    public Object(String description, String type, int parentId) {
+        this.description = description;
+        this.type = type;
+        this.parentId = parentId;
+    }
 
-public String getDesctiption() {
-	return desctiption;
-}
+    public int getId() {
+        return id;
+    }
 
-public void setDesctiption(String desctiption) {
-	this.desctiption = desctiption;
-}
+    public void setId(int id) {
+        this.id = id;
+    }
 
-public String getType() {
-	return type;
-}
+    public String getDescription() {
+        return description;
+    }
 
-public void setType(String type) {
-	this.type = type;
-}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-public int getParentId() {
-	return parantId;
-}
+    public String getType() {
+        return type;
+    }
 
-public void setParantId(int parantId) {
-	this.parantId = parantId;
-}
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public int getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(int parentId) {
+        this.parentId = parentId;
+    }
 }

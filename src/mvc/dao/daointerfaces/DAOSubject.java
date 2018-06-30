@@ -1,4 +1,4 @@
-package mvc.dao.DAOInterfaces;
+package mvc.dao.daointerfaces;
 
 import mvc.beans.Lecturer;
 import mvc.beans.Student;

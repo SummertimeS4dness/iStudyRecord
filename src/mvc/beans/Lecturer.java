@@ -68,6 +68,7 @@ public class Lecturer {
         this.works = works;
         this.interests = interests;
     }
+
     public Lecturer(String login, String password, String name, String info, String degree, String works, String interests) {
         this.login = login;
         this.password = password;
@@ -77,7 +78,10 @@ public class Lecturer {
         this.works = works;
         this.interests = interests;
     }
-    public Lecturer() { super();}
+
+    public Lecturer() {
+        super();
+    }
 
     public void setId(int id) {
         this.id = id;

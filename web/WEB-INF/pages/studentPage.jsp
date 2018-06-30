@@ -16,7 +16,6 @@
                             $("#personDataTable").find("tr:not(:first)").remove();
                             alert(response.responseText);
                             var trHTML = '';
-                            var tr = '';
                             var obj = $.parseJSON(response.responseText);
                             alert(obj.length);
                             for (var i = 0; i < obj.length; i++) {
@@ -32,8 +31,8 @@
         <title>Welcome</title>
     </head>
     <body>
-        <button name="objectType" id="ot" onclick="test()" class="lft2">Marks</button>
-        <button name="objectType" id="ot" onclick="test()" class="lft2">Lessons</button>
+        <button name="objectType" id="marks" onclick="test()" class="lft2">Marks</button>
+        <button name="objectType" id="lessons" onclick="test()" class="lft2">Lessons</button>
         <table id="personDataTable" border = "2" align="center">
             <tr>
                 <th>Subject</th>

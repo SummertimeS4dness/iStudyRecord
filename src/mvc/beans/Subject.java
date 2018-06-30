@@ -1,58 +1,60 @@
 package mvc.beans;
 
 public class Subject {
-	private int id;
-	private String shortName;
-	private String fullName;
-	private String info;
-	private int lecturerId;
+    private int id;
+    private String shortName;
+    private String fullName;
+    private String info;
+    private int lecturerId;
 
-public Subject(int id, String shortName, String fullName, String info, int lecturerId) {
-	this.id = id;
-	this.shortName = shortName;
-	this.fullName = fullName;
-	this.info = info;
-	this.lecturerId = lecturerId;
-}
-public Subject(){}
+    public Subject(int id, String shortName, String fullName, String info, int lecturerId) {
+        this.id = id;
+        this.shortName = shortName;
+        this.fullName = fullName;
+        this.info = info;
+        this.lecturerId = lecturerId;
+    }
 
-public int getId() {
-	return id;
-}
+    public Subject() {
+    }
 
-public void setId(int id) {
-	this.id = id;
-}
+    public int getId() {
+        return id;
+    }
 
-public String getShortName() {
-	return shortName;
-}
+    public void setId(int id) {
+        this.id = id;
+    }
 
-public void setShortName(String shortName) {
-	this.shortName = shortName;
-}
+    public String getShortName() {
+        return shortName;
+    }
 
-public String getFullName() {
-	return fullName;
-}
+    public void setShortName(String shortName) {
+        this.shortName = shortName;
+    }
 
-public void setFullName(String fullName) {
-	this.fullName = fullName;
-}
+    public String getFullName() {
+        return fullName;
+    }
 
-public String getInfo() {
-	return info;
-}
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
 
-public void setInfo(String info) {
-	this.info = info;
-}
+    public String getInfo() {
+        return info;
+    }
 
-public int getLecturerId() {
-	return lecturerId;
-}
+    public void setInfo(String info) {
+        this.info = info;
+    }
 
-public void setLecturerId(int lecturerId) {
-	this.lecturerId = lecturerId;
-}
+    public int getLecturerId() {
+        return lecturerId;
+    }
+
+    public void setLecturerId(int lecturerId) {
+        this.lecturerId = lecturerId;
+    }
 }

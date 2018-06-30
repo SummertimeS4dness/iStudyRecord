@@ -1,7 +1,6 @@
 package mvc.dao;
 
 import mvc.beans.Lecturer;
-import mvc.beans.Lesson;
 import mvc.beans.Mark;
 import mvc.beans.Student;
 import org.springframework.jdbc.core.JdbcTemplate;

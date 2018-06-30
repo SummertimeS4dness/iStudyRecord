@@ -4,20 +4,17 @@ package mvc.controllers;
 import mvc.beans.Lecturer;
 import mvc.beans.Login;
 import mvc.beans.Mark;
+import mvc.beans.Object;
 import mvc.beans.Student;
 import mvc.dao.DAOImpl;
-import mvc.dao.DAOInterfaces.DAOStudent;
+import mvc.dao.daointerfaces.DAOLecturer;
+import mvc.dao.daointerfaces.DAOStudent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.springframework.http.MediaType;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,14 +22,18 @@ import java.util.List;
 public class Controllers {
     @Autowired
     private DAOImpl dao;
-    
+
     @Autowired
     private DAOStudent daoStudent;
+
+    @Autowired
+    private DAOLecturer daoLecturer;
+
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    private ArrayList <Student> studentList = new ArrayList<>();
-    private ArrayList <Mark> markList = new ArrayList<>();
+    private ArrayList<Student> studentList = new ArrayList<>();
+    private ArrayList<Mark> markList = new ArrayList<>();
     private Login login;
 
     /*@RequestMapping("/studentPage")
@@ -40,20 +41,21 @@ public class Controllers {
         List<Mark> marks = dao.getMarks(login.getNickname());
         return new ModelAndView("studentPage", "list", marks);
     }*/
-    @RequestMapping(value = "/marks", method = RequestMethod.GET, produces = {"application/json"}, headers="Accept=*/*")
-    public @ResponseBody List<Mark>/*String*/ showMarksForStudent(){
+    @RequestMapping(value = "/marks", method = RequestMethod.GET, produces = {"application/json"}, headers = "Accept=*/*")
+    public @ResponseBody
+    List<Mark>/*String*/ showMarksForStudent() {
         return dao.getMarks(login.getNickname());
     }
 
     @RequestMapping(value = "/test", produces = "application/json")
     @ResponseBody
-    public String test(){
+    public String test() {
         return "test";
     }
-    
-    @RequestMapping(value = "/students", method = RequestMethod.GET, produces = {"application/json"}, headers="Accept=*/*")
+
+    @RequestMapping(value = "/students", method = RequestMethod.GET, produces = {"application/json"}, headers = "Accept=*/*")
     @ResponseBody
-    public List<Student> showStudents(){
+    public List<Student> showStudents() {
         return daoStudent.getStudents();
     }
     /*@RequestMapping("/viewAll1")
@@ -99,7 +101,8 @@ public class Controllers {
 
     @RequestMapping(value = "/registerStudentProcess", method = RequestMethod.POST)
     public ModelAndView registerStudentProcess(@ModelAttribute("student") Student student) {
-        dao.registerStudent(student);
+        Object object = new Object("student", "student", 4);
+        daoStudent.createStudent(student, object);
 
         return new ModelAndView("welcome", "firstname", student.getName());
     }
@@ -114,7 +117,7 @@ public class Controllers {
 
     @RequestMapping(value = "/registerLecturerProcess", method = RequestMethod.POST)
     public ModelAndView registerLecturerProcess(@ModelAttribute("lecturer") Lecturer lecturer) {
-        dao.registerLecturer(lecturer);
+        daoLecturer.createLecturer(lecturer);
 
         return new ModelAndView("welcome", "firstname", lecturer.getName());
     }
@@ -144,29 +147,27 @@ public class Controllers {
                 mav = new ModelAndView("login");
                 mav.addObject("message", "Username or Password is wrong!!");
             }
-        }
-        else if ("lecturer".equals(type)) {
+        } else if ("lecturer".equals(type)) {
             lecturer = dao.validateLecturer(login.getNickname(), login.getPassword());
             if (lecturer != null) {
-                int y = 0;
                 mav = new ModelAndView("welcome");
                 mav.addObject("firstname", lecturer.getName());
             } else {
                 mav = new ModelAndView("login");
                 mav.addObject("message", "Username or Password is wrong!!");
             }
-        }
-        else if(type.equals("admin")){
-            if(login.getPassword().equals("admin")&& login.getNickname().equals("admin")){
-                mav= new ModelAndView("adminPage");
+        } else if ("admin".equals(type)) {
+            if (login.getPassword().equals("admin") && login.getNickname().equals("admin")) {
+                mav = new ModelAndView("adminPage");
             }
         }
         return mav;
     }
-@RequestMapping(value="/testAdmin", method = RequestMethod.POST,consumes = "application/json")
-public ModelAndView testAdmin(@RequestBody Student student) {
-    System.out.println(student.getName()+" "+student.getId()+" "+student.getLogin()+" "+student.getPassword());
-    return new ModelAndView("showString", "student", student.getName());
-    //return new ModelAndView("login");
-}
+
+    @RequestMapping(value = "/testAdmin", method = RequestMethod.POST, consumes = "application/json")
+    public ModelAndView testAdmin(@RequestBody Student student) {
+        System.out.println(student.getName() + " " + student.getId() + " " + student.getLogin() + " " + student.getPassword());
+        return new ModelAndView("showString", "student", student.getName());
+        //return new ModelAndView("login");
+    }
 }
