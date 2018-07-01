@@ -40,6 +40,8 @@ public class Mark {
     private int subjectId;
     private int studentId;
     private int lecturerId;
+    private String subjectName;
+    private String date;
 
     public Mark() {super();}
 
@@ -50,6 +52,17 @@ public class Mark {
         this.subjectId = subjectId;
         this.studentId = studentId;
         this.lecturerId = lecturerId;
+    }
+
+    public Mark(int id, int lessonId, int score, int subjectId, int studentId, int lecturerId, String subjectName, String date) {
+        this.id = id;
+        this.lessonId = lessonId;
+        this.score = score;
+        this.subjectId = subjectId;
+        this.studentId = studentId;
+        this.lecturerId = lecturerId;
+        this.subjectName = subjectName;
+        this.date = date;
     }
 
     public Mark(int score, int subjectId) {
@@ -103,5 +116,21 @@ public class Mark {
 
     public void setLecturerId(int lecturerId) {
         this.lecturerId = lecturerId;
+    }
+    public void setSubjectName(String subjectName) {
+        this.subjectName = subjectName;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getSubjectName() {
+
+        return subjectName;
+    }
+
+    public String getDate() {
+        return date;
     }
 }

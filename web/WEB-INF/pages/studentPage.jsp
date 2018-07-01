@@ -19,10 +19,31 @@
                             var obj = $.parseJSON(response.responseText);
                             alert(obj.length);
                             for (var i = 0; i < obj.length; i++) {
-                                trHTML += '<tr><td>' + obj[i].subjectId + '</td><td>' + obj[i].score + '</td></tr>';
+                                trHTML += '<tr><td>' + obj[i].subjectName + '</td><td>' + obj[i].score + '</td><td>' + obj[i].date + '</td></tr>';
                                 console.log(trHTML);
                             }
                             $("#marksTable tbody").append(trHTML);
+                        }
+                    ]
+                });
+            }
+            function getSchedule() {
+                $.ajax({
+                    type: "get",
+                    url: 'schedule',
+                    dataType: "json",
+                    complete: [
+                        function (response) {
+                            $("#scheduleTable").find("tr:not(:first)").remove();
+                            alert(response.responseText);
+                            var trHTML = '';
+                            var obj = $.parseJSON(response.responseText);
+                            alert(obj.length);
+                            for (var i = 0; i < obj.length; i++) {
+                                trHTML += '<tr><td>' + obj[i].subject + '</td><td>' + obj[i].lecturer + '</td><td>' + obj[i].date + '</td></tr>';
+                                console.log(trHTML);
+                            }
+                            $("#scheduleTable tbody").append(trHTML);
                         }
                     ]
                 });
@@ -82,16 +103,17 @@
                 <tr>
                     <th>Subject</th>
                     <th>Score</th>
+                    <th>Date</th>
                 </tr>
             </table>
         </div>
-        <button class="accordion">Schedule</button>
+        <button class="accordion" onclick="getSchedule()">Schedule</button>
         <div class="panel">
             <table id="scheduleTable" border = "2" align="center">
                 <tr>
                     <th>Subject</th>
                     <th>Lecturer</th>
-                    <th>Time</th>
+                    <th>Date</th>
                 </tr>
             </table>
         </div>

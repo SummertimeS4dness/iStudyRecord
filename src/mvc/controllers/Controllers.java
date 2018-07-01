@@ -2,13 +2,11 @@ package mvc.controllers;
 
 
 import com.sun.deploy.net.HttpResponse;
-import mvc.beans.Lecturer;
-import mvc.beans.Login;
-import mvc.beans.Mark;
+import mvc.beans.*;
 import mvc.beans.Object;
-import mvc.beans.Student;
 import mvc.dao.DAOImpl;
 import mvc.dao.daointerfaces.DAOLecturer;
+import mvc.dao.daointerfaces.DAOLesson;
 import mvc.dao.daointerfaces.DAOMark;
 import mvc.dao.daointerfaces.DAOStudent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,11 +34,13 @@ public class Controllers {
     private DAOMark daoMark;
 
     @Autowired
+    private DAOLesson daoLesson;
+
+    @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    private ArrayList<Student> studentList = new ArrayList<>();
-    private ArrayList<Mark> markList = new ArrayList<>();
     private Login login;
+    private int ID;
 
     /*@RequestMapping("/studentPage")
     public ModelAndView showMarksForStudent(){
@@ -50,18 +50,13 @@ public class Controllers {
     @RequestMapping(value = "/marks", method = RequestMethod.GET, produces = {"application/json"}, headers = "Accept=*/*")
     @ResponseBody
     public List<Mark> showMarksForStudent() {
-        //return daoMark.getMarksForStudent(new Student(login.getNickname(), login.getPassword()));
-        List<Mark> list = new ArrayList<>();
-        list.add(new Mark(1, 1));
-        list.add(new Mark(2, 2));
-        list.add(new Mark(3, 3));
-        return list;
+        return daoMark.getMarksForStudent(new Student(ID, login.getNickname(), login.getPassword()));
     }
 
-    @RequestMapping(value = "/test", produces = "application/json")
+    @RequestMapping(value = "/schedule", method = RequestMethod.GET, produces = {"application/json"}, headers = "Accept=*/*")
     @ResponseBody
-    public String test() {
-        return "test";
+    public List<Lesson> showScheduleForStudent() {
+        return daoLesson.getLessonForStudent(new Student(ID, login.getNickname(), login.getPassword()));
     }
 
     @RequestMapping(value = "/students", method = RequestMethod.GET, produces = {"application/json"}, headers = "Accept=*/*")
@@ -149,6 +144,7 @@ public class Controllers {
         this.login = new Login(login.getNickname(), login.getPassword(), type);
         if ("student".equals(type)) {
             student = daoStudent.validateStudent(login);
+            ID = student.getId();
             if (student != null) {
                 mav = new ModelAndView("studentPage");
                 //List<Mark> marks = dao.getMarks(login.getNickname());
@@ -160,6 +156,7 @@ public class Controllers {
             }
         } else if ("lecturer".equals(type)) {
             lecturer = dao.validateLecturer(login.getNickname(), login.getPassword());
+            ID = lecturer.getId();
             if (lecturer != null) {
                 mav = new ModelAndView("welcome");
                 mav.addObject("firstname", lecturer.getName());

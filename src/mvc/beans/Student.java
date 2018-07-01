@@ -15,13 +15,8 @@ public class Student {
         this.name = name;
     }
 
-    public Student(String login, String password, String name) {
-        this.login = login;
-        this.password = password;
-        this.name = name;
-    }
-
-    public Student(String login, String password) {
+    public Student(int id, String login, String password) {
+        this.id = id;
         this.login = login;
         this.password = password;
     }

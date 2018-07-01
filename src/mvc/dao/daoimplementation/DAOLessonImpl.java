@@ -41,8 +41,10 @@ public class DAOLessonImpl implements DAOLesson {
     @Override
     public List<Lesson> getLessonForStudent(Student student) {
         String sql = "SELECT * FROM LESSONS JOIN STUDENT_SUBJECT_LISTS ON" +
-                " (LESSONS.SUBJECT_ID=STUDENT_SUBJECT_LISTS.SUBJECT_ID) WHERE STUDENT_ID=" + student.getId();
-        List<Lesson> lessons = template.query(sql, new LessonMapper());
+                " (LESSONS.SUBJECT_ID=STUDENT_SUBJECT_LISTS.SUBJECT_ID) JOIN SUBJECTS ON (STUDENT_SUBJECT_LISTS.SUBJECT_ID=SUBJECTS.SUBJECT_ID)" +
+                " JOIN LECTURERS ON (SUBJECTS.LECTURER_ID=LECTURERS.LECTURER_ID) WHERE STUDENT_ID=" + student.getId();
+        List<Lesson> lessons = template.query(sql, new LessonMapper1());
+        System.out.println(lessons.get(0).getSubject());
         return lessons;
     }
 
@@ -72,4 +74,17 @@ public class DAOLessonImpl implements DAOLesson {
             return lesson;
         }
     }
+    class LessonMapper1 implements RowMapper<Lesson> {
+        public Lesson mapRow(ResultSet rs, int arg1) throws SQLException {
+            int lessonId = rs.getInt("lesson_id");
+            String lessonDate = rs.getString("lesson_date");
+            int subjectId = rs.getInt("subject_id");
+            int lecturerId = rs.getInt("lecturer_id");
+            String subject = rs.getString("subject_full_name");
+            String lecturer = rs.getString("lecturer_name");
+            Lesson lesson = new Lesson(lessonDate, subjectId, lecturerId, lessonId, subject, lecturer);
+            return lesson;
+        }
+    }
+
 }

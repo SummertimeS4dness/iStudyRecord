@@ -7,12 +7,23 @@ public class Lesson {
     private int subjectId;
     private int lecturerId;
     private int lessonId;
+    private String subject;
+    private String lecturer;
 
     public Lesson(String date, int subjectId, int lecturerId, int lessonId) {
         this.date = date;
         this.subjectId = subjectId;
         this.lecturerId = lecturerId;
         this.lessonId = lessonId;
+    }
+
+    public Lesson(String date, int subjectId, int lecturerId, int lessonId, String subject, String lecturer) {
+        this.date = date;
+        this.subjectId = subjectId;
+        this.lecturerId = lecturerId;
+        this.lessonId = lessonId;
+        this.subject = subject;
+        this.lecturer = lecturer;
     }
 
     public String getDate() {
@@ -45,5 +56,22 @@ public class Lesson {
 
     public void setLessonId(int lessonId) {
         this.lessonId = lessonId;
+    }
+
+    public String getLecturer() {
+        return lecturer;
+    }
+
+    public void setSubject(String subject) {
+
+        this.subject = subject;
+    }
+
+    public void setLecturer(String lecturer) {
+        this.lecturer = lecturer;
+    }
+
+    public String getSubject() {
+        return subject;
     }
 }
