@@ -41,6 +41,8 @@ public class Mark {
     private int studentId;
     private int lecturerId;
 
+    public Mark() {super();}
+
     public Mark(int id, int lessonId, int score, int subjectId, int studentId, int lecturerId) {
         this.id = id;
         this.lessonId = lessonId;
@@ -48,6 +50,11 @@ public class Mark {
         this.subjectId = subjectId;
         this.studentId = studentId;
         this.lecturerId = lecturerId;
+    }
+
+    public Mark(int score, int subjectId) {
+        this.score = score;
+        this.subjectId = subjectId;
     }
 
     public int getId() {

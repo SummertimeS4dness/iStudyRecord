@@ -13,32 +13,87 @@
                     dataType: "json",
                     complete: [
                         function (response) {
-                            $("#personDataTable").find("tr:not(:first)").remove();
+                            $("#marksTable").find("tr:not(:first)").remove();
                             alert(response.responseText);
                             var trHTML = '';
                             var obj = $.parseJSON(response.responseText);
                             alert(obj.length);
                             for (var i = 0; i < obj.length; i++) {
-                                trHTML += '<tr><td>' + obj[i].subject + '</td><td>' + obj[i].score + '</td></tr>';
+                                trHTML += '<tr><td>' + obj[i].subjectId + '</td><td>' + obj[i].score + '</td></tr>';
                                 console.log(trHTML);
                             }
-                            $("#personDataTable tbody").append(trHTML);
+                            $("#marksTable tbody").append(trHTML);
                         }
                     ]
                 });
             }
+            $(document).ready(function () {
+                var acc = document.getElementsByClassName("accordion");
+                var i;
+
+                for (i = 0; i < acc.length; i++) {
+                    acc[i].addEventListener("click", function () {
+                        this.classList.toggle("active");
+                        var panel = this.nextElementSibling;
+                        if (panel.style.display === "block") {
+                            panel.style.display = "none";
+                        } else {
+                            panel.style.display = "block";
+                        }
+                    });
+                }
+            });
+
+            function test() {
+                alert("test");
+            }
         </script>
+        <style>
+            .accordion {
+                background-color: #eee;
+                color: #444;
+                cursor: pointer;
+                padding: 18px;
+                width: 100%;
+                border: none;
+                text-align: left;
+                outline: none;
+                font-size: 15px;
+                transition: 0.4s;
+            }
+
+            .active, .accordion:hover {
+                background-color: #ccc;
+            }
+
+            .panel {
+                padding: 0 18px;
+                display: none;
+                background-color: white;
+                overflow: hidden;
+            }
+        </style>
         <title>Welcome</title>
     </head>
     <body>
-        <button name="objectType" id="marks" onclick="getMarks()" class="lft2">Marks</button>
-        <button name="objectType" id="lessons" onclick="getMarks()" class="lft2">Lessons</button>
-        <table id="personDataTable" border = "2" align="center">
-            <tr>
-                <th>Subject</th>
-                <th>Score</th>
-            </tr>
-        </table>
-        <div id="parameters"> </div>
+        <button class="accordion" onclick="getMarks()">Marks</button>
+        <div class="panel">
+            <table id="marksTable" border = "2" align="center">
+                <tr>
+                    <th>Subject</th>
+                    <th>Score</th>
+                </tr>
+            </table>
+        </div>
+        <button class="accordion">Schedule</button>
+        <div class="panel">
+            <table id="scheduleTable" border = "2" align="center">
+                <tr>
+                    <th>Subject</th>
+                    <th>Lecturer</th>
+                    <th>Time</th>
+                </tr>
+            </table>
+        </div>
     </body>
 </html>

@@ -9,6 +9,7 @@ import mvc.beans.Object;
 import mvc.beans.Student;
 import mvc.dao.DAOImpl;
 import mvc.dao.daointerfaces.DAOLecturer;
+import mvc.dao.daointerfaces.DAOMark;
 import mvc.dao.daointerfaces.DAOStudent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,6 +33,9 @@ public class Controllers {
     private DAOLecturer daoLecturer;
 
     @Autowired
+    private DAOMark daoMark;
+
+    @Autowired
     private JdbcTemplate jdbcTemplate;
 
     private ArrayList<Student> studentList = new ArrayList<>();
@@ -44,9 +48,14 @@ public class Controllers {
         return new ModelAndView("studentPage", "list", marks);
     }*/
     @RequestMapping(value = "/marks", method = RequestMethod.GET, produces = {"application/json"}, headers = "Accept=*/*")
-    public @ResponseBody
-    List<Mark>/*String*/ showMarksForStudent() {
-        return dao.getMarks(login.getNickname());
+    @ResponseBody
+    public List<Mark> showMarksForStudent() {
+        //return daoMark.getMarksForStudent(new Student(login.getNickname(), login.getPassword()));
+        List<Mark> list = new ArrayList<>();
+        list.add(new Mark(1, 1));
+        list.add(new Mark(2, 2));
+        list.add(new Mark(3, 3));
+        return list;
     }
 
     @RequestMapping(value = "/test", produces = "application/json")
@@ -142,9 +151,9 @@ public class Controllers {
             student = daoStudent.validateStudent(login);
             if (student != null) {
                 mav = new ModelAndView("studentPage");
-                List<Mark> marks = dao.getMarks(login.getNickname());
+                //List<Mark> marks = dao.getMarks(login.getNickname());
                 mav.addObject("firstname", student.getName());
-                mav.addObject("list", marks);
+                //mav.addObject("list", marks);
             } else {
                 mav = new ModelAndView("login");
                 mav.addObject("message", "Username or Password is wrong!!");
@@ -178,10 +187,10 @@ public class Controllers {
         System.out.println(student.getName() + " " + student.getId() + " " + student.getLogin() + " " + student.getPassword());
         daoStudent.updateStudent(student);
     }
-@RequestMapping(value = "/deleteStudent",method = RequestMethod.DELETE,consumes = "application/json")
-@ResponseStatus(value = HttpStatus.OK)
-public void deleteStudent(@RequestBody Student student){
-    System.out.println(student.getName() + " " + student.getId() + " " + student.getLogin() + " " + student.getPassword());
-    daoStudent.removeStudent(student);
-}
+    @RequestMapping(value = "/deleteStudent",method = RequestMethod.DELETE,consumes = "application/json")
+    @ResponseStatus(value = HttpStatus.OK)
+    public void deleteStudent(@RequestBody Student student){
+        System.out.println(student.getName() + " " + student.getId() + " " + student.getLogin() + " " + student.getPassword());
+        daoStudent.removeStudent(student);
+    }
 }

@@ -16,9 +16,14 @@ public class Student {
     }
 
     public Student(String login, String password, String name) {
-        this.login=login;
+        this.login = login;
         this.password = password;
         this.name = name;
+    }
+
+    public Student(String login, String password) {
+        this.login = login;
+        this.password = password;
     }
 
     public Student() {
@@ -29,17 +34,17 @@ public class Student {
         this.id = id;
     }
 
-public String getLogin() {
-    return login;
-}
-
-public void setLogin(String login) {
-    this.login = login;
-}
-
-public void setPassword(String password) {
-        this.password = password;
+    public String getLogin() {
+        return login;
     }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public void setPassword(String password) {
+            this.password = password;
+        }
 
     public void setName(String name) {
         this.name = name;
