@@ -42,6 +42,11 @@
             });}else {
                 shown=0;
                 document.getElementById("personDataTable").style.visibility="hidden";
+                document.getElementById("studentPersone").style.visibility="hidden";
+                document.getElementById("studentId").textContent='';
+                document.getElementById("studentName").value='';
+                document.getElementById("studentLogin").value='';
+                document.getElementById("studentPassword").value='';
             }
         }
         function test2(a,ob) {
@@ -81,6 +86,13 @@
             document.getElementById("studentLogin").value=student.login;
             document.getElementById("studentPassword").value=student.password;
         }
+        function onCancelStudent() {
+            document.getElementById("studentPersone").style.visibility="hidden";
+            document.getElementById("studentId").textContent='';
+            document.getElementById("studentName").value='';
+            document.getElementById("studentLogin").value='';
+            document.getElementById("studentPassword").value='';
+        }
         function saveStudentChange() {
             var student= {
                 id: document.getElementById("studentId").textContent,
@@ -96,7 +108,32 @@
                 data: JSON.stringify(student),
                 success: function (response)
                 {
+                    shown=0;
                     test();
+                    document.getElementById("studentPersone").style.visibility="hidden";
+                },
+                error : function(xhr, status, errorThrown) {
+                    alert(status+" "+errorThrown.toString());
+                }
+            });
+        }
+        function removeStudent() {
+            var student= {
+                id: document.getElementById("studentId").textContent,
+                login: document.getElementById("studentLogin").value,
+                password: document.getElementById("studentPassword").value,
+                name: document.getElementById("studentName").value
+            }
+            $.ajax({
+                type: "DELETE",
+                contentType : 'application/json; charset=utf-8',
+                url: "deleteStudent",
+                data: JSON.stringify(student),
+                success: function (response)
+                {
+                    shown=0;
+                    test();
+                    document.getElementById("studentPersone").style.visibility="hidden";
                 },
                 error : function(xhr, status, errorThrown) {
                     alert(status+" "+errorThrown.toString());
@@ -141,7 +178,10 @@
             <td ><input id="studentLogin"/></td>
             <td ><input id="studentPassword"/></td>
         </tr>
-        <td><button id="saveStudentChage" onclick="saveStudentChange()">Save</button> </td>
+        <tr><td><button id="saveStudentChage" onclick="saveStudentChange()">Save</button></td>
+            <td><button id="removeStudent" onclick="removeStudent()">Delete</button> </td>
+            <td><button id="cancelStudent" onclick="onCancelStudent()">Cancel</button></td>
+        </tr>
 
 </table>
         </td>

@@ -178,4 +178,10 @@ public class Controllers {
         System.out.println(student.getName() + " " + student.getId() + " " + student.getLogin() + " " + student.getPassword());
         daoStudent.updateStudent(student);
     }
+@RequestMapping(value = "/deleteStudent",method = RequestMethod.DELETE,consumes = "application/json")
+@ResponseStatus(value = HttpStatus.OK)
+public void deleteStudent(@RequestBody Student student){
+    System.out.println(student.getName() + " " + student.getId() + " " + student.getLogin() + " " + student.getPassword());
+    daoStudent.removeStudent(student);
+}
 }

@@ -44,11 +44,12 @@ public class DAOStudentImpl implements DAOStudent {
 
     @Override
     public void removeStudent(Student student) {
+        //String objectRemove = "DELETE FROM OBJECTS,STUDENT_INFO WHERE OBJECTS.OBJECT_ID=? AND STUDENT_INFO.STUDENT_ID=?";
         String objectRemove = "DELETE FROM OBJECTS WHERE OBJECT_ID = ?";
         template.update(objectRemove, student.getId());
 
-        String studentRemove = "DELETE FROM STUDENT_INFO WHERE STUDENT_ID = ?";
-        template.update(studentRemove, student.getId());
+       // String studentRemove = "DELETE FROM STUDENT_INFO WHERE STUDENT_ID = ?";
+       // template.update(studentRemove, student.getId());
     }
 
     @Override
