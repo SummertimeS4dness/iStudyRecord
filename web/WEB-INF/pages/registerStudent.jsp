@@ -26,10 +26,6 @@
 				<td><form:button id="registerStudent" name="registerStudent">Register</form:button></td>
 			</tr>
 			<tr></tr>
-			<tr>
-				<td></td>
-				<td><a href="">Home</a></td>
-			</tr>
 		</table>
 	</form:form>
 </body>

@@ -6,7 +6,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
         <script type="text/javascript">
-            function test() {
+            function getMarks() {
                 $.ajax({
                     type: "get",
                     url: 'marks',
@@ -31,8 +31,8 @@
         <title>Welcome</title>
     </head>
     <body>
-        <button name="objectType" id="marks" onclick="test()" class="lft2">Marks</button>
-        <button name="objectType" id="lessons" onclick="test()" class="lft2">Lessons</button>
+        <button name="objectType" id="marks" onclick="getMarks()" class="lft2">Marks</button>
+        <button name="objectType" id="lessons" onclick="getMarks()" class="lft2">Lessons</button>
         <table id="personDataTable" border = "2" align="center">
             <tr>
                 <th>Subject</th>

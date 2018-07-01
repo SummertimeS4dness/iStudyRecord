@@ -43,10 +43,6 @@
 				<td><form:button id="registerLecturer" name="registerLecturer">Register</form:button></td>
 			</tr>
 			<tr></tr>
-			<tr>
-				<td></td>
-				<td><a href="">Home</a></td>
-			</tr>
 		</table>
 	</form:form>
 </body>
