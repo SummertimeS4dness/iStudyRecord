@@ -1,6 +1,7 @@
 package mvc.controllers;
 
 
+import com.sun.deploy.net.HttpResponse;
 import mvc.beans.Lecturer;
 import mvc.beans.Login;
 import mvc.beans.Mark;
@@ -10,6 +11,7 @@ import mvc.dao.DAOImpl;
 import mvc.dao.daointerfaces.DAOLecturer;
 import mvc.dao.daointerfaces.DAOStudent;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -101,7 +103,7 @@ public class Controllers {
 
     @RequestMapping(value = "/registerStudentProcess", method = RequestMethod.POST)
     public ModelAndView registerStudentProcess(@ModelAttribute("student") Student student) {
-        Object object = new Object("student", "student", 4);
+        Object object = new Object("student", "student", 0);
         daoStudent.createStudent(student, object);
 
         return new ModelAndView("welcome", "firstname", student.getName());
@@ -137,7 +139,7 @@ public class Controllers {
         Lecturer lecturer = null;
         this.login = new Login(login.getNickname(), login.getPassword(), type);
         if ("student".equals(type)) {
-            student = dao.validateStudent(login.getNickname(), login.getPassword());
+            student = daoStudent.validateStudent(login);
             if (student != null) {
                 mav = new ModelAndView("studentPage");
                 List<Mark> marks = dao.getMarks(login.getNickname());
@@ -169,5 +171,11 @@ public class Controllers {
         System.out.println(student.getName() + " " + student.getId() + " " + student.getLogin() + " " + student.getPassword());
         return new ModelAndView("showString", "student", student.getName());
         //return new ModelAndView("login");
+    }
+    @RequestMapping(value = "/updateStudent",method = RequestMethod.POST,consumes = "application/json")
+    @ResponseStatus(value = HttpStatus.OK)
+    public void updateStudent(@RequestBody Student student){
+        System.out.println(student.getName() + " " + student.getId() + " " + student.getLogin() + " " + student.getPassword());
+        daoStudent.updateStudent(student);
     }
 }

@@ -14,4 +14,5 @@ public interface DAOStudent {
 	public Student validateStudent(Login login);
 	public void registerStudentForSubject(Student student,Subject subject);
 	public List<Student> getStudentsOnSubject(Subject subject);
+	public void updateStudent(Student student);
 }

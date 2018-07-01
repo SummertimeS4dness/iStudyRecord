@@ -21,11 +21,24 @@ public class DAOStudentImpl implements DAOStudent {
 
     @Override
     public void createStudent(Student student, Object object) {
-        String objectInsert = "insert into OBJECTS values(OBJECT_SEQUENCE.nextval,?,?,?)";
+        String selectID="(SELECT OBJECT_SEQUENCE.nextval FROM DUAL)";
+        int id = template.query(selectID, new RowMapper<Integer>() {
+            @Override
+            public Integer mapRow(ResultSet resultSet, int i) throws SQLException {
+                return resultSet.getInt(1);
+            }
+        }).get(0);
+        String objectInsert = "insert into OBJECTS values(?,?,?,?)";
+        int parentId=object.getParentId();
+        if(parentId==0)
+        template.update(objectInsert,id,object.getDescription(),object.getType(), null);
+        else
         template.update(objectInsert,object.getDescription(),object.getType(), object.getParentId());
-
-        String studentInsert = "insert into STUDENT_INFO values(OBJECT_SEQUENCE.currval,?,?,?)";
-        template.update(studentInsert, student.getName(), student.getLogin(), student.getPassword());
+       // String studentInsert = "insert into STUDENT_INFO values(OBJECT_SEQUENCE.nextval-1,?,?,?)";
+       
+        System.out.println(id);
+        String studentInsert = "insert into STUDENT_INFO values(?,?,?,?)";
+        template.update(studentInsert,id, student.getName(), student.getLogin(), student.getPassword());
     }
 
 
@@ -48,7 +61,7 @@ public class DAOStudentImpl implements DAOStudent {
     @Override
     public Student validateStudent(Login login) {
         String studentValidate = "SELECT * FROM STUDENT_INFO WHERE STUDENT_LOGIN = ? AND STUDENT_PASSWORD=?";
-        Student student = template.query(studentValidate, new StudentMapper()).get(0);
+        Student student = template.query(studentValidate, new StudentMapper(),login.getNickname(),login.getPassword()).get(0);
         return student;
     }
 
@@ -66,7 +79,13 @@ public class DAOStudentImpl implements DAOStudent {
         return users;
     }
 
-    class StudentMapper implements RowMapper<Student> {
+@Override
+public void updateStudent(Student student) {
+    String sql = "UPDATE STUDENT_INFO SET STUDENT_NAME=?, STUDENT_LOGIN=?,STUDENT_PASSWORD=? WHERE STUDENT_ID=?";
+    template.update(sql,student.getName(),student.getLogin(),student.getPassword(),student.getId());
+}
+
+class StudentMapper implements RowMapper<Student> {
         public Student mapRow(ResultSet rs, int arg1) throws SQLException {
             Student student = new Student();
             student.setId(rs.getInt("student_id"));
