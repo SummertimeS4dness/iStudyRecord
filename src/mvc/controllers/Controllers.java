@@ -123,7 +123,7 @@ public class Controllers {
 
     @RequestMapping(value = "/registerLecturerProcess", method = RequestMethod.POST)
     public ModelAndView registerLecturerProcess(@ModelAttribute("lecturer") Lecturer lecturer) {
-        daoLecturer.createLecturer(lecturer);
+        daoLecturer.createLecturer(lecturer, new Object(0,"lecturer","lecturer",0));
 
         return new ModelAndView("welcome", "firstname", lecturer.getName());
     }
@@ -155,7 +155,7 @@ public class Controllers {
                 mav.addObject("message", "Username or Password is wrong!!");
             }
         } else if ("lecturer".equals(type)) {
-            lecturer = dao.validateLecturer(login.getNickname(), login.getPassword());
+            lecturer = daoLecturer.validateLecturer(login);
             ID = lecturer.getId();
             if (lecturer != null) {
                 mav = new ModelAndView("welcome");

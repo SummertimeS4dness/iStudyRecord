@@ -198,7 +198,9 @@
     <body>
         <div id="result"></div>
         <h1>Hello admin</h1>
-        <button name="objectType" id="ot" class="aclass" onclick="test()">All students</button>
+        <button class="accordion" onclick="test()">Show all students</button>
+        <div class="panel">
+        <%--<button name="objectType" id="ot" class="aclass" onclick="test()">All students</button>--%>
         <table>
             <tr>
                 <td>
@@ -242,6 +244,7 @@
                 </td>
             </tr>
         </table>
+        </div>
         <div id="parameters"></div>
         <button class="accordion">Register student</button>
         <div class="panel">

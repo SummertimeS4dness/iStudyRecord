@@ -1,6 +1,7 @@
 package mvc.dao.daoimplementation;
 
 import mvc.beans.*;
+import mvc.beans.Object;
 import mvc.dao.daointerfaces.DAOLecturer;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -17,10 +18,24 @@ public void setTemplate(JdbcTemplate template) {
 }
 
 @Override
-public void createLecturer(Lecturer lecturer) {
-	String sql = "INSERT INTO LECTURERS VALUES (LECTURER_SEQUENCE.nextval,?,?,?,?,?,?,?)";
-	template.update(sql, lecturer.getLogin(), lecturer.getPassword(), lecturer.getName()
+public void createLecturer(Lecturer lecturer, Object object) {
+	String selectID="(SELECT OBJECT_SEQUENCE.nextval FROM DUAL)";
+	int id = template.query(selectID, new RowMapper<Integer>() {
+		@Override
+		public Integer mapRow(ResultSet resultSet, int i) throws SQLException {
+			return resultSet.getInt(1);
+		}
+	}).get(0);
+	String objectInsert = "insert into OBJECTS values(?,?,?,?)";
+	int parentId=object.getParentId();
+	if(parentId==0)
+		template.update(objectInsert,id,object.getDescription(),object.getType(), null);
+	else
+		template.update(objectInsert,object.getDescription(),object.getType(), object.getParentId());
+	String sql = "INSERT INTO LECTURERS VALUES (?,?,?,?,?,?,?,?)";
+	template.update(sql,id, lecturer.getLogin(), lecturer.getPassword(), lecturer.getName()
 			, lecturer.getInfo(), lecturer.getDegree(), lecturer.getWorks(), lecturer.getInterests());
+	
 	
 }
 
@@ -82,5 +97,11 @@ class LecturerMapper implements RowMapper<Lecturer> {
 		Lecturer lecturer = new Lecturer(id, login, password, name, info, degree, works, interests);
 		return lecturer;
 	}
+}
+@Override
+public Lecturer validateLecturer(Login login) {
+	String lecturerValidate = "SELECT * FROM LECTURERS WHERE LECTURER_LOGIN = ? AND LECTURER_PASSWORD=?";
+	Lecturer lecturer = template.query(lecturerValidate, new LecturerMapper(),login.getNickname(),login.getPassword()).get(0);
+	return lecturer;
 }
 }
