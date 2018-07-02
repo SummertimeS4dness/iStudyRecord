@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -190,4 +191,14 @@ public class Controllers {
         System.out.println(student.getName() + " " + student.getId() + " " + student.getLogin() + " " + student.getPassword());
         daoStudent.removeStudent(student);
     }
+@RequestMapping(value = "/createStudent",method = RequestMethod.POST)
+public String newAccountForm(ModelMap map){
+   Student student = new Student(); //Would recommend using spring container to create objects
+   Object object= new Object();
+    
+    map.addAttribute("student",student);
+    map.addAttribute("object",object);
+    System.out.println(student.getName());
+    return "form";
+}
 }

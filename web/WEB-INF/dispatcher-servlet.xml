@@ -37,4 +37,12 @@
         <property name = "template" ref = "jdbcTemplate"/>
     </bean>
 
+    <bean id = "daoMark" class = "mvc.dao.daoimplementation.DAOMarkImpl">
+        <property name = "template" ref = "jdbcTemplate"/>
+    </bean>
+
+    <bean id = "daoLesson" class = "mvc.dao.daoimplementation.DAOLessonImpl">
+        <property name = "template" ref = "jdbcTemplate"/>
+    </bean>
+
 </beans>
