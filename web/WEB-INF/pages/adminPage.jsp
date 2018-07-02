@@ -271,33 +271,42 @@
             <c:set var="student" value="${student}" scope="request"/>
             <jsp:useBean id="object" class="mvc.beans.Object"/>
             <c:set var="object" value="${object}" scope="request"/>
-            <form action="registerStudentProcess" method="post">
+            <form  id ="registerStudent" method="post" >
                 <spring:bind path="student.login">
+                    <label>Login</label>
                     <input type="text" name="${status.expression}" value="${status.value}"><br />
                 </spring:bind>
                 <spring:bind path="student.password">
+                    <label>Password</label>
                     <input type="password" name="${status.expression}" value="${status.value}"><br />
                 </spring:bind>
                 <spring:bind path="student.name">
+                    <label>Name</label>
                     <input type="text" name="${status.expression}" value="${status.value}"><br />
                 </spring:bind>
                 <spring:bind path="student.id">
+                    <label>Id</label>
                     <input type="text" name="${status.expression}" value="${status.value}"><br />
                 </spring:bind>
                 <spring:bind path="object.id">
+                    <label>oId</label>
                     <input type="text" name="${status.expression}" value="${status.value}"><br />
                 </spring:bind>
                 <spring:bind path="object.description">
+                    <%--//<label>oDescription</label>--%>
                     <input type="text" name="${status.expression}" value="${status.value}"><br />
                 </spring:bind>
                 <spring:bind path="object.type">
+                    <label>oType</label>
                     <input type="text" name="${status.expression}" value="${status.value}"><br />
                 </spring:bind>
                 <spring:bind path="object.parentId">
-                    <input type="text" name="${status.expression}" value="${status.value}"><br />
+                    <label>oParentId</label>
+                    <input type="text" name="${status.expression}" value="0"><br />
                 </spring:bind>
-                <input type="submit" value="Create"/>
+                <input type="submit" value="Create">
             </form>
+
         </div>
         <button class="accordion">Register lecturer</button>
         <div class="panel">
