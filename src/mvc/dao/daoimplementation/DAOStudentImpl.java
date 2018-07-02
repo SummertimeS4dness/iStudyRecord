@@ -33,10 +33,7 @@ public class DAOStudentImpl implements DAOStudent {
         if(parentId==0)
         template.update(objectInsert,id,object.getDescription(),object.getType(), null);
         else
-        template.update(objectInsert,object.getDescription(),object.getType(), object.getParentId());
-       // String studentInsert = "insert into STUDENT_INFO values(OBJECT_SEQUENCE.nextval-1,?,?,?)";
-       
-        System.out.println(id);
+        template.update(objectInsert,id,object.getDescription(),object.getType(), object.getParentId());
         String studentInsert = "insert into STUDENT_INFO values(?,?,?,?)";
         template.update(studentInsert,id, student.getName(), student.getLogin(), student.getPassword());
     }

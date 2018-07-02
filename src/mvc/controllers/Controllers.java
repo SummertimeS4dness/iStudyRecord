@@ -169,12 +169,15 @@ public class Controllers {
             }
         } else if ("admin".equals(type)) {
             if (login.getPassword().equals("admin") && login.getNickname().equals("admin")) {
-                mav = new ModelAndView("adminPage");
+                mav = new ModelAndView("redirect:/adminPage");
             }
         }
         return mav;
     }
-
+@RequestMapping(value = "/adminPage", method = RequestMethod.GET)
+public String destination() {
+    return "adminPage";
+}
     @RequestMapping(value = "/testAdmin", method = RequestMethod.POST, consumes = "application/json")
     public ModelAndView testAdmin(@RequestBody Student student) {
         System.out.println(student.getName() + " " + student.getId() + " " + student.getLogin() + " " + student.getPassword());
@@ -193,14 +196,14 @@ public class Controllers {
         System.out.println(student.getName() + " " + student.getId() + " " + student.getLogin() + " " + student.getPassword());
         daoStudent.removeStudent(student);
     }
-    @RequestMapping(value = "/createStudent",method = RequestMethod.POST)
-    public String newAccountForm(ModelMap map){
-        Student student = new Student(); //Would recommend using spring container to create objects
-        Object object= new Object();
-
-        map.addAttribute("student",student);
-        map.addAttribute("object",object);
-        System.out.println(student.getName());
-        return "form";
+    
+    @RequestMapping(value = "/adminPage",method = RequestMethod.POST)
+    public ModelAndView newAccountForm(@ModelAttribute("student") Student student,   @ModelAttribute("object") Object object){
+        object.setDescription(student.getName());
+        object.setType("student");
+        System.out.println(object.getId()+" "+object.getParentId()+" "+object.getDescription()+" "+object.getType());
+        //daoStudent.createStudent(student,object);
+        return new ModelAndView("adminPage");
     }
+
 }

@@ -17,11 +17,11 @@ public class Object {
         this.parentId = parentId;
     }
 
-    public Object(String description, String type, int parentId) {
-        this.description = description;
-        this.type = type;
-        this.parentId = parentId;
-    }
+//    public Object(String description, String type, int parentId) {
+//        this.description = description;
+//        this.type = type;
+//        this.parentId = parentId;
+//    }
 
     public int getId() {
         return id;
