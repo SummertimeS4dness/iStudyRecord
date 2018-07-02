@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -107,8 +108,9 @@ public class Controllers {
     }
 
     @RequestMapping(value = "/registerStudentProcess", method = RequestMethod.POST)
-    public ModelAndView registerStudentProcess(@ModelAttribute("student") Student student) {
-        Object object = new Object("student", "student", 0);
+    public ModelAndView registerStudentProcess(@ModelAttribute("student") Student student, BindingResult resultStudent,  @ModelAttribute("object") Object object,
+                                               BindingResult resultLecturer) {
+        //Object object = new Object("student", "student", 0);
         daoStudent.createStudent(student, object);
 
         return new ModelAndView("welcome", "firstname", student.getName());
@@ -191,14 +193,14 @@ public class Controllers {
         System.out.println(student.getName() + " " + student.getId() + " " + student.getLogin() + " " + student.getPassword());
         daoStudent.removeStudent(student);
     }
-@RequestMapping(value = "/createStudent",method = RequestMethod.POST)
-public String newAccountForm(ModelMap map){
-   Student student = new Student(); //Would recommend using spring container to create objects
-   Object object= new Object();
-    
-    map.addAttribute("student",student);
-    map.addAttribute("object",object);
-    System.out.println(student.getName());
-    return "form";
-}
+    @RequestMapping(value = "/createStudent",method = RequestMethod.POST)
+    public String newAccountForm(ModelMap map){
+        Student student = new Student(); //Would recommend using spring container to create objects
+        Object object= new Object();
+
+        map.addAttribute("student",student);
+        map.addAttribute("object",object);
+        System.out.println(student.getName());
+        return "form";
+    }
 }

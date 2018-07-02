@@ -9,6 +9,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="mvc.beans.Student" %>
 <%@ page import="mvc.beans.Lecturer" %>
+<%@ page import="mvc.beans.Object" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@taglib  uri="http://www.springframework.org/tags" prefix="spring"%>
 <html>
@@ -266,33 +267,37 @@
             <%--</jsp:include>--%>
         <%--</div>--%>
         <div class="panel">
-        <form action="createStudent" method="post">
-        <spring:bind path="student.login">
-        <input type="text" name="${status.expression}" value="${status.value}"><br />
-        </spring:bind>
-        <spring:bind path="student.password">
-        <input type="password" name="${status.expression}" value="${status.value}"><br />
-        </spring:bind>
-            <spring:bind path="student.name">
-                <input type="text" name="${status.expression}" value="${status.value}"><br />
-            </spring:bind>
-            <spring:bind path="student.id">
-                <input type="text" name="${status.expression}" value="${status.value}"><br />
-            </spring:bind>
-            <spring:bind path="object.id">
-                <input type="text" name="${status.expression}" value="${status.value}"><br />
-            </spring:bind>
-            <spring:bind path="object.description">
-                <input type="text" name="${status.expression}" value="${status.value}"><br />
-            </spring:bind>
-            <spring:bind path="object.type">
-                <input type="text" name="${status.expression}" value="${status.value}"><br />
-            </spring:bind>
-            <spring:bind path="object.parentId">
-                <input type="text" name="${status.expression}" value="${status.value}"><br />
-            </spring:bind>
-        <input type="submit" value="Create"/>
-        </form>
+            <jsp:useBean id="student" class="mvc.beans.Student"/>
+            <c:set var="student" value="${student}" scope="request"/>
+            <jsp:useBean id="object" class="mvc.beans.Object"/>
+            <c:set var="object" value="${object}" scope="request"/>
+            <form action="registerStudentProcess" method="post">
+                <spring:bind path="student.login">
+                    <input type="text" name="${status.expression}" value="${status.value}"><br />
+                </spring:bind>
+                <spring:bind path="student.password">
+                    <input type="password" name="${status.expression}" value="${status.value}"><br />
+                </spring:bind>
+                <spring:bind path="student.name">
+                    <input type="text" name="${status.expression}" value="${status.value}"><br />
+                </spring:bind>
+                <spring:bind path="student.id">
+                    <input type="text" name="${status.expression}" value="${status.value}"><br />
+                </spring:bind>
+                <spring:bind path="object.id">
+                    <input type="text" name="${status.expression}" value="${status.value}"><br />
+                </spring:bind>
+                <spring:bind path="object.description">
+                    <input type="text" name="${status.expression}" value="${status.value}"><br />
+                </spring:bind>
+                <spring:bind path="object.type">
+                    <input type="text" name="${status.expression}" value="${status.value}"><br />
+                </spring:bind>
+                <spring:bind path="object.parentId">
+                    <input type="text" name="${status.expression}" value="${status.value}"><br />
+                </spring:bind>
+                <input type="submit" value="Create"/>
+            </form>
         </div>
         <button class="accordion">Register lecturer</button>
         <div class="panel">
