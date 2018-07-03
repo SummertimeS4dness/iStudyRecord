@@ -1,7 +1,5 @@
 package mvc.controllers;
 
-
-import com.sun.deploy.net.HttpResponse;
 import mvc.beans.*;
 import mvc.beans.Object;
 import mvc.dao.DAOImpl;
@@ -10,13 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -92,6 +88,12 @@ public List<Lecturer> showLecturers() {
     @ResponseBody
     public List<Object> showCathedras() {
         return daoObject.getCathedras();
+    }
+
+    @RequestMapping(value = "/getLecturerBySubject", method = RequestMethod.POST, produces = {"application/json"}, consumes = {"application/json"}, headers = "Accept=*/*")
+    @ResponseBody
+    public Lecturer showLecturerBySubject(@RequestBody Subject subject) {
+        return daoLecturer.getLecturerForSubject(subject);
     }
 
     /*@RequestMapping("/viewAll1")

@@ -15,6 +15,10 @@ public class Subject {
         this.lecturerId = lecturerId;
     }
 
+    public Subject(int id) {
+        this.id = id;
+    }
+
     public Subject() {
     }
 
