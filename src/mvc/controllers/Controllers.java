@@ -5,10 +5,7 @@ import com.sun.deploy.net.HttpResponse;
 import mvc.beans.*;
 import mvc.beans.Object;
 import mvc.dao.DAOImpl;
-import mvc.dao.daointerfaces.DAOLecturer;
-import mvc.dao.daointerfaces.DAOLesson;
-import mvc.dao.daointerfaces.DAOMark;
-import mvc.dao.daointerfaces.DAOStudent;
+import mvc.dao.daointerfaces.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -39,6 +36,9 @@ public class Controllers {
     private DAOLesson daoLesson;
 
     @Autowired
+    private DAOObject daoObject;
+    
+    @Autowired
     private JdbcTemplate jdbcTemplate;
 
     private Login login;
@@ -66,6 +66,17 @@ public class Controllers {
     public List<Student> showStudents() {
         return daoStudent.getStudents();
     }
+    @RequestMapping(value = "/getGroups", method = RequestMethod.GET, produces = {"application/json"}, headers = "Accept=*/*")
+    @ResponseBody
+    public List<Object> showGroups() {
+        return daoObject.getGrops();
+    }
+    @RequestMapping(value = "/getCathedras", method = RequestMethod.GET, produces = {"application/json"}, headers = "Accept=*/*")
+    @ResponseBody
+    public List<Object> showCathedras() {
+        return daoObject.getCathedras();
+    }
+
     /*@RequestMapping("/viewAll1")
     public ModelAndView showMarksForGroup(){
         return null;
@@ -197,13 +208,21 @@ public String destination() {
         daoStudent.removeStudent(student);
     }
     
-    @RequestMapping(value = "/adminPage",method = RequestMethod.POST)
+    @RequestMapping(value = "/adminPage",method = RequestMethod.POST, params = "st")
     public ModelAndView newAccountForm(@ModelAttribute("student") Student student,   @ModelAttribute("object") Object object){
+        System.out.println("STUDENT_____________________");
         object.setDescription(student.getName());
         object.setType("student");
-        System.out.println(object.getId()+" "+object.getParentId()+" "+object.getDescription()+" "+object.getType());
         //daoStudent.createStudent(student,object);
         return new ModelAndView("adminPage");
     }
-
+@RequestMapping(value = "/adminPage",method = RequestMethod.POST)
+public ModelAndView newAccountForm(@ModelAttribute("lecturer") Lecturer lecturer,   @ModelAttribute("object1") Object object){
+    System.out.println("LECTURER_____________________");
+    object.setDescription(lecturer.getName());
+    object.setType("lecturer");
+    //daoLecturer.createLecturer(lecturer,object);
+  //  daoStudent.createStudent(student,object);
+    return new ModelAndView("adminPage");
+}
 }

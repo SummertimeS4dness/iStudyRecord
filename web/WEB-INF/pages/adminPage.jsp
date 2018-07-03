@@ -161,11 +161,13 @@
             }
 
             $(document).ready(function () {
+
                 var acc = document.getElementsByClassName("accordion");
                 var i;
 
                 for (i = 0; i < acc.length; i++) {
                     acc[i].addEventListener("click", function () {
+                        list();
                         this.classList.toggle("active");
                         var panel = this.nextElementSibling;
                         if (panel.style.display === "block") {
@@ -176,6 +178,46 @@
                     });
                 }
             });
+            function list()
+            {
+                var groups;
+                $.ajax({
+                    type: "GET",
+                    url: 'getGroups',
+                    dataType: "json",
+                    complete: [function (response) {
+                        groups = $.parseJSON(response.responseText);
+                        var ddl = $("#selectGroup");
+                        ddl.find('option').remove()
+                        for (k = 0; k < groups.length; k++)
+                            ddl.append("<option value='" + groups[k].id + "'>" + groups[k].description + "</option>");
+
+//                $("#selectGroup").html("");
+//                $(array_list).each(function (i) { //populate child options
+//                    $("#selectGroup").append("<option value=\""+array_list[i].id+"\">"+array_list[i].description+"</option>");
+                        }
+                    ]
+                });
+                var cathedras;
+                $.ajax({
+                    type: "GET",
+                    url: 'getCathedras',
+                    dataType: "json",
+                    complete: [function (response) {
+                        cathedras = $.parseJSON(response.responseText);
+                        var ddl = $("#selectCathedra");
+                        ddl.find('option').remove()
+                        for (k = 0; k < cathedras.length; k++)
+                            ddl.append("<option value='" + cathedras[k].id + "'>" + cathedras[k].description + "</option>");
+
+//                $("#selectGroup").html("");
+//                $(array_list).each(function (i) { //populate child options
+//                    $("#selectGroup").append("<option value=\""+array_list[i].id+"\">"+array_list[i].description+"</option>");
+                    }
+                    ]
+                });
+
+            }
         </script>
         <script>
 
@@ -258,63 +300,67 @@
         </table>
         </div>
         <div id="parameters"></div>
+
+        <button class="accordion">Register lecturer</button>
+        <div class="panel">
+            <jsp:useBean id="lecturer" class="mvc.beans.Lecturer"/>
+            <c:set var="lecturer" value="${lecturer}" scope="request"/>
+            <jsp:useBean id="object1" class="mvc.beans.Object"/>
+            <c:set var="object1" value="${object1}" scope="request"/>
+            <form  id ="registerLecturer" method="post" action="adminPage" >
+                <spring:bind path="lecturer.login">
+                    <label>Login</label>
+                    <input type="text" name="${status.expression}"><br />
+                </spring:bind>
+                <spring:bind path="lecturer.password">
+                    <label>Password</label>
+                    <input type="password" name="${status.expression}"><br />
+                </spring:bind>
+                <spring:bind path="lecturer.name">
+                    <label>Name</label>
+                    <input type="text" name="${status.expression}"><br />
+                </spring:bind>
+                <spring:bind path="object1.parentId">
+                    <select id="selectCathedra" path="object1.parentId" name="${status.expression}"></select>
+                    <%--<label>oParentId</label>--%>
+                    <%--<input type="text" name="${status.expression}" ><br />--%>
+                </spring:bind>
+                <input type="submit" value="Create">
+            </form>
+        </div>
         <button class="accordion">Register student</button>
         <%--<div class="panel">--%>
-            <%--<jsp:useBean id="student" class="mvc.beans.Student"/>--%>
-            <%--<c:set var="student" value="${student}" scope="request"/>--%>
-            <%--<jsp:include page="registerStudent.jsp">--%>
-                <%--<jsp:param name="student" value="student"/>--%>
-            <%--</jsp:include>--%>
+        <%--<jsp:useBean id="student" class="mvc.beans.Student"/>--%>
+        <%--<c:set var="student" value="${student}" scope="request"/>--%>
+        <%--<jsp:include page="registerStudent.jsp">--%>
+        <%--<jsp:param name="student" value="student"/>--%>
+        <%--</jsp:include>--%>
         <%--</div>--%>
         <div class="panel">
             <jsp:useBean id="student" class="mvc.beans.Student"/>
             <c:set var="student" value="${student}" scope="request"/>
             <jsp:useBean id="object" class="mvc.beans.Object"/>
             <c:set var="object" value="${object}" scope="request"/>
-            <form  id ="registerStudent" method="post" >
+            <form  id ="registerStudent" method="post">
                 <spring:bind path="student.login">
                     <label>Login</label>
-                    <input type="text" name="${status.expression}" value="${status.value}"><br />
+                    <input type="text" name="${status.expression}"><br />
                 </spring:bind>
                 <spring:bind path="student.password">
                     <label>Password</label>
-                    <input type="password" name="${status.expression}" value="${status.value}"><br />
+                    <input type="password" name="${status.expression}"><br />
                 </spring:bind>
                 <spring:bind path="student.name">
                     <label>Name</label>
-                    <input type="text" name="${status.expression}" value="${status.value}"><br />
-                </spring:bind>
-                <spring:bind path="student.id">
-                    <label>Id</label>
-                    <input type="text" name="${status.expression}" value="${status.value}"><br />
-                </spring:bind>
-                <spring:bind path="object.id">
-                    <label>oId</label>
-                    <input type="text" name="${status.expression}" value="${status.value}"><br />
-                </spring:bind>
-                <spring:bind path="object.description">
-                    <%--//<label>oDescription</label>--%>
-                    <input type="text" name="${status.expression}" value="${status.value}"><br />
-                </spring:bind>
-                <spring:bind path="object.type">
-                    <label>oType</label>
-                    <input type="text" name="${status.expression}" value="${status.value}"><br />
+                    <input type="text" name="${status.expression}"><br />
                 </spring:bind>
                 <spring:bind path="object.parentId">
-                    <label>oParentId</label>
-                    <input type="text" name="${status.expression}" value="0"><br />
+                    <select id="selectGroup" path="object.parentId" name="${status.expression}"></select>
+                    <%--<label>oParentId</label>--%>
+                    <%--<input type="text" name="${status.expression}" ><br />--%>
                 </spring:bind>
                 <input type="submit" value="Create">
             </form>
-
-        </div>
-        <button class="accordion">Register lecturer</button>
-        <div class="panel">
-            <jsp:useBean id="lecturer" class="mvc.beans.Lecturer"/>
-            <c:set var="lecturer" value="${lecturer}" scope="request"/>
-            <jsp:include page="registerLecturer.jsp">
-                <jsp:param name="lecturer" value="lecturer"/>
-            </jsp:include>
         </div>
     </body>
 </html>
