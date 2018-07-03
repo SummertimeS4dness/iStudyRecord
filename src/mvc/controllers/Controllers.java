@@ -208,21 +208,22 @@ public String destination() {
         daoStudent.removeStudent(student);
     }
     
-    @RequestMapping(value = "/adminPage",method = RequestMethod.POST, params = "st")
-    public ModelAndView newAccountForm(@ModelAttribute("student") Student student,   @ModelAttribute("object") Object object){
+    @RequestMapping(value = "/addStudent",method = RequestMethod.POST)
+    public ModelAndView newStudentForm(@ModelAttribute("student") Student student,   @ModelAttribute("object") Object object){
         System.out.println("STUDENT_____________________");
         object.setDescription(student.getName());
         object.setType("student");
-        //daoStudent.createStudent(student,object);
+        daoStudent.createStudent(student,object);
         return new ModelAndView("adminPage");
     }
-@RequestMapping(value = "/adminPage",method = RequestMethod.POST)
-public ModelAndView newAccountForm(@ModelAttribute("lecturer") Lecturer lecturer,   @ModelAttribute("object1") Object object){
+@RequestMapping(value = "/addLecturer",method = RequestMethod.POST)
+public ModelAndView newLecturerForm(@ModelAttribute("lecturer") Lecturer lecturer,   @ModelAttribute("object1") Object object){
     System.out.println("LECTURER_____________________");
     object.setDescription(lecturer.getName());
     object.setType("lecturer");
-    //daoLecturer.createLecturer(lecturer,object);
+    daoLecturer.createLecturer(lecturer,object);
   //  daoStudent.createStudent(student,object);
     return new ModelAndView("adminPage");
 }
+
 }
