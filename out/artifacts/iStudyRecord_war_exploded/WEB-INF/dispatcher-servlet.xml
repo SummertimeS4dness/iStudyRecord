@@ -32,7 +32,9 @@
     <bean id = "daoStudent" class = "mvc.dao.daoimplementation.DAOStudentImpl">
         <property name = "template" ref = "jdbcTemplate"/>
     </bean>
-
+    <bean id = "daoObject" class = "mvc.dao.daoimplementation.DAOObjectImpl">
+        <property name = "template" ref = "jdbcTemplate"/>
+    </bean>
     <bean id = "daoLecturer" class = "mvc.dao.daoimplementation.DAOLecturerImpl">
         <property name = "template" ref = "jdbcTemplate"/>
     </bean>
