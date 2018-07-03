@@ -307,7 +307,7 @@
             <c:set var="lecturer" value="${lecturer}" scope="request"/>
             <jsp:useBean id="object1" class="mvc.beans.Object"/>
             <c:set var="object1" value="${object1}" scope="request"/>
-            <form  id ="registerLecturer" method="post" action="adminPage" >
+            <form  id ="registerLecturer" method="post" action="addLecturer" >
                 <spring:bind path="lecturer.login">
                     <label>Login</label>
                     <input type="text" name="${status.expression}"><br />
@@ -341,7 +341,7 @@
             <c:set var="student" value="${student}" scope="request"/>
             <jsp:useBean id="object" class="mvc.beans.Object"/>
             <c:set var="object" value="${object}" scope="request"/>
-            <form  id ="registerStudent" method="post">
+            <form  id ="registerStudent" method="post" action="addStudent">
                 <spring:bind path="student.login">
                     <label>Login</label>
                     <input type="text" name="${status.expression}"><br />

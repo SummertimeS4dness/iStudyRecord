@@ -31,7 +31,7 @@ public void createLecturer(Lecturer lecturer, Object object) {
 	if(parentId==0)
 		template.update(objectInsert,id,object.getDescription(),object.getType(), null);
 	else
-		template.update(objectInsert,object.getDescription(),object.getType(), object.getParentId());
+		template.update(objectInsert,id,object.getDescription(),object.getType(), object.getParentId());
 	String sql = "INSERT INTO LECTURERS VALUES (?,?,?,?,?,?,?,?)";
 	template.update(sql,id, lecturer.getLogin(), lecturer.getPassword(), lecturer.getName()
 			, lecturer.getInfo(), lecturer.getDegree(), lecturer.getWorks(), lecturer.getInterests());
