@@ -40,10 +40,30 @@
                             var obj = $.parseJSON(response.responseText);
                             alert(obj.length);
                             for (var i = 0; i < obj.length; i++) {
-                                trHTML += '<tr><td>' + obj[i].subject + '</td><td>' + obj[i].lecturer + '</td><td>' + obj[i].date + '</td></tr>';
+                                trHTML += '<tr onclick="getLecturerBySubject(' + obj[i].subjectId + ')"><td><label>' + obj[i].subject + '</label></td><td>' + obj[i].lecturer + '</td><td>' + obj[i].date + '</td></tr>';
                                 console.log(trHTML);
                             }
                             $("#scheduleTable tbody").append(trHTML);
+                        }
+                    ]
+                });
+            }
+            function getLecturerBySubject(id) {
+                var subject = {
+                    id: id,
+                }
+                $.ajax({
+                    type: "POST",
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: "json",
+                    url: "getLecturerBySubject",
+                    data: JSON.stringify(subject),
+                    complete: [
+                        function (response) {
+                            alert(response.responseText)
+                            var lecturer = $.parseJSON(response.responseText);
+                            alert("Name: " + lecturer.name + "\nInfo: " + lecturer.info + "\nDegree: " + lecturer.degree
+                                + "\nWorks: " + lecturer.works + "\nInterests: " + lecturer.interest)
                         }
                     ]
                 });
@@ -64,10 +84,6 @@
                     });
                 }
             });
-
-            function test() {
-                alert("test");
-            }
         </script>
         <style>
             .accordion {
