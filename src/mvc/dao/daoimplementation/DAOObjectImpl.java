@@ -16,7 +16,21 @@ public class DAOObjectImpl implements DAOObject {
         this.template = template;
     }
 
-    @Override
+@Override
+public List<Object> getGrops() {
+    String sql = "SELECT * FROM OBJECTS WHERE OBJECT_TYPE='group'";
+    List<Object> objects = template.query(sql, new ObjectMapper());
+    return objects;
+}
+
+@Override
+public List<Object> getCathedras() {
+    String sql = "SELECT * FROM OBJECTS WHERE OBJECT_TYPE='cathedra'";
+    List<Object> objects = template.query(sql, new ObjectMapper());
+    return objects;
+}
+
+@Override
     public void createObject(Object object) {
         String sql = "INSERT INTO OBJECTS VALUES (OBJECT_SEQUENCE.nextval,?,?,?)";
         template.update(sql, object.getId(), object.getDescription(), object.getType(), object.getParentId());
@@ -52,7 +66,7 @@ public class DAOObjectImpl implements DAOObject {
     class ObjectMapper implements RowMapper<Object> {
         public Object mapRow(ResultSet rs, int arg1) throws SQLException {
             int id = rs.getInt("object_id");
-            String description = rs.getString("object_description");
+            String description = rs.getString("object_descriptoin");
             String type = rs.getString("object_type");
             int parentId = rs.getInt("parent_id");
             Object object = new Object(id, description, type, parentId);
