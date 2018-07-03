@@ -14,6 +14,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,6 +67,22 @@ public class Controllers {
     public List<Student> showStudents() {
         return daoStudent.getStudents();
     }
+
+    @RequestMapping(value = "/lecturerObjects", method = RequestMethod.GET, produces = {"application/json"}, headers = "Accept=*/*")
+    @ResponseBody
+    public List<Object> getLcturerOjects() {
+        return daoObject.getLecturers();
+    }
+@RequestMapping(value = "/studentObjects", method = RequestMethod.GET, produces = {"application/json"}, headers = "Accept=*/*")
+@ResponseBody
+public List<Object> getStudentOjects() {
+    return daoObject.getStudents();
+}
+@RequestMapping(value = "/lecturers", method = RequestMethod.GET, produces = {"application/json"}, headers = "Accept=*/*")
+@ResponseBody
+public List<Lecturer> showLecturers() {
+    return daoLecturer.getLecturers();
+}
     @RequestMapping(value = "/getGroups", method = RequestMethod.GET, produces = {"application/json"}, headers = "Accept=*/*")
     @ResponseBody
     public List<Object> showGroups() {
@@ -214,7 +231,8 @@ public String destination() {
         object.setDescription(student.getName());
         object.setType("student");
         daoStudent.createStudent(student,object);
-        return new ModelAndView("adminPage");
+        //return new ModelAndView("adminPage");
+        return new ModelAndView(new RedirectView("adminPage"));
     }
 @RequestMapping(value = "/addLecturer",method = RequestMethod.POST)
 public ModelAndView newLecturerForm(@ModelAttribute("lecturer") Lecturer lecturer,   @ModelAttribute("object1") Object object){
@@ -223,7 +241,8 @@ public ModelAndView newLecturerForm(@ModelAttribute("lecturer") Lecturer lecture
     object.setType("lecturer");
     daoLecturer.createLecturer(lecturer,object);
   //  daoStudent.createStudent(student,object);
-    return new ModelAndView("adminPage");
+   //return new ModelAndView("adminPage");
+    return new ModelAndView(new RedirectView("adminPage"));
 }
 
 }

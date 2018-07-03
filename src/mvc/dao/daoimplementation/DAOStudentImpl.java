@@ -51,14 +51,14 @@ public class DAOStudentImpl implements DAOStudent {
 
     @Override
     public List<Student> getStudents() {
-        String sql = "SELECT * FROM STUDENT_INFO ";
+        String sql = "SELECT * FROM STUDENT_INFO ORDER BY STUDENT_ID";
         List<Student> users = template.query(sql, new StudentMapper());
         return users;
     }
 
     @Override
     public Student validateStudent(Login login) {
-        String studentValidate = "SELECT * FROM STUDENT_INFO WHERE STUDENT_LOGIN = ? AND STUDENT_PASSWORD=?";
+        String studentValidate = "SELECT * FROM STUDENT_INFO WHERE STUDENT_LOGIN = ? AND STUDENT_PASSWORD=? ORDER BY STUDENT_ID";
         Student student = template.query(studentValidate, new StudentMapper(),login.getNickname(),login.getPassword()).get(0);
         return student;
     }

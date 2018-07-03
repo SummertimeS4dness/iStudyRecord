@@ -18,14 +18,25 @@ public class DAOObjectImpl implements DAOObject {
 
 @Override
 public List<Object> getGrops() {
-    String sql = "SELECT * FROM OBJECTS WHERE OBJECT_TYPE='group'";
+    String sql = "SELECT * FROM OBJECTS WHERE OBJECT_TYPE='group' ORDER BY OBJECT_ID";
     List<Object> objects = template.query(sql, new ObjectMapper());
     return objects;
 }
-
+@Override
+public List<Object> getStudents() {
+    String sql = "SELECT * FROM OBJECTS WHERE OBJECT_TYPE='student' ORDER BY OBJECT_ID";
+    List<Object> objects = template.query(sql, new ObjectMapper());
+    return objects;
+}
+@Override
+public List<Object> getLecturers() {
+    String sql = "SELECT * FROM OBJECTS WHERE OBJECT_TYPE='lecturer'ORDER BY OBJECT_ID";
+    List<Object> objects = template.query(sql, new ObjectMapper());
+    return objects;
+}
 @Override
 public List<Object> getCathedras() {
-    String sql = "SELECT * FROM OBJECTS WHERE OBJECT_TYPE='cathedra'";
+    String sql = "SELECT * FROM OBJECTS WHERE OBJECT_TYPE='cathedra'ORDER BY OBJECT_ID";
     List<Object> objects = template.query(sql, new ObjectMapper());
     return objects;
 }
@@ -44,21 +55,21 @@ public List<Object> getCathedras() {
 
     @Override
     public List<Object> getObjects() {
-        String sql = "SELECT * FROM OBJECTS";
+        String sql = "SELECT * FROM OBJECTS ORDER BY OBJECT_ID";
         List<Object> objects = template.query(sql, new ObjectMapper());
         return objects;
     }
 
     @Override
     public Object getParent(Object object) {
-        String sql = "SELECT * FROM OBJECTS WHERE OBJECT_ID=" + object.getParentId();
+        String sql = "SELECT * FROM OBJECTS WHERE OBJECT_ID=" + object.getParentId()+" ORDER BY OBJECT_ID";
         List<Object> objects = template.query(sql, new ObjectMapper());
         return objects.get(0);
     }
 
     @Override
     public List<Object> getChildObjects(Object object) {
-        String sql = "SELECT * FROM OBJECTS WHERE PARENT_ID=" + object.getId();
+        String sql = "SELECT * FROM OBJECTS WHERE PARENT_ID=" + object.getId()+" ORDER BY OBJECT_ID";
         List<Object> objects = template.query(sql, new ObjectMapper());
         return objects;
     }
