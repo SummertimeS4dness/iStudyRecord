@@ -76,8 +76,13 @@ public class Controllers {
     @RequestMapping(value = "/getStudentsForSubject", method = RequestMethod.POST, produces = {"application/json"}, headers = "Accept=*/*")
     @ResponseBody
     public List<Student> showStudentsForSubjects(@RequestBody Subject subject) {
-        System.out.println(daoStudent.getStudentsOnSubject(subject).get(0).getName());
         return daoStudent.getStudentsOnSubject(subject);
+    }
+
+    @RequestMapping(value = "/getLessonsForSubject", method = RequestMethod.POST, produces = {"application/json"}, headers = "Accept=*/*")
+    @ResponseBody
+    public List<Lesson> showLessonsForSubjects(@RequestBody Subject subject) {
+        return daoLesson.getLessonForSubject(subject);
     }
 
     @RequestMapping(value = "/lecturerSchedule", method = RequestMethod.GET, produces = {"application/json"}, headers = "Accept=*/*")
@@ -251,14 +256,14 @@ public class Controllers {
 
     @RequestMapping(value = "/studentPage", method = RequestMethod.GET)
     public ModelAndView destinationStudentPage() {
-        ModelAndView mav =  new ModelAndView("studentPage", "name", login.getNickname());
+        ModelAndView mav = new ModelAndView("studentPage", "name", login.getNickname());
         mav.addObject("studentID", ID);
         return mav;
     }
 
     @RequestMapping(value = "/lecturerPage", method = RequestMethod.GET)
-    public ModelAndView destinationLecturerPage(){
-        ModelAndView mav =  new ModelAndView("lecturerPage", "name", login.getNickname());
+    public ModelAndView destinationLecturerPage() {
+        ModelAndView mav = new ModelAndView("lecturerPage", "name", login.getNickname());
         mav.addObject("lecturerID", ID);
         return mav;
     }
@@ -330,5 +335,12 @@ public class Controllers {
     public void createLesson(@RequestBody Lesson lesson) {
         daoLesson.addLesson(lesson);
     }
+
+    @RequestMapping(value = "/createMark", method = RequestMethod.POST, consumes = "application/json")
+    @ResponseStatus(value = HttpStatus.OK)
+    public void createMark(@RequestBody Mark mark) {
+        daoMark.createMark(mark);
+    }
+
 
 }

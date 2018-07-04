@@ -32,6 +32,7 @@
                 ]
             });
         }
+
         function listLessonSubjects() {
             $.ajax({
                 type: "GET",
@@ -40,7 +41,7 @@
                 complete: [function (response) {
                     var subjects = $.parseJSON(response.responseText);
                     alert(response.responseText)
-                    var ddl = $("#lessonSubject" );
+                    var ddl = $("#lessonSubject");
                     ddl.find('option').remove();
                     for (k = 0; k < subjects.length; k++) {
                         ddl.append("<option value='" + subjects[k].id + "'>" + subjects[k].fullName + "</option>");
@@ -48,11 +49,12 @@
                 }]
             });
         }
+
         function createLesson() {
             var lesson = {
-                date:document.getElementById("lessonDate").value,
+                date: document.getElementById("lessonDate").value,
                 lecturerId:${lecturerID},
-                subjectId:document.getElementById("lessonSubject").options[document.getElementById("lessonSubject").selectedIndex].value
+                subjectId: document.getElementById("lessonSubject").options[document.getElementById("lessonSubject").selectedIndex].value
             }
             alert(JSON.stringify(lesson))
             $.ajax({
@@ -60,23 +62,13 @@
                 contentType: 'application/json; charset=utf-8',
                 url: "createLesson",
                 data: JSON.stringify(lesson),
-                success: function (response) {}
+                success: function (response) {
+                }
             });
         }
+
         function listMarkSubjectAndStudent() {
-            var subject = {
-                id: 1
-            }
             $.ajax({
-                type: "POST",
-                url:'getStudentsForSubject',
-                contentType: 'application/json; charset=utf-8',
-                dataType: 'json',
-                data: JSON.stringify(subject),
-                success: function(response) {
-                    alert(response.responseText)
-                }
-            /*$.ajax({
                 type: "GET",
                 url: 'getSubjectsForLecturer',
                 dataType: "json",
@@ -90,34 +82,66 @@
                     }
                     ddl.append("<option value='" + 56 + "'>" + "hello" + "</option>");
                 }]
-            });*/
-            /*if(document.getElementById("markSubject").options[document.getElementById("markSubject").selectedIndex] != undefined) {
+            });
 
-            }*/
-            /*$('#markSubject').change(function(){
+            $('#markSubject').change(function () {
                 var subject = {
                     id: document.getElementById("markSubject").options[document.getElementById("markSubject").selectedIndex].value
                 }
                 $.ajax({
                     type: "POST",
-                    url:'getStudentsForSubject',
                     contentType: 'application/json; charset=utf-8',
+                    url: 'getStudentsForSubject',
                     data: JSON.stringify(subject),
-                    success: function(response){
-                        alert(response.responseText)*/
-                        /*var students = $.parseJSON(response.responseText);
-                        alert(students[0].name);*/
-                        /*$.each(states, function(i, stt){
-                            $('<option value="'+stt.name+'">'+stt.text+'</option>').appendTo('#states');
-                        });*/
-                   /* }
-                });*/
-                //$('#states').empty();
+                    complete: [
+                        function (response) {
+                            alert(response.responseText)
+                            var students = $.parseJSON(response.responseText);
+                            $.each(students, function (i, st) {
+                                $('<option value="' + st.id + '">' + st.name + '</option>').appendTo('#markStudent');
+                            });
+                        }
+                    ]
+                });
+                $.ajax({
+                    type: "POST",
+                    contentType: 'application/json; charset=utf-8',
+                    url: 'getLessonsForSubject',
+                    data: JSON.stringify(subject),
+                    complete: [
+                        function (response) {
+                            alert(response.responseText)
+                            var lessons = $.parseJSON(response.responseText);
+                            $.each(lessons, function (i, les) {
+                                $('<option value="' + les.lessonId + '">' + les.date + '</option>').appendTo('#markLesson');
+                            });
+                        }
+                    ]
+                });
+                $('#markStudent').empty();
+                $('#markLesson').empty();
             });
         }
-        function createMark() {
 
+        function createMark() {
+            var mark = {
+                lessonId: document.getElementById("markLesson").options[document.getElementById("markLesson").selectedIndex].value,
+                score: document.getElementById("markScore").value,
+                subjectId: document.getElementById("markSubject").options[document.getElementById("markSubject").selectedIndex].value,
+                studentId: document.getElementById("markStudent").options[document.getElementById("markStudent").selectedIndex].value,
+                lecturerId:${lecturerID}
+            }
+            alert(JSON.stringify(mark))
+            $.ajax({
+                type: "POST",
+                contentType: 'application/json; charset=utf-8',
+                url: "createMark",
+                data: JSON.stringify(mark),
+                success: function (response) {
+                }
+            });
         }
+
         $(document).ready(function () {
             var acc = document.getElementsByClassName("accordion");
             var i;
@@ -163,51 +187,59 @@
     <title>Welcome</title>
 </head>
 <body>
-    <h1>Hello, ${name}</h1>
-    <button class="accordion" onclick="getSchedule()">Schedule</button>
-    <div class="panel">
-        <table id="scheduleTable" border = "2" align="center">
-            <tr>
-                <th>Subject</th>
-                <th>Date</th>
-            </tr>
-        </table>
-    </div>
-    <button class="accordion" onclick="listLessonSubjects()">Add lesson</button>
-    <div class="panel">
-        <table>
-            <tr>
-                <td><label>Date</label></td>
-                <td><input type="text" id="lessonDate"></td>
-            </tr>
-            <tr>
-                <td><label>Subject</label></td>
-                <td><select id="lessonSubject"></select></td>
-            </tr>
-            <tr>
-                <td><button onclick="createLesson()">Create</button></td>
-            </tr>
-        </table>
-    </div>
-    <button class="accordion" onclick="listMarkSubjectAndStudent()">Put mark</button>
-    <div class="panel">
-        <table>
-            <tr>
-                <td><label>Subject</label></td>
-                <td><select id="markSubject"></select></td>
-            </tr>
-            <tr>
-                <td><label>Student</label></td>
-                <td><select id="markStudent"></select></td>
-            </tr>
-            <tr>
-                <td><label>Mark</label></td>
-                <td><input type="text" id="markMark"></td>
-            </tr>
-            <tr>
-                <td><button onclick="createMark()">Create</button></td>
-            </tr>
-        </table>
-    </div>
+<h1>Hello, ${name}</h1>
+<button class="accordion" onclick="getSchedule()">Schedule</button>
+<div class="panel">
+    <table id="scheduleTable" border="2" align="center">
+        <tr>
+            <th>Subject</th>
+            <th>Date</th>
+        </tr>
+    </table>
+</div>
+<button class="accordion" onclick="listLessonSubjects()">Add lesson</button>
+<div class="panel">
+    <table>
+        <tr>
+            <td><label>Date</label></td>
+            <td><input type="text" id="lessonDate"></td>
+        </tr>
+        <tr>
+            <td><label>Subject</label></td>
+            <td><select id="lessonSubject"></select></td>
+        </tr>
+        <tr>
+            <td>
+                <button onclick="createLesson()">Create</button>
+            </td>
+        </tr>
+    </table>
+</div>
+<button class="accordion" onclick="listMarkSubjectAndStudent()">Put mark</button>
+<div class="panel">
+    <table>
+        <tr>
+            <td><label>Subject</label></td>
+            <td><select id="markSubject"></select></td>
+        </tr>
+        <tr>
+            <td><label>Lesson</label></td>
+            <td><select id="markLesson"></select></td>
+        </tr>
+        <tr>
+            <td><label>Student</label></td>
+            <td><select id="markStudent"></select></td>
+        </tr>
+        <tr>
+            <td><label>Mark</label></td>
+            <td><input type="text" id="markScore"></td>
+        </tr>
+        <tr>
+            <td>
+                <button onclick="createMark()">Create</button>
+            </td>
+        </tr>
+    </table>
+</div>
 </body>
 </html>

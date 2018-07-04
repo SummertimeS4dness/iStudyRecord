@@ -19,7 +19,7 @@ public class DAOMarkImpl implements DAOMark {
     @Override
     public void createMark(Mark mark) {
         String sql = "INSERT INTO MARKS VALUES (MARK_SEQUENCE.nextval,?,?,?,?,?)";
-        template.update(sql, mark.getId(), mark.getLessonId(), mark.getScore(), mark.getSubjectId(), mark.getStudentId(), mark.getLecturerId());
+        template.update(sql, mark.getLessonId(), mark.getScore(), mark.getSubjectId(), mark.getStudentId(), mark.getLecturerId());
 
 
     }
@@ -86,6 +86,7 @@ public class DAOMarkImpl implements DAOMark {
             return mark;
         }
     }
+
     class MarkMapper1 implements RowMapper<Mark> {
         public Mark mapRow(ResultSet rs, int arg1) throws SQLException {
             int id = rs.getInt("mark_id");
