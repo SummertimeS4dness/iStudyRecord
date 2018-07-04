@@ -70,7 +70,7 @@ public class DAOSubjectImpl implements DAOSubject {
             }).get(0);
             sql="SELECT COUNT(STUDENT_ID) FROM STUDENT_SUBJECT_LISTS WHERE SUBJECT_ID = "+subject.getId()+" GROUP BY SUBJECT_ID";
             List<Integer> am = template.query(sql,new RowMapper<Integer>(){
-    
+
                 @Override
                 public Integer mapRow(ResultSet resultSet, int i) throws SQLException {
                     return resultSet.getInt(1);

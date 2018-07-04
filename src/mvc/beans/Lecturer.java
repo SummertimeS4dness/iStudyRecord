@@ -90,6 +90,12 @@ public void setCathedraId(int cathedraId) {
         this.interests = interests;
     }
 
+    public Lecturer(int id, String login, String password) {
+        this.id = id;
+        this.login = login;
+        this.password = password;
+    }
+
     public Lecturer(String login, String password, String name, String info, String degree, String works, String interests) {
         this.login = login;
         this.password = password;

@@ -10,6 +10,8 @@ public class Lesson {
     private String subject;
     private String lecturer;
 
+    public Lesson() { }
+
     public Lesson(String date, int subjectId, int lecturerId, int lessonId) {
         this.date = date;
         this.subjectId = subjectId;
@@ -24,6 +26,11 @@ public class Lesson {
         this.lessonId = lessonId;
         this.subject = subject;
         this.lecturer = lecturer;
+    }
+
+    public Lesson(String date, String subject) {
+        this.date = date;
+        this.subject = subject;
     }
 
     public String getDate() {

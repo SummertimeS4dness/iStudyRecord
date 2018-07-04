@@ -30,7 +30,7 @@
             function getSchedule() {
                 $.ajax({
                     type: "get",
-                    url: 'schedule',
+                    url: 'studentSchedule',
                     dataType: "json",
                     complete: [
                         function (response) {
@@ -71,7 +71,6 @@
             $(document).ready(function () {
                 var acc = document.getElementsByClassName("accordion");
                 var i;
-
                 for (i = 0; i < acc.length; i++) {
                     acc[i].addEventListener("click", function () {
                         this.classList.toggle("active");
@@ -83,6 +82,17 @@
                         }
                     });
                 }
+                /*$.ajax({
+                    type: "GET",
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: "json",
+                    url: "getName",
+                    complete: [
+                        function (response) {
+                            $("h1").append('Hello, ' + response.responseText)
+                        }
+                    ]
+                });*/
             });
         </script>
         <style>
@@ -113,6 +123,7 @@
         <title>Welcome</title>
     </head>
     <body>
+        <h1>Hello, ${name}</h1>
         <button class="accordion" onclick="getMarks()">Marks</button>
         <div class="panel">
             <table id="marksTable" border = "2" align="center">
