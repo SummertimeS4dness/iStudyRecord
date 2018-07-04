@@ -25,7 +25,6 @@
                         alert(obj.length);
                         for (var i = 0; i < obj.length; i++) {
                             trHTML += '<tr><td><label>' + obj[i].subject + '</label></td><td>' + obj[i].date + '</td></tr>';
-                            console.log(trHTML);
                         }
                         $("#scheduleTable tbody").append(trHTML);
                     }
@@ -40,12 +39,11 @@
                 dataType: "json",
                 complete: [function (response) {
                     var subjects = $.parseJSON(response.responseText);
-                    alert(response.responseText)
-                    var ddl = $("#lessonSubject");
-                    ddl.find('option').remove();
-                    for (k = 0; k < subjects.length; k++) {
-                        ddl.append("<option value='" + subjects[k].id + "'>" + subjects[k].fullName + "</option>");
-                    }
+                    alert(response.responseText);
+                    $("#lessonSubject").find('option').remove();
+                    $.each(subjects, function (i, sub) {
+                        $('<option value="' + sub.id + '">' + sub.fullName + '</option>').appendTo('#lessonSubject');
+                    });
                 }]
             });
         }
@@ -75,12 +73,11 @@
                 complete: [function (response) {
                     var subjects = $.parseJSON(response.responseText);
                     //alert(response.responseText)
-                    var ddl = $("#markSubject");
-                    ddl.find('option').remove();
-                    for (k = 0; k < subjects.length; k++) {
-                        ddl.append("<option value='" + subjects[k].id + "'>" + subjects[k].fullName + "</option>");
-                    }
-                    ddl.append("<option value='" + 56 + "'>" + "hello" + "</option>");
+                    $("#markSubject").find('option').remove();
+                    $.each(subjects, function (i, sub) {
+                        $('<option value="' + sub.id + '">' + sub.fullName + '</option>').appendTo('#markSubject');
+                    });
+                    $('<option value="' + 56 + '">' + "hello" + '</option>').appendTo('#markSubject');
                 }]
             });
 
