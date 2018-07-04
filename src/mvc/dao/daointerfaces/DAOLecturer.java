@@ -14,4 +14,5 @@ public interface DAOLecturer {
 	public List<Lecturer> getLecturersForStudent(Student student);
 	public List<Lecturer> getLecturers();
 	public Lecturer validateLecturer(Login login);
+	public void updateLecturer(Lecturer lecturer);
 }

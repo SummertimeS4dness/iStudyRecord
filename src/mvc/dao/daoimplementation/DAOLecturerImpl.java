@@ -41,7 +41,7 @@ public void createLecturer(Lecturer lecturer, Object object) {
 
 @Override
 public void removeLecturer(Lecturer lecturer) {
-	String sql = "DELETE FROM LECTURERS WHERE LECTURER_ID=?";
+	String sql = "DELETE FROM OBJECTS WHERE OBJECT_ID=?";
 	template.update(sql, lecturer.getId());
 }
 
@@ -84,7 +84,7 @@ public List<Lecturer> getLecturers() {
 	return lecturers;
 }
 
-class LecturerMapper implements RowMapper<Lecturer> {
+ class LecturerMapper implements RowMapper<Lecturer> {
 	public Lecturer mapRow(ResultSet rs, int arg1) throws SQLException {
 		int id = rs.getInt("lecturer_id");
 		String login = rs.getString("lecturer_login");
@@ -95,6 +95,10 @@ class LecturerMapper implements RowMapper<Lecturer> {
 		String works = rs.getString("lecturer_works");
 		String interests = rs.getString("lecturer_interests");
 		Lecturer lecturer = new Lecturer(id, login, password, name, info, degree, works, interests);
+		String sql = "SELECT * FROM OBJECTS WHERE OBJECT_ID=(SELECT PARENT_ID FROM OBJECTS WHERE OBJECT_ID=" + rs.getInt("lecturer_id")+")ORDER BY OBJECT_ID";
+		List<Object> objects = template.query(sql, new DAOObjectImpl.ObjectMapper());
+		lecturer.setCathedra(objects.get(0).getDescription());
+		lecturer.setCathedraId(objects.get(0).getId());
 		return lecturer;
 	}
 }
@@ -103,5 +107,10 @@ public Lecturer validateLecturer(Login login) {
 	String lecturerValidate = "SELECT * FROM LECTURERS WHERE LECTURER_LOGIN = ? AND LECTURER_PASSWORD=?";
 	Lecturer lecturer = template.query(lecturerValidate, new LecturerMapper(),login.getNickname(),login.getPassword()).get(0);
 	return lecturer;
+}
+
+public void updateLecturer(Lecturer lecturer) {
+	String sql = "UPDATE LECTURERS SET LECTURER_LOGIN =?,LECTURER_PASSWORD=?,LECTURER_NAME=?,LECTURER_INFO=?,LECTURER_DEGREE=?,LECTURER_WORKS=?,LECTURER_INTERESTS=? WHERE LECTURER_ID=?";
+	template.update(sql,lecturer.getLogin(),lecturer.getPassword(),lecturer.getName(),lecturer.getInfo(),lecturer.getDegree(),lecturer.getWorks(),lecturer.getInterests(),lecturer.getId());
 }
 }

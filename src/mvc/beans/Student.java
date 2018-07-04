@@ -7,8 +7,26 @@ public class Student {
     private String password;
     private String name;
     
+    private String group;
+    private int groupId;
 
-    public Student(int id, String login, String password, String name) {
+public String getGroup() {
+    return group;
+}
+
+public void setGroup(String group) {
+    this.group = group;
+}
+
+public int getGroupId() {
+    return groupId;
+}
+
+public void setGroupId(int groupId) {
+    this.groupId = groupId;
+}
+
+public Student(int id, String login, String password, String name) {
         this.id = id;
         this.login=login;
         this.password = password;

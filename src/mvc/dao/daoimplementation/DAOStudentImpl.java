@@ -1,9 +1,11 @@
 package mvc.dao.daoimplementation;
 
+import javafx.scene.Group;
 import mvc.beans.Login;
 import mvc.beans.Object;
 import mvc.beans.Student;
 import mvc.beans.Subject;
+import mvc.dao.daointerfaces.DAOObject;
 import mvc.dao.daointerfaces.DAOStudent;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -48,7 +50,7 @@ public class DAOStudentImpl implements DAOStudent {
        // String studentRemove = "DELETE FROM STUDENT_INFO WHERE STUDENT_ID = ?";
        // template.update(studentRemove, student.getId());
     }
-
+    
     @Override
     public List<Student> getStudents() {
         String sql = "SELECT * FROM STUDENT_INFO ORDER BY STUDENT_ID";
@@ -90,6 +92,10 @@ class StudentMapper implements RowMapper<Student> {
             student.setLogin(rs.getString("student_login"));
             student.setPassword(rs.getString("student_password"));
             student.setName(rs.getString("student_name"));
+            String sql = "SELECT * FROM OBJECTS WHERE OBJECT_ID=(SELECT PARENT_ID FROM OBJECTS WHERE OBJECT_ID=" + rs.getInt("student_id")+")ORDER BY OBJECT_ID";
+            List<Object> objects = template.query(sql, new DAOObjectImpl.ObjectMapper());
+            student.setGroup(objects.get(0).getDescription());
+            student.setGroupId(objects.get(0).getId());
             return student;
         }
     }

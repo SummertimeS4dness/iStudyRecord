@@ -14,4 +14,5 @@ public interface DAOObject {
 	public List<Object> getObjects();
 	public Object getParent(Object object);
 	public List<Object> getChildObjects(Object object);
+	public void updateObject(Object object);
 }

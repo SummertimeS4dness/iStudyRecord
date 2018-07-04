@@ -57,6 +57,27 @@ public class Lecturer {
     private String degree;
     private String works;
     private String interests;
+    
+    
+    private String cathedra;
+    private int cathedraId;
+
+public String getCathedra() {
+    return cathedra;
+}
+
+public void setCathedra(String cathedra) {
+    this.cathedra = cathedra;
+}
+
+public int getCathedraId() {
+    return cathedraId;
+}
+
+public void setCathedraId(int cathedraId) {
+    this.cathedraId = cathedraId;
+}
+
 
     public Lecturer(int id, String login, String password, String name, String info, String degree, String works, String interests) {
         this.id = id;

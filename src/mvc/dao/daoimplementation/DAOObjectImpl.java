@@ -1,6 +1,7 @@
 package mvc.dao.daoimplementation;
 
 import mvc.beans.Object;
+import mvc.beans.Student;
 import mvc.dao.daointerfaces.DAOObject;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -62,7 +63,8 @@ public List<Object> getCathedras() {
 
     @Override
     public Object getParent(Object object) {
-        String sql = "SELECT * FROM OBJECTS WHERE OBJECT_ID=" + object.getParentId()+" ORDER BY OBJECT_ID";
+        
+        String sql = "SELECT * FROM OBJECTS  WHERE OBJECT_ID=(SELECT PARENT_ID FROM OBJECTS  WHERE OBJECT_ID="+object.getId()+") ORDER BY OBJECT_ID";
         List<Object> objects = template.query(sql, new ObjectMapper());
         return objects.get(0);
     }
@@ -74,7 +76,13 @@ public List<Object> getCathedras() {
         return objects;
     }
 
-    class ObjectMapper implements RowMapper<Object> {
+    @Override
+    public void updateObject(Object object) {
+    String sql = "UPDATE OBJECTS SET PARENT_ID=?, OBJECT_DESCRIPTOIN = ? WHERE OBJECT_ID=?";
+    template.update(sql,object.getParentId(),object.getDescription(), object.getId());
+}
+    
+    static class ObjectMapper implements RowMapper<Object> {
         public Object mapRow(ResultSet rs, int arg1) throws SQLException {
             int id = rs.getInt("object_id");
             String description = rs.getString("object_descriptoin");

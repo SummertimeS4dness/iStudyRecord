@@ -20,8 +20,9 @@ public class DAOSubjectImpl implements DAOSubject {
 
     @Override
     public void createSubject(Subject subject) {
+        System.out.println(subject.getLecturerId());
         String sql = "INSERT INTO SUBJECTS VALUES (SUBJECT_SEQUENCE.nextval,?,?,?,?)";
-        template.update(sql, subject.getId(), subject.getShortName(), subject.getFullName(), subject.getInfo(), subject.getLecturerId());
+        template.update(sql,  subject.getShortName(), subject.getFullName(), subject.getInfo(), subject.getLecturerId());
     }
 
     @Override
@@ -31,7 +32,7 @@ public class DAOSubjectImpl implements DAOSubject {
     }
 
     @Override
-    public List<Subject> getSublects() {
+    public List<Subject> getSubjects() {
         String sql = "SELECT * FROM SUBJECTS";
         List<Subject> subjects = template.query(sql, new SubjecttMapper());
         return subjects;
@@ -60,6 +61,24 @@ public class DAOSubjectImpl implements DAOSubject {
             subject.setShortName(rs.getString("subject_short_name"));
             subject.setFullName(rs.getString("subject_full_name"));
             subject.setInfo(rs.getString("subject_info"));
+            String sql = "SELECT LECTURER_NAME FROM LECTURERS WHERE LECTURER_ID="+subject.getLecturerId();
+            String lecturer = template.query(sql, new RowMapper<String>() {
+                @Override
+                public String mapRow(ResultSet resultSet, int i) throws SQLException {
+                    return resultSet.getString("lecturer_name");
+                }
+            }).get(0);
+            sql="SELECT COUNT(STUDENT_ID) FROM STUDENT_SUBJECT_LISTS WHERE SUBJECT_ID = "+subject.getId()+" GROUP BY SUBJECT_ID";
+            List<Integer> am = template.query(sql,new RowMapper<Integer>(){
+    
+                @Override
+                public Integer mapRow(ResultSet resultSet, int i) throws SQLException {
+                    return resultSet.getInt(1);
+                }
+            });
+            subject.setLecturerName(lecturer);
+            if(am.size()>0)
+            subject.setAmount(am.get(0));
             return subject;
         }
     }

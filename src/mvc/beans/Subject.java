@@ -6,8 +6,26 @@ public class Subject {
     private String fullName;
     private String info;
     private int lecturerId;
+    private int amount;
+    private String lecturerName;
 
-    public Subject(int id, String shortName, String fullName, String info, int lecturerId) {
+public String getLecturerName() {
+    return lecturerName;
+}
+
+public void setLecturerName(String lecturerName) {
+    this.lecturerName = lecturerName;
+}
+
+public int getAmount() {
+    return amount;
+}
+
+public void setAmount(int amount) {
+    this.amount = amount;
+}
+
+public Subject(int id, String shortName, String fullName, String info, int lecturerId) {
         this.id = id;
         this.shortName = shortName;
         this.fullName = fullName;

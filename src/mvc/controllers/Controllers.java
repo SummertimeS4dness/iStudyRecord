@@ -34,7 +34,9 @@ public class Controllers {
 
     @Autowired
     private DAOObject daoObject;
-    
+
+@Autowired
+private DAOSubject daoSubject;
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
@@ -89,13 +91,21 @@ public List<Lecturer> showLecturers() {
     public List<Object> showCathedras() {
         return daoObject.getCathedras();
     }
-
+@RequestMapping(value = "/getLecturers", method = RequestMethod.GET, produces = {"application/json"}, headers = "Accept=*/*")
+@ResponseBody
+public List<Lecturer> showLecturersObjects() {
+    return daoLecturer.getLecturers();
+}
     @RequestMapping(value = "/getLecturerBySubject", method = RequestMethod.POST, produces = {"application/json"}, consumes = {"application/json"}, headers = "Accept=*/*")
     @ResponseBody
     public Lecturer showLecturerBySubject(@RequestBody Subject subject) {
         return daoLecturer.getLecturerForSubject(subject);
     }
-
+@RequestMapping(value = "/subjects", method = RequestMethod.GET, produces = {"application/json"}, headers = "Accept=*/*")
+@ResponseBody
+public List<Subject> showSubjects() {
+    return daoSubject.getSubjects();
+}
     /*@RequestMapping("/viewAll1")
     public ModelAndView showMarksForGroup(){
         return null;
@@ -219,6 +229,7 @@ public String destination() {
     public void updateStudent(@RequestBody Student student){
         System.out.println(student.getName() + " " + student.getId() + " " + student.getLogin() + " " + student.getPassword());
         daoStudent.updateStudent(student);
+        daoObject.updateObject(new Object(student.getId(),student.getGroup(),"",student.getGroupId()));
     }
     @RequestMapping(value = "/deleteStudent",method = RequestMethod.DELETE,consumes = "application/json")
     @ResponseStatus(value = HttpStatus.OK)
@@ -245,6 +256,22 @@ public ModelAndView newLecturerForm(@ModelAttribute("lecturer") Lecturer lecture
   //  daoStudent.createStudent(student,object);
    //return new ModelAndView("adminPage");
     return new ModelAndView(new RedirectView("adminPage"));
+}
+@RequestMapping(value = "/updateLecturer",method = RequestMethod.POST,consumes = "application/json")
+@ResponseStatus(value = HttpStatus.OK)
+public void updateLecturer(@RequestBody Lecturer lecturer){
+    daoLecturer.updateLecturer(lecturer);
+    daoObject.updateObject(new Object(lecturer.getId(),lecturer.getName(),"lecturer",lecturer.getCathedraId()));
+}
+@RequestMapping(value = "/deleteLecturer",method = RequestMethod.DELETE,consumes = "application/json")
+@ResponseStatus(value = HttpStatus.OK)
+public void deleteLecturer(@RequestBody Lecturer lecturer){
+   daoLecturer.removeLecturer(lecturer);
+}
+@RequestMapping(value = "/createSubject",method = RequestMethod.POST,consumes = "application/json")
+@ResponseStatus(value = HttpStatus.OK)
+public void deleteLecturer(@RequestBody Subject subject){
+    daoSubject.createSubject(subject);
 }
 
 }
