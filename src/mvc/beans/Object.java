@@ -17,7 +17,11 @@ public class Object {
         this.parentId = parentId;
     }
 
-//    public Object(String description, String type, int parentId) {
+    public Object(int id) {
+        this.id = id;
+    }
+
+    //    public Object(String description, String type, int parentId) {
 //        this.description = description;
 //        this.type = type;
 //        this.parentId = parentId;

@@ -1,6 +1,7 @@
 package mvc.dao.daoimplementation;
 
 import mvc.beans.Lecturer;
+import mvc.beans.Object;
 import mvc.beans.Student;
 import mvc.beans.Subject;
 import mvc.dao.daointerfaces.DAOSubject;
@@ -48,7 +49,15 @@ public class DAOSubjectImpl implements DAOSubject {
 
     @Override
     public List<Subject> showSubjectsForLecturer(Lecturer lecturer) {
-        String sql = "SELECT * FROM SUBJECTS  WHERE LECTURER_ID=" + lecturer.getId();
+        String sql = "SELECT * FROM SUBJECTS WHERE LECTURER_ID=" + lecturer.getId();
+        List<Subject> subjects = template.query(sql, new SubjecttMapper());
+        return subjects;
+    }
+    //HFDKJSHFJKDSHFK
+    @Override
+    public List<Subject> showSubjectsForGroup(Object object) {
+        String sql = "SELECT * FROM SUBJECTS JOIN STUDENT_SUBJECT_LISTS ON (SUBJECTS.SUBJECT_ID = STUDENT_SUBJECT_LISTS.SUBJECT_ID) " +
+                "JOIN OBJECTS ON (STUDENT_SUBJECT_LISTS.STUDENT_ID=OBJECTS.OBJECT_ID) WHERE PARENT_ID=" + object.getId();
         List<Subject> subjects = template.query(sql, new SubjecttMapper());
         return subjects;
     }

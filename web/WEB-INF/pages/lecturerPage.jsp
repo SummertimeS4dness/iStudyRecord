@@ -138,7 +138,68 @@
                 }
             });
         }
-
+        function listGroups() {
+            $.ajax({
+                type: "GET",
+                url: 'getGroups',
+                dataType: "json",
+                complete: [function (response) {
+                    var groups = $.parseJSON(response.responseText);
+                    //alert(response.responseText)
+                    $("#marksForGroupGroup").find('option').remove();
+                    $.each(groups, function (i, gr) {
+                        $('<option value="' + gr.id + '">' + gr.description + '</option>').appendTo('#marksForGroupGroup');
+                    });
+                    $('<option value="' + 56 + '">' + "hello" + '</option>').appendTo('#marksForGroupGroup');
+                }]
+            });
+            $('#marksForGroupGroup').change(function () {
+                var object = {
+                    id: document.getElementById("marksForGroupGroup").options[document.getElementById("marksForGroupGroup").selectedIndex].value,
+                }
+                $.ajax({
+                    type: "GET",
+                    url: 'getSubjectsForGroup',
+                    dataType: "json",
+                    contentType: 'application/json; charset=utf-8',
+                    data: {id: object.id},
+                    complete: [function (response) {
+                        //alert(response.responseText)
+                        var subjects = $.parseJSON(response.responseText);
+                        $("#marksForGroupSubject").find('option').remove();
+                        $.each(subjects, function (i, sub) {
+                            $('<option value="' + sub.id + '">' + sub.fullName + '</option>').appendTo('#marksForGroupSubject');
+                        });
+                        $('<option value="' + 56 + '">' + "hello" + '</option>').appendTo('#marksForGroupSubject');
+                    }]
+                });
+            });
+            $('#marksForGroupSubject').change(function () {
+                var object = {
+                    objId: document.getElementById("marksForGroupGroup").options[document.getElementById("marksForGroupGroup").selectedIndex].value,
+                    subjId: document.getElementById("marksForGroupSubject").options[document.getElementById("marksForGroupSubject").selectedIndex].value
+                }
+                $.ajax({
+                    type: "GET",
+                    url: 'getMarksForGroupAndSubject',
+                    dataType: "json",
+                    contentType: 'application/json; charset=utf-8',
+                    data:{objId:object.objId,subjId:object.subjId},
+                    complete: [function (response) {
+                        alert(response.responseText)
+                        $("#marksForGroupTable").find("tr:not(:first)").remove();
+                        var trHTML = '';
+                        var obj = $.parseJSON(response.responseText);
+                        alert(obj.length);
+                        for (var i = 0; i < obj.length; i++) {
+                            trHTML += '<tr><td>' + obj[i].studentName + '</td><td>' + obj[i].score + '</td><td>' + obj[i].date + '</td></tr>';
+                            console.log(trHTML);
+                        }
+                        $("#marksForGroupTable tbody").append(trHTML);
+                    }]
+                });
+            });
+        }
         $(document).ready(function () {
             var acc = document.getElementsByClassName("accordion");
             var i;
@@ -235,6 +296,26 @@
             <td>
                 <button onclick="createMark()">Create</button>
             </td>
+        </tr>
+    </table>
+</div>
+<button class="accordion" onclick="listGroups()">Marks for group</button>
+<div class="panel">
+    <table>
+        <tr>
+            <td><label>Select group</label></td>
+            <td><select id="marksForGroupGroup"></select></td>
+        </tr>
+        <tr>
+            <td><label>Select subject</label></td>
+            <td><select id="marksForGroupSubject"></select></td>
+        </tr>
+    </table>
+    <table id="marksForGroupTable" border="2" align="center">
+        <tr>
+            <th>Student</th>
+            <th>Mark</th>
+            <th>Date</th>
         </tr>
     </table>
 </div>

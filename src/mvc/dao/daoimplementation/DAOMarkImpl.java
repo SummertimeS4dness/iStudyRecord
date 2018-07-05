@@ -1,6 +1,7 @@
 package mvc.dao.daoimplementation;
 
 import mvc.beans.*;
+import mvc.beans.Object;
 import mvc.dao.daointerfaces.DAOMark;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -73,6 +74,15 @@ public class DAOMarkImpl implements DAOMark {
         List<Mark> marks = template.query(sql, new MarkMapper());
         return marks;
     }
+    //dgjdfhgj
+    @Override
+    public List<Mark> getMarksForGroupAndSubject(Subject subject, Object object) {
+        String sql = "SELECT * from MARKS JOIN OBJECTS ON (MARKS.STUDENT_ID=OBJECTS.OBJECT_ID) JOIN STUDENT_INFO ON" +
+                " (OBJECTS.OBJECT_ID=STUDENT_INFO.STUDENT_ID) JOIN LESSONS ON (MARKS.LESSON_ID=LESSONS.LESSON_ID) WHERE " +
+                "MARKS.SUBJECT_ID=" + subject.getId() + " AND PARENT_ID=" + object.getId();
+        List<Mark> marks = template.query(sql, new MarkMapper2());
+        return marks;
+    }
 
     class MarkMapper implements RowMapper<Mark> {
         public Mark mapRow(ResultSet rs, int arg1) throws SQLException {
@@ -98,6 +108,22 @@ public class DAOMarkImpl implements DAOMark {
             String subjectName = rs.getString("subject_full_name");
             String date = rs.getString("lesson_date");
             Mark mark = new Mark(id, lessonId, score, subjectID, studentID, lecturerID, subjectName, date);
+            return mark;
+        }
+    }
+    class MarkMapper2 implements RowMapper<Mark> {
+        public Mark mapRow(ResultSet rs, int arg1) throws SQLException {
+            int id = rs.getInt("mark_id");
+            int lessonId = rs.getInt("lesson_id");
+            int score = rs.getInt("score");
+            int subjectID = rs.getInt("subject_id");
+            int studentID = rs.getInt("student_id");
+            int lecturerID = rs.getInt("lecturer_id");
+            String studentName = rs.getString("student_name");
+            String date = rs.getString("lesson_date");
+            Mark mark = new Mark(id, lessonId, score, subjectID, studentID, lecturerID);
+            mark.setDate(date);
+            mark.setStudentName(studentName);
             return mark;
         }
     }

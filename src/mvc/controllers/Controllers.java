@@ -72,6 +72,22 @@ public class Controllers {
     public List<Subject> showSubjectsForLecturer() {
         return daoSubject.showSubjectsForLecturer(new Lecturer(ID, login.getNickname(), login.getPassword()));
     }
+    //rlkgjutdihgkdf
+    @RequestMapping(value = "/getSubjectsForGroup", method = RequestMethod.GET, consumes = "application/json",produces = {"application/json"}, headers = "Accept=*/*")
+    @ResponseBody
+    public List<Subject> getSubjectsForGroup(@RequestParam("id") int id){
+        Object object = new Object(id);
+        return daoSubject.showSubjectsForGroup(object);
+    }
+
+    //rlkgjutdihgkdf
+    @RequestMapping(value = "/getMarksForGroupAndSubject", method = RequestMethod.GET, consumes = "application/json",produces = {"application/json"}, headers = "Accept=*/*")
+    @ResponseBody
+    public List<Mark> getMarksForGroupAndSubject(@RequestParam("objId") int objId, @RequestParam("subjId") int subjId){
+        Object object = new Object(objId);
+        Subject subject = new Subject(subjId);
+        return daoMark.getMarksForGroupAndSubject(subject, object);
+    }
 
     @RequestMapping(value = "/getStudentsForSubject", method = RequestMethod.POST, produces = {"application/json"}, headers = "Accept=*/*")
     @ResponseBody

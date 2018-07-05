@@ -41,6 +41,7 @@ public class Mark {
     private int studentId;
     private int lecturerId;
     private String subjectName;
+    private String studentName;
     private String date;
 
     public Mark() {super();}
@@ -68,6 +69,14 @@ public class Mark {
     public Mark(int score, int subjectId) {
         this.score = score;
         this.subjectId = subjectId;
+    }
+
+    public String getStudentName() {
+        return studentName;
+    }
+
+    public void setStudentName(String studentName) {
+        this.studentName = studentName;
     }
 
     public int getId() {
