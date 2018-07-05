@@ -15,4 +15,5 @@ public interface DAOStudent {
 	public void registerStudentForSubject(Student student,Subject subject);
 	public List<Student> getStudentsOnSubject(Subject subject);
 	public void updateStudent(Student student);
+	public void removeStudentFromSubject(Subject subject, Student student);
 }

@@ -278,7 +278,6 @@ public class Controllers {
     @RequestMapping(value = "/updateStudent", method = RequestMethod.POST, consumes = "application/json")
     @ResponseStatus(value = HttpStatus.OK)
     public void updateStudent(@RequestBody Student student) {
-        System.out.println(student.getName() + " " + student.getId() + " " + student.getLogin() + " " + student.getPassword());
         daoStudent.updateStudent(student);
         daoObject.updateObject(new Object(student.getId(), student.getGroup(), "", student.getGroupId()));
     }
@@ -323,7 +322,11 @@ public class Controllers {
     public void deleteLecturer(@RequestBody Lecturer lecturer) {
         daoLecturer.removeLecturer(lecturer);
     }
-
+@RequestMapping(value = "/deleteSubject", method = RequestMethod.DELETE, consumes = "application/json")
+@ResponseStatus(value = HttpStatus.OK)
+public void deleteSubject(@RequestBody Subject subject) {
+    daoSubject.removeSubject(subject);
+}
     @RequestMapping(value = "/createSubject", method = RequestMethod.POST, consumes = "application/json")
     @ResponseStatus(value = HttpStatus.OK)
     public void createSubject(@RequestBody Subject subject) {
@@ -341,6 +344,23 @@ public class Controllers {
     public void createMark(@RequestBody Mark mark) {
         daoMark.createMark(mark);
     }
-
-
+    @RequestMapping(value = "/updateSubject", method = RequestMethod.POST, consumes = "application/json")
+    @ResponseStatus(value = HttpStatus.OK)
+    public void updateSubject(@RequestBody Subject subject) {
+        daoSubject.updateSubject(subject);
+    }
+@RequestMapping(value = "/studentsForSubject", method = RequestMethod.GET, consumes = "application/json",produces = {"application/json"}, headers = "Accept=*/*")
+@ResponseBody
+public List<Student> getStudentForSubject(@RequestParam("id") int id){
+    Subject subject = new Subject(id,null,null,null,0);
+    return daoStudent.getStudentsOnSubject(subject);
+}
+@RequestMapping(value = "/deleteStudentsFromSubject", method = RequestMethod.DELETE, consumes = "application/json")
+@ResponseStatus(value = HttpStatus.OK)
+public void removeStudentsFromSubject(@RequestBody Student[] students){
+    Subject subject=new Subject(students[0].getId());
+    for(int i=1;i<students.length;i++){
+        daoStudent.removeStudentFromSubject(subject,students[i]);
+    }
+}
 }

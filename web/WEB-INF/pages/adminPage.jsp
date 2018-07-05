@@ -137,17 +137,22 @@
                                 var obj = $.parseJSON(response.responseText);
                                 for (var i = 0; i < obj.length; i++) {
                                     trHTML += '<tr><td>' + obj[i].id + '</td>' +
-                                        '<td>' + obj[i].fullName + '</td>' +
                                         '<td>' + obj[i].shortName + '</td>' +
+                                        '<td>' + obj[i].fullName + '</td>' +
                                         '<td>' + obj[i].info + '</td>'+
                                         '<td>' + obj[i].lecturerId + '</td>' +
                                         '<td>' + obj[i].lecturerName + '</td>' +
                                         '<td>' + obj[i].amount + '</td>' +
+                                        '<td><button id="' + i+"f" + '"class="myclassE">show students</button> </td>'+
                                         '<td><button id="' + i + '"class="myclassL">edit</button> </td></tr>';
                                     var a = obj;
                                     $(document).off().on('click', 'button.myclassL', function (event) {
                                         listLecturers();
                                         onSubjectEdit(this.id, a);
+                                    });
+                                    $(document).on('click', 'button.myclassE', function (event) {
+                                       // listLecturers();
+                                        showStudentsForSubject(this.id, a);
                                     });
                                 }
                                 $("#subjects tbody").append(trHTML);
@@ -163,6 +168,128 @@
 //                    document.getElementById("studentLogin").value = '';
 //                    document.getElementById("studentPassword").value = '';
                 }
+            }
+            function showStudentsForSubject(pos, mass) {
+                var massPos=Number(pos.substring(0,pos.length-1));
+                var subject={
+                id:mass[massPos].id,
+                shortName:mass[massPos].shortName,
+                fullName:mass[massPos].fullName,
+                lecturerId:mass[massPos].lecturerId
+                };
+                $.ajax({
+                    type: "GET",
+                    url: 'studentsForSubject',
+                    dataType: "json",
+                    contentType: 'application/json; charset=utf-8',
+                   data:{id:subject.id},
+                    complete: [
+                        function (response) {
+                        //alert(response.responseText);
+                            document.getElementById("subjects").style.visibility = "visible";
+                            $("#studentsOnSubject").find("tr:not(:first)").remove();
+                            var trHTML = '';
+                            var obj = $.parseJSON(response.responseText);
+                            var k;
+                            for(k=0;k<obj.length;k++){
+                               trHTML+= '<tr><td>' + obj[k].id + '</td>' +
+                                '<td>' + obj[k].name + '</td>'+
+                                '<td><input type="checkbox" value="'+obj[k].id+'" class="checkUser"></td></tr>'
+                            }
+                            trHTML+='<tr><td><button class="myclassRR">Remove selected</button> </td><td><button class="myclassAD">Add students</button></td><td><button class="myclassCN">Cancel</button></td></tr>'
+                            $("#studentsOnSubject tbody").append(trHTML);
+                            $(document).on('click', 'button.myclassRR', function (event) {
+                               selectedStudents(subject);
+                            });
+                            $(document).on('click', 'button.myclassAD', function (event) {
+                                addStudentForSubject(subject);
+                            });
+                            $(document).on('click', 'button.myclassCN', function (event) {
+                                document.getElementById("studentsOnSubject").style.visibility="hidden";
+                            });
+                        }]
+
+
+
+            });
+                document.getElementById("studentsOnSubject").style.visibility="visible";
+            }
+            function addStudentForSubject(subject) {
+                document.getElementById("studentsToAdd").style.visibility="visible";
+                $.ajax({
+                    type: "GET",
+                    url: 'students',
+                    dataType: "json",
+                    complete: [
+                        function (response) {
+                            document.getElementById("personDataTable").style.visibility = "visible";
+                            $("#studentsToAdd").find("tr:not(:first)").remove();
+                            var trHTML = '';
+                            var obj = $.parseJSON(response.responseText);
+                            for (var i = 0; i < obj.length; i++) {
+                                trHTML += '<tr>' +
+                                    '<td>' + obj[i].id + '</td>' +
+                                    '<td>' + obj[i].name + '</td>' +
+                                    '<td>' +obj[i].group+'</td>' +
+                                    '<td><input type="checkbox" value="'+obj[i].id+'" class="checkUserToAdd"></td></tr>'
+                                    '</tr>';
+
+                            }
+                            trHTML+='<tr><td><button class="myclassADS">Add selected</button> </td><td><button class="myclassCLRSLC">Clear selection</button></td><td><button class="myclassCLS">Cancel</button></td></tr>'
+                            $(document).on('click', 'button.myclassADR', function (event) {
+                                //addSelected(subject)
+                            });
+                            $(document).on('click', 'button.myclassCLRSLC', function (event) {
+                                clearSelectionForAdd();
+                            });
+                            $(document).on('click', 'button.myclassCLS', function (event) {
+                                document.getElementById("studentsToAdd").style.visibility="hidden";
+                            });
+                            $("#studentsToAdd tbody").append(trHTML);
+                        }
+                    ]
+                });
+            }
+            function clearSelectionForAdd() {
+                alert("ok")
+                $('[class=checkUserToAdd]:checked').each(function() {
+                    $(this).prop('checked', false);
+                    })
+
+                }
+
+            function selectedStudents(subject) {
+                document.getElementById("studentsOnSubject").style.visibility="visible";
+                var students = [];
+                students.push({id:subject.id, name: "e",
+                    login: "e",
+                    password: "e"});
+                var i = 0;
+                $('[class=checkUser]:checked').each(function() {
+                    var a = ($(this).val());
+                    var student= {
+                        id: a,
+                        name: "e",
+                        login: "e",
+                        password: "e"
+                    }
+                    students.push(student);
+                    i++;
+                });
+                $.ajax({
+                    type: "DELETE",
+                    contentType: 'application/json; charset=utf-8',
+                    url: "deleteStudentsFromSubject",
+                    data:(JSON.stringify(students)),
+                    success: function (response) {
+                        subjectsShown=0;
+                        subjects();
+                        document.getElementById("studentsOnSubject").style.visibility="hidden";
+                    },error: function (xhr, status, errorThrown) {
+                        alert(status + " " + errorThrown.toString());
+                    }
+
+            });
             }
             function onEdit(pos, mass) {
                 var student = {
@@ -188,7 +315,6 @@
                     info: mass[pos].info,
                     lecturerId:mass[pos].group,
                 }
-                alert(subject.info);
                 document.getElementById("subjectBody").style.visibility = "visible";
                 document.getElementById("subjectId").textContent = subject.id;
                 document.getElementById("subjectShortName").value = subject.shortName;
@@ -222,6 +348,9 @@
             function onCancelStudent() {
                 document.getElementById("studentPersone").style.visibility = "hidden";
             }
+            function onCancelSubject() {
+                document.getElementById("subjectBody").style.visibility = "hidden";
+            }
             function onCancelLecturer() {
                 document.getElementById("lecturerPerson").style.visibility = "hidden";
             }
@@ -244,6 +373,30 @@
                         shown = 0;
                         test();
                         document.getElementById("studentPersone").style.visibility = "hidden";
+                    },
+                    error: function (xhr, status, errorThrown) {
+                        alert(status + " " + errorThrown.toString());
+                    }
+                });
+
+            }
+            function saveSubjectChange() {
+                var subject = {
+                id:document.getElementById("subjectId").textContent ,
+                shortName:document.getElementById("subjectShortName").value,
+                fullName:document.getElementById("subjectFullName").value,
+                info:document.getElementById("subjectInfo").value,
+                lecturerId:document.getElementById("selectSubjectOnEdit").options[document.getElementById("selectSubjectOnEdit").selectedIndex].value
+                };
+                $.ajax({
+                    type: "POST",
+                    contentType: 'application/json; charset=utf-8',
+                    url: "updateSubject",
+                    data: JSON.stringify(subject),
+                    success: function (response) {
+                        subjectsShown = 0;
+                        subjects();
+                        document.getElementById("subjectBody").style.visibility = "hidden";
                     },
                     error: function (xhr, status, errorThrown) {
                         alert(status + " " + errorThrown.toString());
@@ -323,6 +476,29 @@
                         shown = 0;
                         test();
                         document.getElementById("studentPersone").style.visibility = "hidden";
+                    },
+                    error: function (xhr, status, errorThrown) {
+                        alert(status + " " + errorThrown.toString());
+                    }
+                });
+            }
+            function removeSubject() {
+                var subject = {
+                    id:document.getElementById("subjectId").textContent ,
+                    shortName:document.getElementById("subjectShortName").value,
+                    fullName:document.getElementById("subjectFullName").value,
+                    info:document.getElementById("subjectInfo").value,
+                    lecturerId:document.getElementById("selectSubjectOnEdit").options[document.getElementById("selectSubjectOnEdit").selectedIndex].value
+                };
+                $.ajax({
+                    type: "DELETE",
+                    contentType: 'application/json; charset=utf-8',
+                    url: "deleteSubject",
+                    data: JSON.stringify(subject),
+                    success: function (response) {
+                        subjectsShown = 0;
+                        subjects();
+                        document.getElementById("subjectBody").style.visibility = "hidden";
                     },
                     error: function (xhr, status, errorThrown) {
                         alert(status + " " + errorThrown.toString());
@@ -614,7 +790,29 @@
                     </td>
                 </tr>
             </table>
-
+            <table width="100%">
+                <tr>
+                    <td>
+                        <table id="studentsOnSubject" style="visibility: hidden" border="1" width="50%">
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th></th>
+                            </tr>
+                        </table>
+                    </td>
+                    <td>
+                        <table id="studentsToAdd" style="visibility: hidden" border="1" width="100%">
+                            <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Group</th>
+                            <th></th>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
         </div>
         <button class="accordion" onclick="listCathedras()">Register lecturer</button>
         <div class="panel">

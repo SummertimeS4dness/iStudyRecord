@@ -12,4 +12,5 @@ public interface DAOSubject {
 	public List<Subject> getSubjects();
 	public List<Subject> showSubjectsForStudent(Student student);
 	public List<Subject> showSubjectsForLecturer(Lecturer lecturer);
+	public void updateSubject(Subject subject);
 }

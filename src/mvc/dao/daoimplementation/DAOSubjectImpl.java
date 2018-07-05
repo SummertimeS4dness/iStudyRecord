@@ -82,4 +82,9 @@ public class DAOSubjectImpl implements DAOSubject {
             return subject;
         }
     }
+@Override
+public void updateSubject(Subject subject) {
+    String sql = "UPDATE SUBJECTS SET SUBJECT_SHORT_NAME=?,SUBJECT_FULL_NAME=?,SUBJECT_INFO =?,LECTURER_ID=? WHERE SUBJECT_ID=?";
+    template.update(sql,subject.getShortName(),subject.getFullName(),subject.getInfo(),subject.getLecturerId(),subject.getId());
+}
 }

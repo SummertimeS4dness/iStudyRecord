@@ -78,7 +78,11 @@ public class DAOStudentImpl implements DAOStudent {
         List<Student> users = template.query(sql, new StudentMapper());
         return users;
     }
-
+@Override
+public void removeStudentFromSubject(Subject subject, Student student) {
+    String sql ="DELETE FROM STUDENT_SUBJECT_LISTS WHERE STUDENT_ID=? AND SUBJECT_ID=?";
+    template.update(sql,student.getId(),subject.getId());
+}
 @Override
 public void updateStudent(Student student) {
     String sql = "UPDATE STUDENT_INFO SET STUDENT_NAME=?, STUDENT_LOGIN=?,STUDENT_PASSWORD=? WHERE STUDENT_ID=?";
