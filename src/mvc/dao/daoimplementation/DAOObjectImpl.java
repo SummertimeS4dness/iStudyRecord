@@ -41,11 +41,25 @@ public List<Object> getCathedras() {
     List<Object> objects = template.query(sql, new ObjectMapper());
     return objects;
 }
-
+@Override
+public List<Object> getFaculties() {
+    String sql = "SELECT * FROM OBJECTS WHERE OBJECT_TYPE='faculty'ORDER BY OBJECT_ID";
+    List<Object> objects = template.query(sql, new ObjectMapper());
+    return objects;
+}
+@Override
+public List<Object> getUniversities() {
+    String sql = "SELECT * FROM OBJECTS WHERE OBJECT_TYPE='university'ORDER BY OBJECT_ID";
+    List<Object> objects = template.query(sql, new ObjectMapper());
+    return objects;
+}
 @Override
     public void createObject(Object object) {
         String sql = "INSERT INTO OBJECTS VALUES (OBJECT_SEQUENCE.nextval,?,?,?)";
-        template.update(sql, object.getId(), object.getDescription(), object.getType(), object.getParentId());
+    if(object.getParentId()==0)
+        template.update(sql,object.getDescription(), object.getType(), null);
+    else
+        template.update(sql,object.getDescription(), object.getType(), object.getParentId());
     }
 
     @Override

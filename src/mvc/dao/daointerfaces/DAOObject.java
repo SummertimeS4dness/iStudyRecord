@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface DAOObject {
 	public List<Object> getGrops();
+	public List<Object> getFaculties();
+	public List<Object> getUniversities();
 	public List<Object> getStudents();
 	public List<Object> getLecturers();
 	public List<Object> getCathedras();

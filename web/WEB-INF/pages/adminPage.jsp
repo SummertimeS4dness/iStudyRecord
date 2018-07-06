@@ -21,18 +21,90 @@
             var shown = 0;
             var lecturerShown=0;
             var subjectsShown=0;
+            var objectShown=0;
+            function objects() {
+                if (objectShown == 0) {
+                    objectShown = 1;
+
+                    $.ajax({
+                        type: "GET",
+                        url: 'objects',
+                        dataType: "json",
+                        complete: [
+                            function (response) {
+                                $("#objects").find("tr:not(:first)").remove();
+                                var trHTML = '';
+                                var obj = $.parseJSON(response.responseText);
+                                for (var i = 0; i < obj.length; i++) {
+                                    trHTML += '<tr>' +
+                                        '<td>' + obj[i].id + '</td>' +
+                                        '<td>' + obj[i].type + '</td>' +
+                                        '<td>' + obj[i].description + '</td>' +
+                                        '<td>' + obj[i].parentId + '</td>' +
+                                        '<td><button id="' + i + '"class="myclassObj">edit</button> </td>' +
+                                        '</tr>';
+                                    var a = obj;
+                                    $(document).off().on('click', 'button.myclassObj', function (event) {
+                                      onObjectEdit(a,this.id);
+                                    });
+                                }
+                                $("#objects tbody").append(trHTML);
+                            }
+                        ]
+                    });
+                } else {
+                   objectShown= 0;
+                    //document.getElementById("objects").style.visibility = "hidden";
+                   // document.getElementById("studentPersone").style.visibility = "hidden";
+                }
+            }
+            function fillSelectOfObject(object) {
+                $("#selectParent").find('option').remove();
+                var whatToFill;
+                if(object.type=="student"){
+                    listStudent();
+                    whatToFill="no";
+                }else if(object.type=="lecturer"){
+                    listCathedras();
+                    whatToFill="no";
+                }else if(object.type=="cathedra"){
+                    whatToFill="getFaculty";
+                }else if(object.type=="group"){
+                    whatToFill='getFaculty';
+                }else if(object.type=="faculty"){
+                    whatToFill='getUniversity';
+                }else {
+                    whatToFill="no";
+                }
+                if(whatToFill!="no"){
+                    $.ajax({
+                        type: "GET",
+                        url: whatToFill,
+                        dataType: "json",
+                        complete: [function (response) {
+                           var obj = $.parseJSON(response.responseText);
+                            var ddl3 = $("#selectParent");
+                            ddl3.find('option').remove()
+                            for (k = 0; k < obj.length; k++) {
+                                ddl3.append("<option value='" + obj[k].id + "'>" + obj[k].description + "</option>");
+                            }
+                        }
+                        ]
+                    });
+
+                }
+            }
+            function onObjectEdit(mass,pos) {
+                var a = mass[pos];
+                document.getElementById("objectBody").style.visibility = "visible";
+                document.getElementById("objectId").textContent = a.id;
+                document.getElementById("objectType").textContent = a.type;
+                document.getElementById("objectDescription").value = a.description;
+                fillSelectOfObject(a);
+            }
             function test() {
                 if (shown == 0) {
                     shown = 1;
-//                    var stOb=null;
-//                    $.ajax({
-//                        type: "GET",
-//                        url: 'studentObjects',
-//                        dataType: "json",
-//                        complete: [
-//                            function (response) {
-//                            stOb=$.parseJSON(response.responseText);
-//                            }]});
 
                     $.ajax({
                         type: "GET",
@@ -68,10 +140,6 @@
                     shown = 0;
                     document.getElementById("personDataTable").style.visibility = "hidden";
                     document.getElementById("studentPersone").style.visibility = "hidden";
-                    document.getElementById("studentId").textContent = '';
-                    document.getElementById("studentName").value = '';
-                    document.getElementById("studentLogin").value = '';
-                    document.getElementById("studentPassword").value = '';
                 }
             }
             function lecturers() {
@@ -146,13 +214,14 @@
                                         '<td><button id="' + i+"f" + '"class="myclassE">show students</button> </td>'+
                                         '<td><button id="' + i + '"class="myclassL">edit</button> </td></tr>';
                                     var a = obj;
+                                    var b=obj[i];
                                     $(document).off().on('click', 'button.myclassL', function (event) {
                                         listLecturers();
                                         onSubjectEdit(this.id, a);
                                     });
                                     $(document).on('click', 'button.myclassE', function (event) {
                                        // listLecturers();
-                                        showStudentsForSubject(this.id, a);
+                                        showStudentsForSubject(b);
                                     });
                                 }
                                 $("#subjects tbody").append(trHTML);
@@ -161,22 +230,9 @@
                     });
                 } else {
                     subjectsShown = 0;
-//                    document.getElementById("personDataTable").style.visibility = "hidden";
-                  //  document.getElementById("lecturerPerson").style.visibility = "hidden";
-//                    document.getElementById("studentId").textContent = '';
-//                    document.getElementById("studentName").value = '';
-//                    document.getElementById("studentLogin").value = '';
-//                    document.getElementById("studentPassword").value = '';
                 }
             }
-            function showStudentsForSubject(pos, mass) {
-                var massPos=Number(pos.substring(0,pos.length-1));
-                var subject={
-                id:mass[massPos].id,
-                shortName:mass[massPos].shortName,
-                fullName:mass[massPos].fullName,
-                lecturerId:mass[massPos].lecturerId
-                };
+            function showStudentsForSubject(subject) {
                 $.ajax({
                     type: "GET",
                     url: 'studentsForSubject',
@@ -206,6 +262,8 @@
                             });
                             $(document).on('click', 'button.myclassCN', function (event) {
                                 document.getElementById("studentsOnSubject").style.visibility="hidden";
+                                document.getElementById("studentsToAdd").style.visibility="hidden";
+
                             });
                         }]
 
@@ -236,8 +294,8 @@
 
                             }
                             trHTML+='<tr><td><button class="myclassADS">Add selected</button> </td><td><button class="myclassCLRSLC">Clear selection</button></td><td><button class="myclassCLS">Cancel</button></td></tr>'
-                            $(document).on('click', 'button.myclassADR', function (event) {
-                                //addSelected(subject)
+                            $(document).on('click', 'button.myclassADS', function (event) {
+                                addSelectedForSubject(subject);
                             });
                             $(document).on('click', 'button.myclassCLRSLC', function (event) {
                                 clearSelectionForAdd();
@@ -251,13 +309,44 @@
                 });
             }
             function clearSelectionForAdd() {
-                alert("ok")
                 $('[class=checkUserToAdd]:checked').each(function() {
                     $(this).prop('checked', false);
                     })
 
                 }
+            function addSelectedForSubject(subject) {
+                var students = [];
+                students.push({id:subject.id, name: "e",
+                    login: "e",
+                    password: subject.lecturerId,});
+                var i = 0;
+                $('[class=checkUserToAdd]:checked').each(function() {
+                    var a = ($(this).val());
+                    var student= {
+                        id: a,
+                        name: "e",
+                        login: "e",
+                        password: "e"
+                    }
+                    students.push(student);
+                    i++;
+                });
+                $.ajax({
+                    type: "POST",
+                    contentType: 'application/json; charset=utf-8',
+                    url: "addStudentForSubject",
+                    data:(JSON.stringify(students)),
+                    success: function (response) {
+                        subjectsShown=0;
+                        subjects();
+                        showStudentsForSubject(subject);
+                       // document.getElementById("studentsOnSubject").style.visibility="hidden";
+                    },error: function (xhr, status, errorThrown) {
+                        alert(status + " " + errorThrown.toString());
+                    }
 
+                });
+            }
             function selectedStudents(subject) {
                 document.getElementById("studentsOnSubject").style.visibility="visible";
                 var students = [];
@@ -284,7 +373,8 @@
                     success: function (response) {
                         subjectsShown=0;
                         subjects();
-                        document.getElementById("studentsOnSubject").style.visibility="hidden";
+                        showStudentsForSubject(subject);
+                        //document.getElementById("studentsOnSubject").style.visibility="hidden";
                     },error: function (xhr, status, errorThrown) {
                         alert(status + " " + errorThrown.toString());
                     }
@@ -527,19 +617,23 @@
                 var groups;
                 $.ajax({
                     type: "GET",
-                    url: 'getGroups',
+                    url: 'getGroup',
                     dataType: "json",
                     complete: [function (response) {
                         groups = $.parseJSON(response.responseText);
                         var ddl = $("#selectGroup");
                         var ddl2 = $("#selectGroupOnEdit");
+                        var ddl3=$("#selectParent");
                         ddl.find('option').remove();
                       //  ddl.append("<option style=\"display:none\" selected=\"selected\"/>");
                         ddl2.find('option').remove();
+                        ddl3.find('option').remove();
+
                       //  ddl2.append("<option style=\"display:none\" selected=\"selected\"/>");
                         for (k = 0; k < groups.length; k++) {
                             ddl.append("<option value='" + groups[k].id + "'>" + groups[k].description + "</option>");
                             ddl2.append("<option value='" + groups[k].id + "'>" + groups[k].description + "</option>");
+                            ddl3.append("<option value='" + groups[k].id + "'>" + groups[k].description + "</option>");
                         }
 
 //                $("#selectGroup").html("");
@@ -553,17 +647,21 @@
                 var cathedras;
                 $.ajax({
                     type: "GET",
-                    url: 'getCathedras',
+                    url: 'getCathedra',
                     dataType: "json",
                     complete: [function (response) {
                         cathedras = $.parseJSON(response.responseText);
                         var ddl = $("#selectCathedra");
                         ddl.find('option').remove();
                         var ddl2 = $("#selectCathedraOnEdit");
-                        ddl2.find('option').remove()
+                        ddl2.find('option').remove();
+                        var ddl3 = $("#selectParent");
+                        ddl3.find('option').remove();
+
                         for (k = 0; k < cathedras.length; k++) {
                             ddl.append("<option value='" + cathedras[k].id + "'>" + cathedras[k].description + "</option>");
                             ddl2.append("<option value='" + cathedras[k].id + "'>" + cathedras[k].description + "</option>");
+                            ddl3.append("<option value='" + cathedras[k].id + "'>" + cathedras[k].description + "</option>");
                         }
 //                $("#selectGroup").html("");
 //                $(array_list).each(function (i) { //populate child options
@@ -619,6 +717,103 @@
                     }
                 });
 
+            }
+            function selectParent() {
+                var toSelect=document.getElementById("objectTypeCreate").options[document.getElementById("objectTypeCreate").selectedIndex].value
+                if(toSelect!="no"){
+                $.ajax({
+                    type: "GET",
+                    url: toSelect,
+                    dataType: "json",
+                    complete: [function (response) {
+                        obj = $.parseJSON(response.responseText);
+                        var ddl3 = $("#parentTypeCreate");
+                        ddl3.find('option').remove()
+                        for (k = 0; k < obj.length; k++) {
+                            ddl3.append("<option value='" + obj[k].id + "'>" + obj[k].description + "</option>");
+                        }
+                    }
+                    ]
+                });}else{
+                    var ddl3 = $("#parentTypeCreate");
+                    ddl3.find('option').remove();
+                    ddl3.append("<option value='0'>" +" " + "</option>");
+
+                }
+                $('#parentTypeCreate').removeAttr('disabled');
+                $('#createObject').removeAttr('disabled');
+                $('#objectTypeCreate').attr('disabled', 'disabled');
+            }
+            function cancelSelectParent() {
+                $('#objectTypeCreate').removeAttr('disabled');
+                $('#parentTypeCreate').attr('disabled', 'disabled');
+                $('#createObject').attr('disabled', 'disabled');
+            }
+            function createObject() {
+            var  object={
+              id:0,
+              description:document.getElementById("objectDescriptionCreate").value,
+              type:document.getElementById("objectTypeCreate").options[document.getElementById("objectTypeCreate").selectedIndex].text,
+              parentId:document.getElementById("parentTypeCreate").options[document.getElementById("parentTypeCreate").selectedIndex].value};
+                $.ajax({
+                    type: "post",
+                    url: "addObject",
+                    dataType: "json",
+                    contentType: 'application/json; charset=utf-8',
+                    data:JSON.stringify(object),
+                    complete: [function (response) {
+                        objectShown = 0;
+                        objects();
+                        document.getElementById("objectDescriptionCreate").value='';
+                        cancelSelectParent();
+                    }]
+
+                    });
+            }
+            function saveObjectChange() {
+                var  object={
+                    id:document.getElementById("objectId").textContent,
+                    description:document.getElementById("objectDescription").value,
+                    type:document.getElementById("objectType").textContent,
+                    parentId:document.getElementById("selectParent").options[document.getElementById("selectParent").selectedIndex].value};
+                $.ajax({
+                    type: "POST",
+                    contentType: 'application/json; charset=utf-8',
+                    url: "updateObject",
+                    data: JSON.stringify(object),
+                    success: function (response) {
+                        objectShown = 0;
+                        objects();
+                        document.getElementById("objectBody").style.visibility = "hidden";
+                    },
+                    error: function (xhr, status, errorThrown) {
+                        alert(status + " " + errorThrown.toString());
+                    }
+                });
+            }
+            function removeObject(){
+                var  object={
+                    id:document.getElementById("objectId").textContent,
+                    description:document.getElementById("objectDescription").value,
+                    type:document.getElementById("objectType").textContent,
+                    parentId:document.getElementById("selectParent").options[document.getElementById("selectParent").selectedIndex].value};
+                $.ajax({
+                    type: "DELETE",
+                    contentType: 'application/json; charset=utf-8',
+                    url: "deleteObject",
+                    data: JSON.stringify(object),
+                    success: function (response) {
+                        objectShown = 0;
+                        objects();
+                        document.getElementById("objectBody").style.visibility = "hidden";
+                    },
+                    error: function (xhr, status, errorThrown) {
+                        alert(status + " " + errorThrown.toString());
+                    }
+                });
+            }
+            function onCancelObject() {
+                document.getElementById("objectBody").style.visibility = "hidden";
             }
         </script>
         <script>
@@ -814,6 +1009,44 @@
                 </tr>
             </table>
         </div>
+        <button class="accordion" onclick="objects()">Show all ...</button>
+        <div class ="panel">
+            <table id="objects" border="1" width="100%">
+                <tr>
+                    <th>Id</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                    <th>ParentID</th>
+                    <th></th>
+                </tr>
+            </table>
+            <table id="objectBody" style="visibility: hidden">
+                <tr>
+                    <td>id</td>
+                    <td>Type</td>
+                    <td>Description</td>
+                    <td>Parent id</td>
+                    <td>ParentId</td>
+                </tr>
+                <tr>
+                    <td><label id="objectId">id</label></td>
+                    <td><label id="objectType">type</label></td>
+                    <td><input id="objectDescription"/></td>
+                    <td><select id="selectParent" selected></select></td>
+                </tr>
+                <tr>
+                    <td>
+                        <button id="saveObjectChage" onclick="saveObjectChange()">Save</button>
+                    </td>
+                    <td>
+                        <button id="removeObject" onclick="removeObject()">Delete</button>
+                    </td>
+                    <td>
+                        <button id="cancelObject" onclick="onCancelObject()">Cancel</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
         <button class="accordion" onclick="listCathedras()">Register lecturer</button>
         <div class="panel">
             <jsp:useBean id="lecturer" class="mvc.beans.Lecturer"/>
@@ -876,7 +1109,18 @@
          <label>Lecturer</label>   <select id="lecturersForSubjectCreate"></select><br>
             <button onclick="createSubject()">Create</button>
         </div>
-
-
+        <button class="accordion" >Add ...</button>
+         <div class="panel">
+            <label>Description</label> <input type="text" id="objectDescriptionCreate"><br>
+            <label>Type</label>   <select id="objectTypeCreate">
+             <option value="getFaculty">gruop</option>
+             <option value="getFaculty">cathedra</option>
+             <option value="getUniversity">faculty</option>
+             <option value="no">university</option>
+         </select><br>
+            <button onclick="selectParent()">Choose parent</button><button onclick="cancelSelectParent()">Back</button><br>
+            <label>Parent</label> <select id="parentTypeCreate" disabled></select><br>
+             <button onclick="createObject()" id="createObject" disabled>Create</button>
+         </div>
     </body>
 </html>
