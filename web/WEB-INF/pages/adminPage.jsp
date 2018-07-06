@@ -844,6 +844,58 @@
                 overflow: hidden;
             }
         </style>
+        <style>
+            .flat-table {
+                margin-bottom: 20px;
+                border-collapse:collapse;
+                font-family: 'Lato', Calibri, Arial, sans-serif;
+                border: none;
+                border-radius: 3px;
+                -webkit-border-radius: 3px;
+                -moz-border-radius: 3px;
+            }
+            .flat-table th, .flat-table td {
+                box-shadow: inset 0 -1px rgba(0,0,0,0.25),
+                inset 0 1px rgba(0,0,0,0.25);
+            }
+            .flat-table th {
+                font-weight: normal;
+                -webkit-font-smoothing: antialiased;
+                padding: 1em;
+                color: rgba(0,0,0,0.45);
+                text-shadow: 0 0 1px rgba(0,0,0,0.1);
+                font-size: 1.5em;
+            }
+            .flat-table td {
+                color: #f7f7f7;
+                padding: 0.7em 1em 0.7em 1.15em;
+                text-shadow: 0 0 1px rgba(255,255,255,0.1);
+                font-size: 1.4em;
+            }
+            .flat-table tr {
+                -webkit-transition: background 0.3s, box-shadow 0.3s;
+                -moz-transition: background 0.3s, box-shadow 0.3s;
+                transition: background 0.3s, box-shadow 0.3s;
+            }
+            .flat-table-1 {
+                background:#eee;
+            }
+            .flat-table-1 tr:hover {
+                background: rgba(0,0,0,0.19);
+            }
+            .flat-table-2 tr:hover {
+                background: rgba(0,0,0,0.1);
+            }
+            .flat-table-2 {
+                background: #f06060;
+            }
+            .flat-table-3 {
+                background: #52be7f;
+            }
+            .flat-table-3 tr:hover {
+                background: rgba(0,0,0,0.1);
+            }
+        </style>
         <title>adminPage</title>
     </head>
     <body>
@@ -852,7 +904,7 @@
         <button class="accordion" onclick="test()">Show all students</button>
         <div class="panel">
         <%--<button name="objectType" id="ot" class="aclass" onclick="test()">All students</button>--%>
-            <table id="personDataTable" style="visibility: hidden" border="" width="100%">
+            <table id="personDataTable" style="visibility: hidden" width="100%" class="flat-table-1">
                 <tr>
                     <th >ID</th>
                     <th >Name</th>
@@ -862,7 +914,7 @@
                     <th>Edit</th>
                 </tr>
             </table>
-            <table id="studentPersone" style="visibility: hidden">
+            <table id="studentPersone" style="visibility: hidden" >
                 <tr>
                     <td>id</td>
                     <td>Name</td>
@@ -893,7 +945,7 @@
         </div>
         <button class="accordion" onclick="lecturers()">Show all lecturers</button>
         <div class="panel">
-            <table id="lecturersTable" style="visibility: hidden" border="" width="100%">
+            <table id="lecturersTable" style="visibility: hidden" width="100%" class="flat-table-1">
                 <tr>
                     <th >ID</th>
                     <th >Name</th>
@@ -907,7 +959,7 @@
                     <th></th>
                 </tr>
             </table>
-            <table id="lecturerPerson" style="visibility: hidden" width="100%">
+            <table id="lecturerPerson" style="visibility: hidden" width="100%" >
                 <tr>
                     <td>id</td>
                     <td>Name</td>
@@ -921,8 +973,8 @@
                 </tr>
                 <tr>
                     <td><label id="lecturerId">id</label></td>
-                    <td><input id="lecturerName"/></td>
-                    <td><input id="lecturerLogin"/></td>
+                    <td><input id="lecturerName" style='width:100%'/></td>
+                    <td><input id="lecturerLogin"style='width:100%'/></td>
                     <td><input id="lecturerPassword"/></td>
                     <td><input id="lecturerInfo"/></td>
                     <td><input id="lecturerDegree"/></td>
@@ -945,7 +997,7 @@
         </div>
         <button class="accordion" onclick="subjects()">Show all subjects</button>
         <div class="panel">
-            <table id="subjects" border="1" width="100%">
+            <table id="subjects"width="100%" class="flat-table-1">
                 <tr>
                     <th>Id</th>
                     <th>Short name</th>
@@ -957,7 +1009,7 @@
                     <th></th>
                 </tr>
             </table>
-            <table id="subjectBody" style="visibility: hidden">
+            <table id="subjectBody" style="visibility: hidden" >
                 <tr>
                     <td>id</td>
                     <td>Short name</td>
@@ -984,11 +1036,11 @@
                         <button id="cancelSubject" onclick="onCancelSubject()">Cancel</button>
                     </td>
                 </tr>
-            </table>
+            </table >
             <table width="100%">
                 <tr>
                     <td>
-                        <table id="studentsOnSubject" style="visibility: hidden" border="1" width="50%">
+                        <table id="studentsOnSubject" style="visibility: hidden" width="50%" >
                             <tr>
                                 <th>ID</th>
                                 <th>Name</th>
@@ -997,7 +1049,7 @@
                         </table>
                     </td>
                     <td>
-                        <table id="studentsToAdd" style="visibility: hidden" border="1" width="100%">
+                        <table id="studentsToAdd" style="visibility: hidden" width="100%" >
                             <tr>
                             <th>ID</th>
                             <th>Name</th>
@@ -1011,7 +1063,7 @@
         </div>
         <button class="accordion" onclick="objects()">Show all ...</button>
         <div class ="panel">
-            <table id="objects" border="1" width="100%">
+            <table id="objects"width="100%" class="flat-table-1">
                 <tr>
                     <th>Id</th>
                     <th>Type</th>
