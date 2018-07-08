@@ -18,6 +18,45 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
         <script type="text/javascript" src="http://code.jquery.com/jquery.js"></script>
         <script type="text/javascript">
+            (function(document) {
+                'use strict';
+
+                var LightTableFilter = (function(Arr) {
+
+                    var _input;
+
+                    function _onInputEvent(e) {
+                        _input = e.target;
+                        var tables = document.getElementsByClassName(_input.getAttribute('data-table'));
+                        Arr.forEach.call(tables, function(table) {
+                            Arr.forEach.call(table.tBodies, function(tbody) {
+                                Arr.forEach.call(tbody.rows, _filter);
+                            });
+                        });
+                    }
+
+                    function _filter(row) {
+                        var text = row.textContent.toLowerCase(), val = _input.value.toLowerCase();
+                        row.style.display = text.indexOf(val) === -1 ? 'none' : 'table-row';
+                    }
+
+                    return {
+                        init: function() {
+                            var inputs = document.getElementsByClassName('light-table-filter');
+                            Arr.forEach.call(inputs, function(input) {
+                                input.oninput = _onInputEvent;
+                            });
+                        }
+                    };
+                })(Array.prototype);
+
+                document.addEventListener('readystatechange', function() {
+                    if (document.readyState === 'complete') {
+                        LightTableFilter.init();
+                    }
+                });
+
+            })(document);
             var shown = 0;
             var lecturerShown=0;
             var subjectsShown=0;
@@ -845,74 +884,79 @@
             }
         </style>
         <style>
-            .flat-table {
-                margin-bottom: 20px;
-                border-collapse:collapse;
-                font-family: 'Lato', Calibri, Arial, sans-serif;
-                border: none;
-                border-radius: 3px;
-                -webkit-border-radius: 3px;
-                -moz-border-radius: 3px;
-            }
-            .flat-table th, .flat-table td {
-                box-shadow: inset 0 -1px rgba(0,0,0,0.25),
-                inset 0 1px rgba(0,0,0,0.25);
-            }
-            .flat-table th {
-                font-weight: normal;
-                -webkit-font-smoothing: antialiased;
-                padding: 1em;
-                color: rgba(0,0,0,0.45);
-                text-shadow: 0 0 1px rgba(0,0,0,0.1);
-                font-size: 1.5em;
-            }
-            .flat-table td {
-                color: #f7f7f7;
-                padding: 0.7em 1em 0.7em 1.15em;
-                text-shadow: 0 0 1px rgba(255,255,255,0.1);
-                font-size: 1.4em;
-            }
-            .flat-table tr {
-                -webkit-transition: background 0.3s, box-shadow 0.3s;
-                -moz-transition: background 0.3s, box-shadow 0.3s;
-                transition: background 0.3s, box-shadow 0.3s;
-            }
-            .flat-table-1 {
-                background:#eee;
-            }
-            .flat-table-1 tr:hover {
-                background: rgba(0,0,0,0.19);
-            }
-            .flat-table-2 tr:hover {
-                background: rgba(0,0,0,0.1);
-            }
-            .flat-table-2 {
-                background: #f06060;
-            }
-            .flat-table-3 {
-                background: #52be7f;
-            }
-            .flat-table-3 tr:hover {
-                background: rgba(0,0,0,0.1);
-            }
+            /*.order-table {*/
+                /*margin-bottom: 20px;*/
+                /*border-collapse:collapse;*/
+                /*font-family: 'Lato', Calibri, Arial, sans-serif;*/
+                /*border: none;*/
+                /*border-radius: 3px;*/
+                /*-webkit-border-radius: 3px;*/
+                /*-moz-border-radius: 3px;*/
+            /*}*/
+            /*.order-table th, .order-table td {*/
+                /*box-shadow: inset 0 -1px rgba(0,0,0,0.25),*/
+                /*inset 0 1px rgba(0,0,0,0.25);*/
+            /*}*/
+            /*.order-table th {*/
+                /*font-weight: normal;*/
+                /*-webkit-font-smoothing: antialiased;*/
+                /*padding: 1em;*/
+                /*color: rgba(0,0,0,0.45);*/
+                /*text-shadow: 0 0 1px rgba(0,0,0,0.1);*/
+                /*font-size: 1.5em;*/
+            /*}*/
+            /*.order-table td {*/
+                /*color: #f7f7f7;*/
+                /*padding: 0.7em 1em 0.7em 1.15em;*/
+                /*text-shadow: 0 0 1px rgba(255,255,255,0.1);*/
+                /*font-size: 1.4em;*/
+            /*}*/
+            /*.order-table tr {*/
+                /*-webkit-transition: background 0.3s, box-shadow 0.3s;*/
+                /*-moz-transition: background 0.3s, box-shadow 0.3s;*/
+                /*transition: background 0.3s, box-shadow 0.3s;*/
+            /*}*/
+            /*.order-table {*/
+                /*background:#eee;*/
+            /*}*/
+            /*.order-table-1 tr:hover {*/
+                /*background: rgba(0,0,0,0.19);*/
+            /*}*/
+            /*.order-table-2 tr:hover {*/
+                /*background: rgba(0,0,0,0.1);*/
+            /*}*/
+            /*.flat-table-2 {*/
+                /*background: #f06060;*/
+            /*}*/
+            /*.flat-table-3 {*/
+                /*background: #52be7f;*/
+            /*}*/
+            /*.flat-table-3 tr:hover {*/
+                /*background: rgba(0,0,0,0.1);*/
+            /*}*/
         </style>
         <title>adminPage</title>
     </head>
     <body>
         <div id="result"></div>
-        <h1>Hello admin</h1>
+        <h3>Search</h3>
+        <input type="search" class="light-table-filter" data-table="order-table" placeholder="Filter">
         <button class="accordion" onclick="test()">Show all students</button>
         <div class="panel">
         <%--<button name="objectType" id="ot" class="aclass" onclick="test()">All students</button>--%>
-            <table id="personDataTable" style="visibility: hidden" width="100%" class="flat-table-1">
+            <table class="order-table table" id="personDataTable" style="visibility: hidden" width="100%" class="flat-table-1">
+                <thead>
                 <tr>
-                    <th >ID</th>
-                    <th >Name</th>
-                    <th >Login</th>
-                    <th >Password</th>
-                    <th >Group</th>
-                    <th>Edit</th>
+                    <th align="left" >ID</th>
+                    <th align="left" >Name</th>
+                    <th align="left" >Login</th>
+                    <th align="left" >Password</th>
+                    <th align="left" >Group</th>
+                    <th align="left" >>Edit</th>
                 </tr>
+                </thead>
+                <tbody>
+                </tbody>
             </table>
             <table id="studentPersone" style="visibility: hidden" >
                 <tr>
@@ -945,21 +989,25 @@
         </div>
         <button class="accordion" onclick="lecturers()">Show all lecturers</button>
         <div class="panel">
-            <table id="lecturersTable" style="visibility: hidden" width="100%" class="flat-table-1">
+            <table class="order-table table"  id="lecturersTable" style="visibility: hidden" width="100%" class="flat-table-1">
+                <thead>
                 <tr>
-                    <th >ID</th>
-                    <th >Name</th>
-                    <th >Login</th>
-                    <th >Password</th>
-                    <th >Info</th>
-                    <th >Degree</th>
-                    <th >Works</th>
-                    <th >Interests</th>
-                    <th>Cathedra</th>
-                    <th></th>
+                    <th align="left"  >ID</th>
+                    <th align="left"  >Name</th>
+                    <th align="left"  >Login</th>
+                    <th align="left"  >Password</th>
+                    <th align="left"  >Info</th>
+                    <th align="left"  >Degree</th>
+                    <th align="left"  >Works</th>
+                    <th align="left"  >Interests</th>
+                    <th align="left" >Cathedra</th>
+                    <th align="left" ></th>
                 </tr>
+                </thead>
+                <tbody>
+                </tbody>
             </table>
-            <table id="lecturerPerson" style="visibility: hidden" width="100%" >
+            <table  id="lecturerPerson" style="visibility: hidden" width="100%" >
                 <tr>
                     <td>id</td>
                     <td>Name</td>
@@ -997,17 +1045,21 @@
         </div>
         <button class="accordion" onclick="subjects()">Show all subjects</button>
         <div class="panel">
-            <table id="subjects"width="100%" class="flat-table-1">
+            <table class="order-table table" id="subjects"width="100%" class="flat-table-1">
+                <thead>
                 <tr>
-                    <th>Id</th>
-                    <th>Short name</th>
-                    <th>Full name</th>
-                    <th>Info</th>
-                    <th>Lecturer id</th>
-                    <th>Lecturer name</th>
-                    <th>Students amount</th>
-                    <th></th>
+                    <th align="left" >Id</th>
+                    <th align="left" >Short name</th>
+                    <th align="left" >Full name</th>
+                    <th align="left" >Info</th>
+                    <th align="left" >Lecturer id</th>
+                    <th align="left" >Lecturer name</th>
+                    <th align="left" >Students amount</th>
+                    <th align="left" ></th>
                 </tr>
+                </thead>
+                <tbody>
+                </tbody>
             </table>
             <table id="subjectBody" style="visibility: hidden" >
                 <tr>
@@ -1040,22 +1092,30 @@
             <table width="100%">
                 <tr>
                     <td>
-                        <table id="studentsOnSubject" style="visibility: hidden" width="50%" >
+                        <table class="order-table table" id="studentsOnSubject" style="visibility: hidden" width="50%" >
+                            <thead>
                             <tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th></th>
+                                <th align="left" >ID</th>
+                                <th align="left" >Name</th>
+                                <th align="left" ></th>
                             </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
                         </table>
                     </td>
                     <td>
-                        <table id="studentsToAdd" style="visibility: hidden" width="100%" >
+                        <table class="order-table table" id="studentsToAdd" style="visibility: hidden" width="100%" >
+                            <thead>
                             <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Group</th>
-                            <th></th>
+                                <th align="left" >ID</th>
+                                <th align="left" >Name</th>
+                                <th align="left" >Group</th>
+                                <th align="left" ></th>
                             </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
                         </table>
                     </td>
                 </tr>
@@ -1063,14 +1123,18 @@
         </div>
         <button class="accordion" onclick="objects()">Show all ...</button>
         <div class ="panel">
-            <table id="objects"width="100%" class="flat-table-1">
+            <table class="order-table table" id="objects"width="100%" class="flat-table-1">
+                <thead>
                 <tr>
-                    <th>Id</th>
-                    <th>Type</th>
-                    <th>Description</th>
-                    <th>ParentID</th>
-                    <th></th>
+                    <th align="left" >Id</th>
+                    <th align="left" >Type</th>
+                    <th align="left" >Description</th>
+                    <th align="left" >ParentID</th>
+                    <th align="left" ></th>
                 </tr>
+                </thead>
+                <tbody>
+                </tbody>
             </table>
             <table id="objectBody" style="visibility: hidden">
                 <tr>
