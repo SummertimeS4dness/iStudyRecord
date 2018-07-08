@@ -19,10 +19,8 @@
                 complete: [
                     function (response) {
                         $("#scheduleTable").find("tr:not(:first)").remove();
-                        alert(response.responseText);
                         var trHTML = '';
                         var obj = $.parseJSON(response.responseText);
-                        alert(obj.length);
                         for (var i = 0; i < obj.length; i++) {
                             trHTML += '<tr><td><label>' + obj[i].subject + '</label></td><td>' + obj[i].stringDate + '</td></tr>';
                         }
@@ -39,8 +37,8 @@
                 dataType: "json",
                 complete: [function (response) {
                     var subjects = $.parseJSON(response.responseText);
-                    alert(response.responseText);
                     $("#lessonSubject").find('option').remove();
+                    $('<option disabled selected value></option>').appendTo('#lessonSubject');
                     $.each(subjects, function (i, sub) {
                         $('<option value="' + sub.id + '">' + sub.fullName + '</option>').appendTo('#lessonSubject');
                     });
@@ -49,12 +47,16 @@
         }
 
         function createLesson() {
+            if(document.getElementById("lessonDate").value == "" ||
+                document.getElementById("lessonSubject").options[document.getElementById("lessonSubject").selectedIndex].value =="") {
+                alert("Check your input!")
+                return
+            }
             var lesson = {
                 stringDate: document.getElementById("lessonDate").value,
                 lecturerId:${lecturerID},
                 subjectId: document.getElementById("lessonSubject").options[document.getElementById("lessonSubject").selectedIndex].value
             }
-            alert(JSON.stringify(lesson))
             $.ajax({
                 type: "POST",
                 contentType: 'application/json; charset=utf-8',
@@ -72,8 +74,8 @@
                 dataType: "json",
                 complete: [function (response) {
                     var subjects = $.parseJSON(response.responseText);
-                    //alert(response.responseText)
                     $("#markSubject").find('option').remove();
+                    $('<option disabled selected value></option>').appendTo('#markSubject');
                     $.each(subjects, function (i, sub) {
                         $('<option value="' + sub.id + '">' + sub.fullName + '</option>').appendTo('#markSubject');
                     });
@@ -92,8 +94,8 @@
                     data: JSON.stringify(subject),
                     complete: [
                         function (response) {
-                            alert(response.responseText)
                             var students = $.parseJSON(response.responseText);
+                            $('<option disabled selected value></option>').appendTo('#markStudent');
                             $.each(students, function (i, st) {
                                 $('<option value="' + st.id + '">' + st.name + '</option>').appendTo('#markStudent');
                             });
@@ -107,8 +109,8 @@
                     data: JSON.stringify(subject),
                     complete: [
                         function (response) {
-                            alert(response.responseText)
                             var lessons = $.parseJSON(response.responseText);
+                            $('<option disabled selected value></option>').appendTo('#markLesson');
                             $.each(lessons, function (i, les) {
                                 $('<option value="' + les.lessonId + '">' + les.stringDate + '</option>').appendTo('#markLesson');
                             });
@@ -121,6 +123,15 @@
         }
 
         function createMark() {
+            var x=document.getElementById("markScore").value;
+            var regex=/^[0-9]+$/;
+            if(document.getElementById("markLesson").options[document.getElementById("markLesson").selectedIndex].value == "" ||
+                document.getElementById("markSubject").options[document.getElementById("markSubject").selectedIndex].value == "" ||
+                document.getElementById("markStudent").options[document.getElementById("markStudent").selectedIndex].value == "" ||
+                !x.match(regex) || x < 0 || x > 100) {
+                alert("Check your input!");
+                return
+            }
             var mark = {
                 lessonId: document.getElementById("markLesson").options[document.getElementById("markLesson").selectedIndex].value,
                 score: document.getElementById("markScore").value,
@@ -128,7 +139,6 @@
                 studentId: document.getElementById("markStudent").options[document.getElementById("markStudent").selectedIndex].value,
                 lecturerId:${lecturerID}
             }
-            alert(JSON.stringify(mark))
             $.ajax({
                 type: "POST",
                 contentType: 'application/json; charset=utf-8',
@@ -145,8 +155,8 @@
                 dataType: "json",
                 complete: [function (response) {
                     var groups = $.parseJSON(response.responseText);
-                    //alert(response.responseText)
                     $("#marksForGroupGroup").find('option').remove();
+                    $('<option disabled selected value></option>').appendTo('#marksForGroupGroup');
                     $.each(groups, function (i, gr) {
                         $('<option value="' + gr.id + '">' + gr.description + '</option>').appendTo('#marksForGroupGroup');
                     });
@@ -164,9 +174,9 @@
                     contentType: 'application/json; charset=utf-8',
                     data: {id: object.id},
                     complete: [function (response) {
-                        //alert(response.responseText)
                         var subjects = $.parseJSON(response.responseText);
                         $("#marksForGroupSubject").find('option').remove();
+                        $('<option disabled selected value></option>').appendTo('#marksForGroupSubject');
                         $.each(subjects, function (i, sub) {
                             $('<option value="' + sub.id + '">' + sub.fullName + '</option>').appendTo('#marksForGroupSubject');
                         });
@@ -186,11 +196,9 @@
                     contentType: 'application/json; charset=utf-8',
                     data:{objId:object.objId,subjId:object.subjId},
                     complete: [function (response) {
-                        alert(response.responseText)
                         $("#marksForGroupTable").find("tr:not(:first)").remove();
                         var trHTML = '';
                         var obj = $.parseJSON(response.responseText);
-                        alert(obj.length);
                         for (var i = 0; i < obj.length; i++) {
                             trHTML += '<tr><td>' + obj[i].studentName + '</td><td>' + obj[i].score + '</td><td>' + obj[i].stringDate + '</td></tr>';
                             console.log(trHTML);
@@ -203,8 +211,9 @@
         $(document).ready(function () {
             var acc = document.getElementsByClassName("accordion");
             var i;
+
             for (i = 0; i < acc.length; i++) {
-                acc[i].addEventListener("click", function () {
+                acc[i].addEventListener("click", function() {
                     this.classList.toggle("active");
                     var panel = this.nextElementSibling;
                     if (panel.style.display === "block") {
@@ -214,7 +223,6 @@
                     }
                 });
             }
-            //alert(${lecturerID})
         });
     </script>
     <style>
