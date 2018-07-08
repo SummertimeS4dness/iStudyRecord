@@ -254,13 +254,13 @@
                             }
                             trHTML+='<tr><td><button class="myclassRR">Remove selected</button> </td><td><button class="myclassAD">Add students</button></td><td><button class="myclassCN">Cancel</button></td></tr>'
                             $("#studentsOnSubject tbody").append(trHTML);
-                            $(document).on('click', 'button.myclassRR', function (event) {
+                            $(document).on('click', '.myclassRR', function (event) {
                                selectedStudents(subject);
                             });
-                            $(document).on('click', 'button.myclassAD', function (event) {
+                            $(document).on('click', '.myclassAD', function (event) {
                                 addStudentForSubject(subject);
                             });
-                            $(document).on('click', 'button.myclassCN', function (event) {
+                            $(document).on('click', '.myclassCN', function (event) {
                                 document.getElementById("studentsOnSubject").style.visibility="hidden";
                                 document.getElementById("studentsToAdd").style.visibility="hidden";
 
@@ -294,13 +294,13 @@
 
                             }
                             trHTML+='<tr><td><button class="myclassADS">Add selected</button> </td><td><button class="myclassCLRSLC">Clear selection</button></td><td><button class="myclassCLS">Cancel</button></td></tr>'
-                            $(document).on('click', 'button.myclassADS', function (event) {
+                            $(document).on('click', '.myclassADS', function (event) {
                                 addSelectedForSubject(subject);
                             });
-                            $(document).on('click', 'button.myclassCLRSLC', function (event) {
+                            $(document).on('click', '.myclassCLRSLC', function (event) {
                                 clearSelectionForAdd();
                             });
-                            $(document).on('click', 'button.myclassCLS', function (event) {
+                            $(document).on('click', '.myclassCLS', function (event) {
                                 document.getElementById("studentsToAdd").style.visibility="hidden";
                             });
                             $("#studentsToAdd tbody").append(trHTML);
