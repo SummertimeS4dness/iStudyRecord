@@ -1229,7 +1229,7 @@
          <div class="panel">
             <label>Description</label> <input type="text" id="objectDescriptionCreate"><br>
             <label>Type</label>   <select id="objectTypeCreate">
-             <option value="getFaculty">gruop</option>
+             <option value="getFaculty">group</option>
              <option value="getFaculty">cathedra</option>
              <option value="getUniversity">faculty</option>
              <option value="no">university</option>

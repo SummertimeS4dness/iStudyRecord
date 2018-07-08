@@ -19,7 +19,7 @@
                             var obj = $.parseJSON(response.responseText);
                             alert(obj.length);
                             for (var i = 0; i < obj.length; i++) {
-                                trHTML += '<tr><td>' + obj[i].subjectName + '</td><td>' + obj[i].score + '</td><td>' + obj[i].date + '</td></tr>';
+                                trHTML += '<tr><td>' + obj[i].subjectName + '</td><td>' + obj[i].score + '</td><td>' + obj[i].stringDate + '</td></tr>';
                                 console.log(trHTML);
                             }
                             $("#marksTable tbody").append(trHTML);
@@ -40,7 +40,8 @@
                             var obj = $.parseJSON(response.responseText);
                             alert(obj.length);
                             for (var i = 0; i < obj.length; i++) {
-                                trHTML += '<tr onclick="getLecturerBySubject(' + obj[i].subjectId + ')"><td><label>' + obj[i].subject + '</label></td><td>' + obj[i].lecturer + '</td><td>' + obj[i].date + '</td></tr>';
+                                trHTML += '<tr onclick="getLecturerBySubject(' + obj[i].subjectId + ')"><td><label>' +
+                                    obj[i].subject + '</label></td><td>' + obj[i].lecturer + '</td><td>' + obj[i].stringDate + '</td></tr>';
                                 console.log(trHTML);
                             }
                             $("#scheduleTable tbody").append(trHTML);

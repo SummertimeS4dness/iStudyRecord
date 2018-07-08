@@ -1,39 +1,8 @@
 package mvc.beans;
 
-public class Mark {
-    //    private int score;
-//    private String subject;
-//
-//    public Mark(int score) {
-//        this.score = score;
-//    }
-//
-//    public Mark(int score, String subject) {
-//        this.score = score;
-//        this.subject = subject;
-//    }
-//
-//    public void setSubject(String subject) {
-//
-//        this.subject = subject;
-//    }
-//
-//    public String getSubject() {
-//
-//        return subject;
-//    }
-//
-//    public Mark() {
-//        super();
-//    }
-//
-//    public void setScore(int score) {
-//        this.score = score;
-//    }
-//
-//    public int getScore() {
-//        return score;
-//    }
+import java.util.Date;
+
+public class Mark implements Comparable<Mark> {
     private int id;
     private int lessonId;
     private int score;
@@ -42,7 +11,8 @@ public class Mark {
     private int lecturerId;
     private String subjectName;
     private String studentName;
-    private String date;
+    private String stringDate;
+    private Date date;
 
     public Mark() {super();}
 
@@ -55,7 +25,7 @@ public class Mark {
         this.lecturerId = lecturerId;
     }
 
-    public Mark(int id, int lessonId, int score, int subjectId, int studentId, int lecturerId, String subjectName, String date) {
+    public Mark(int id, int lessonId, int score, int subjectId, int studentId, int lecturerId, String subjectName, String stringDate) {
         this.id = id;
         this.lessonId = lessonId;
         this.score = score;
@@ -63,7 +33,7 @@ public class Mark {
         this.studentId = studentId;
         this.lecturerId = lecturerId;
         this.subjectName = subjectName;
-        this.date = date;
+        this.stringDate = stringDate;
     }
 
     public Mark(int score, int subjectId) {
@@ -126,20 +96,33 @@ public class Mark {
     public void setLecturerId(int lecturerId) {
         this.lecturerId = lecturerId;
     }
+
     public void setSubjectName(String subjectName) {
         this.subjectName = subjectName;
     }
 
-    public void setDate(String date) {
-        this.date = date;
-    }
-
     public String getSubjectName() {
-
         return subjectName;
     }
 
-    public String getDate() {
+    public String getStringDate() {
+        return stringDate;
+    }
+
+    public Date getDate() {
         return date;
+    }
+
+    public void setStringDate(String stringDate) {
+        this.stringDate = stringDate;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    @Override
+    public int compareTo(Mark o) {
+        return getDate().compareTo(o.getDate());
     }
 }

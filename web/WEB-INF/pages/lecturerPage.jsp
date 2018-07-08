@@ -24,7 +24,7 @@
                         var obj = $.parseJSON(response.responseText);
                         alert(obj.length);
                         for (var i = 0; i < obj.length; i++) {
-                            trHTML += '<tr><td><label>' + obj[i].subject + '</label></td><td>' + obj[i].date + '</td></tr>';
+                            trHTML += '<tr><td><label>' + obj[i].subject + '</label></td><td>' + obj[i].stringDate + '</td></tr>';
                         }
                         $("#scheduleTable tbody").append(trHTML);
                     }
@@ -50,7 +50,7 @@
 
         function createLesson() {
             var lesson = {
-                date: document.getElementById("lessonDate").value,
+                stringDate: document.getElementById("lessonDate").value,
                 lecturerId:${lecturerID},
                 subjectId: document.getElementById("lessonSubject").options[document.getElementById("lessonSubject").selectedIndex].value
             }
@@ -110,7 +110,7 @@
                             alert(response.responseText)
                             var lessons = $.parseJSON(response.responseText);
                             $.each(lessons, function (i, les) {
-                                $('<option value="' + les.lessonId + '">' + les.date + '</option>').appendTo('#markLesson');
+                                $('<option value="' + les.lessonId + '">' + les.stringDate + '</option>').appendTo('#markLesson');
                             });
                         }
                     ]
@@ -141,7 +141,7 @@
         function listGroups() {
             $.ajax({
                 type: "GET",
-                url: 'getGroups',
+                url: 'getGroup',
                 dataType: "json",
                 complete: [function (response) {
                     var groups = $.parseJSON(response.responseText);
@@ -192,7 +192,7 @@
                         var obj = $.parseJSON(response.responseText);
                         alert(obj.length);
                         for (var i = 0; i < obj.length; i++) {
-                            trHTML += '<tr><td>' + obj[i].studentName + '</td><td>' + obj[i].score + '</td><td>' + obj[i].date + '</td></tr>';
+                            trHTML += '<tr><td>' + obj[i].studentName + '</td><td>' + obj[i].score + '</td><td>' + obj[i].stringDate + '</td></tr>';
                             console.log(trHTML);
                         }
                         $("#marksForGroupTable tbody").append(trHTML);
@@ -260,7 +260,7 @@
     <table>
         <tr>
             <td><label>Date</label></td>
-            <td><input type="text" id="lessonDate"></td>
+            <td><input type="datetime-local" id="lessonDate"></td>
         </tr>
         <tr>
             <td><label>Subject</label></td>

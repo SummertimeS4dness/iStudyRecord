@@ -8,6 +8,9 @@ import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class DAOMarkImpl implements DAOMark {
@@ -64,7 +67,6 @@ public class DAOMarkImpl implements DAOMark {
     public List<Mark> getMarksForStudentAndSubject(Student student, Subject subject) {
         String sql = "SELECT * from MARKS WHERE SUBJECT_ID=" + subject.getId() + " AND STUDENT_ID=" + student.getId();
         List<Mark> marks = template.query(sql, new MarkMapper());
-        System.out.println(marks.get(0).getSubjectName());
         return marks;
     }
 
@@ -107,7 +109,15 @@ public class DAOMarkImpl implements DAOMark {
             int lecturerID = rs.getInt("lecturer_id");
             String subjectName = rs.getString("subject_full_name");
             String date = rs.getString("lesson_date");
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            Date parsed = null;
+            try {
+                parsed = format.parse(date);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
             Mark mark = new Mark(id, lessonId, score, subjectID, studentID, lecturerID, subjectName, date);
+            mark.setDate(parsed);
             return mark;
         }
     }
@@ -121,9 +131,17 @@ public class DAOMarkImpl implements DAOMark {
             int lecturerID = rs.getInt("lecturer_id");
             String studentName = rs.getString("student_name");
             String date = rs.getString("lesson_date");
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            Date parsed = null;
+            try {
+                parsed = format.parse(date);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
             Mark mark = new Mark(id, lessonId, score, subjectID, studentID, lecturerID);
-            mark.setDate(date);
+            mark.setStringDate(date);
             mark.setStudentName(studentName);
+            mark.setDate(parsed);
             return mark;
         }
     }

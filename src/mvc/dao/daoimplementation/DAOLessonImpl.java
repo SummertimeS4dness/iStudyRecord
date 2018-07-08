@@ -10,6 +10,9 @@ import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class DAOLessonImpl implements DAOLesson {
@@ -21,8 +24,8 @@ public class DAOLessonImpl implements DAOLesson {
 
     @Override
     public void addLesson(Lesson lesson) {
-        String sql = "INSERT INTO LESSONS VALUES (LESSON_SEQUENCE.nextval,?,?,?)";
-        template.update(sql, lesson.getDate(), lesson.getSubjectId(), lesson.getLecturerId());
+        String sql = "INSERT INTO LESSONS VALUES (LESSON_SEQUENCE.nextval,TO_DATE(TO_CHAR(?),'YYYY-MM-DD HH24:MI'),?,?)";
+        template.update(sql, lesson.getStringDate(), lesson.getSubjectId(), lesson.getLecturerId());
     }
 
     @Override
@@ -44,7 +47,6 @@ public class DAOLessonImpl implements DAOLesson {
                 " (LESSONS.SUBJECT_ID=STUDENT_SUBJECT_LISTS.SUBJECT_ID) JOIN SUBJECTS ON (STUDENT_SUBJECT_LISTS.SUBJECT_ID=SUBJECTS.SUBJECT_ID)" +
                 " JOIN LECTURERS ON (SUBJECTS.LECTURER_ID=LECTURERS.LECTURER_ID) WHERE STUDENT_ID=" + student.getId();
         List<Lesson> lessons = template.query(sql, new LessonMapper1());
-        System.out.println(lessons.get(0).getSubject());
         return lessons;
     }
 
@@ -79,19 +81,33 @@ public class DAOLessonImpl implements DAOLesson {
         public Lesson mapRow(ResultSet rs, int arg1) throws SQLException {
             int lessonId = rs.getInt("lesson_id");
             String lessonDate = rs.getString("lesson_date");
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            Date parsed = null;
+            try {
+                parsed = format.parse(lessonDate);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
             int subjectId = rs.getInt("subject_id");
             int lecturerId = rs.getInt("lecturer_id");
             String subject = rs.getString("subject_full_name");
             String lecturer = rs.getString("lecturer_name");
-            Lesson lesson = new Lesson(lessonDate, subjectId, lecturerId, lessonId, subject, lecturer);
+            Lesson lesson = new Lesson(parsed, subjectId, lecturerId, lessonId, subject, lecturer, lessonDate);
             return lesson;
         }
     }
     class LessonMapper2 implements RowMapper<Lesson> {
         public Lesson mapRow(ResultSet rs, int arg1) throws SQLException {
             String lessonDate = rs.getString("lesson_date");
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            Date parsed = null;
+            try {
+                parsed = format.parse(lessonDate);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
             String subject = rs.getString("subject_full_name");
-            Lesson lesson = new Lesson(lessonDate, subject);
+            Lesson lesson = new Lesson(parsed, subject, lessonDate);
             return lesson;
         }
     }
