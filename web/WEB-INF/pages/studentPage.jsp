@@ -14,10 +14,8 @@
                     complete: [
                         function (response) {
                             $("#marksTable").find("tr:not(:first)").remove();
-                            alert(response.responseText);
                             var trHTML = '';
                             var obj = $.parseJSON(response.responseText);
-                            alert(obj.length);
                             for (var i = 0; i < obj.length; i++) {
                                 trHTML += '<tr><td>' + obj[i].subjectName + '</td><td>' + obj[i].score + '</td><td>' + obj[i].stringDate + '</td></tr>';
                                 console.log(trHTML);
@@ -35,10 +33,8 @@
                     complete: [
                         function (response) {
                             $("#scheduleTable").find("tr:not(:first)").remove();
-                            alert(response.responseText);
                             var trHTML = '';
                             var obj = $.parseJSON(response.responseText);
-                            alert(obj.length);
                             for (var i = 0; i < obj.length; i++) {
                                 trHTML += '<tr onclick="getLecturerBySubject(' + obj[i].subjectId + ')"><td><label>' +
                                     obj[i].subject + '</label></td><td>' + obj[i].lecturer + '</td><td>' + obj[i].stringDate + '</td></tr>';
@@ -61,10 +57,7 @@
                     data: JSON.stringify(subject),
                     complete: [
                         function (response) {
-                            alert(response.responseText)
                             var lecturer = $.parseJSON(response.responseText);
-                            alert("Name: " + lecturer.name + "\nInfo: " + lecturer.info + "\nDegree: " + lecturer.degree
-                                + "\nWorks: " + lecturer.works + "\nInterests: " + lecturer.interest)
                         }
                     ]
                 });
