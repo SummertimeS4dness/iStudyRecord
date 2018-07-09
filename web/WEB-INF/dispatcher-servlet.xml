@@ -18,25 +18,25 @@
           class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="location" value="classpath:jdbc.properties"/>
     </bean>
-    <!--<bean id="dataSource"-->
-          <!--class="org.springframework.jdbc.datasource.DriverManagerDataSource">-->
-        <!--<property name="driverClassName" value="${database.driver}"/>-->
-        <!--<property name="url" value="${database.url}"/>-->
-        <!--<property name="username" value="${database.user}"/>-->
-        <!--<property name="password" value="${database.password}"/>-->
-       <!---->
-    <!--</bean>-->
-    <bean id="dataSource" class="oracle.jdbc.pool.OracleDataSource" destroy-method="close">
-        <property name="URL" value="${database.url}" />
-        <property name="user" value="${database.user}"/>
+    <bean id="dataSource"
+          class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="${database.driver}"/>
+        <property name="url" value="${database.url}"/>
+        <property name="username" value="${database.user}"/>
         <property name="password" value="${database.password}"/>
-        <property name="connectionCacheProperties">
-            <props merge="default">
-                <prop key="MinLimit">3</prop>
-                <prop key="MaxLimit">20</prop>
-            </props>
-        </property>
+
     </bean>
+    <!--<bean id="dataSource" class="oracle.jdbc.pool.OracleDataSource" destroy-method="close">-->
+        <!--<property name="URL" value="${database.url}" />-->
+        <!--<property name="user" value="${database.user}"/>-->
+        <!--<property name="password" value="${database.password}"/>-->
+        <!--<property name="connectionCacheProperties">-->
+            <!--<props merge="default">-->
+                <!--<prop key="MinLimit">3</prop>-->
+                <!--<prop key="MaxLimit">20</prop>-->
+            <!--</props>-->
+        <!--</property>-->
+    <!--</bean>-->
 
 
     <bean id = "jdbcTemplate" class = "org.springframework.jdbc.core.JdbcTemplate">
