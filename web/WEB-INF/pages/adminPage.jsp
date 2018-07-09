@@ -12,6 +12,7 @@
 <%@ page import="mvc.beans.Object" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@taglib  uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@ page errorPage="errorPage.jsp" %>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
