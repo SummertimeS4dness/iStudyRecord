@@ -330,25 +330,24 @@ public class Controllers {
         daoStudent.removeStudent(student);
     }
 
-    @RequestMapping(value = "/addStudent", method = RequestMethod.POST)
-    public ModelAndView newStudentForm(@ModelAttribute("student") Student student, @ModelAttribute("object") Object object) {
-        System.out.println("STUDENT_____________________");
+    @RequestMapping(value = "/createStudent", method = RequestMethod.POST)
+    @ResponseStatus(value = HttpStatus.OK)
+    public void newStudentForm(@RequestBody Student student) {
+        Object object=new Object();
         object.setDescription(student.getName());
         object.setType("student");
+        object.setParentId(student.getGroupId());
         daoStudent.createStudent(student, object);
-        //return new ModelAndView("adminPage");
-        return new ModelAndView(new RedirectView("adminPage"));
     }
 
-    @RequestMapping(value = "/addLecturer", method = RequestMethod.POST)
-    public ModelAndView newLecturerForm(@ModelAttribute("lecturer") Lecturer lecturer, @ModelAttribute("object1") Object object) {
-        System.out.println("LECTURER_____________________");
+    @RequestMapping(value = "/createLecturer", method = RequestMethod.POST, consumes = "application/json")
+    @ResponseStatus(value = HttpStatus.OK)
+    public void newLecturerForm(@RequestBody Lecturer lecturer) {
+        Object object= new Object();
         object.setDescription(lecturer.getName());
         object.setType("lecturer");
+        object.setParentId(lecturer.getCathedraId());
         daoLecturer.createLecturer(lecturer, object);
-        //  daoStudent.createStudent(student,object);
-        //return new ModelAndView("adminPage");
-        return new ModelAndView(new RedirectView("adminPage"));
     }
 
     @RequestMapping(value = "/updateLecturer", method = RequestMethod.POST, consumes = "application/json")
