@@ -89,6 +89,45 @@
                     ]
                 });*/
             });
+            /*filter*/(function(document) {
+                'use strict';
+
+                var LightTableFilter = (function(Arr) {
+
+                    var _input;
+
+                    function _onInputEvent(e) {
+                        _input = e.target;
+                        var tables = document.getElementsByClassName(_input.getAttribute('data-table'));
+                        Arr.forEach.call(tables, function(table) {
+                            Arr.forEach.call(table.tBodies, function(tbody) {
+                                Arr.forEach.call(tbody.rows, _filter);
+                            });
+                        });
+                    }
+
+                    function _filter(row) {
+                        var text = row.textContent.toLowerCase(), val = _input.value.toLowerCase();
+                        row.style.display = text.indexOf(val) === -1 ? 'none' : 'table-row';
+                    }
+
+                    return {
+                        init: function() {
+                            var inputs = document.getElementsByClassName('light-table-filter');
+                            Arr.forEach.call(inputs, function(input) {
+                                input.oninput = _onInputEvent;
+                            });
+                        }
+                    };
+                })(Array.prototype);
+
+                document.addEventListener('readystatechange', function() {
+                    if (document.readyState === 'complete') {
+                        LightTableFilter.init();
+                    }
+                });
+
+            })(document);
         </script>
         <style>
             .accordion {
@@ -119,24 +158,32 @@
     </head>
     <body>
         <h1>Hello, ${name}</h1>
+        <input type="search" class="light-table-filter" data-table="order-table" placeholder="Filter">
         <button class="accordion" onclick="getMarks()">Marks</button>
         <div class="panel">
-            <table id="marksTable" border = "2" align="center">
+            <table id="marksTable"  align="left" class="order-table" style="width: 50%">
+                <thead>
                 <tr>
-                    <th>Subject</th>
-                    <th>Score</th>
-                    <th>Date</th>
+                    <th align="left">Subject</th>
+                    <th align="left">Score</th>
+                    <th align="left">Date</th>
                 </tr>
+                </thead>
+                <tbody></tbody>
             </table>
         </div>
         <button class="accordion" onclick="getSchedule()">Schedule</button>
         <div class="panel">
-            <table id="scheduleTable" border = "2" align="center">
+            <table id="scheduleTable"  align="left" style="width: 50%" class="order-table">
+                <thead>
                 <tr>
-                    <th>Subject</th>
-                    <th>Lecturer</th>
-                    <th>Date</th>
+                    <th align="left">Subject</th>
+                    <th align="left">Lecturer</th>
+                    <th align="left">Date</th>
                 </tr>
+                </thead>
+                <tbody>
+                </tbody>
             </table>
         </div>
     </body>

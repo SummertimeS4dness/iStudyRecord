@@ -972,58 +972,6 @@
                 overflow: hidden;
             }
         </style>
-        <style>
-            /*.order-table {*/
-                /*margin-bottom: 20px;*/
-                /*border-collapse:collapse;*/
-                /*font-family: 'Lato', Calibri, Arial, sans-serif;*/
-                /*border: none;*/
-                /*border-radius: 3px;*/
-                /*-webkit-border-radius: 3px;*/
-                /*-moz-border-radius: 3px;*/
-            /*}*/
-            /*.order-table th, .order-table td {*/
-                /*box-shadow: inset 0 -1px rgba(0,0,0,0.25),*/
-                /*inset 0 1px rgba(0,0,0,0.25);*/
-            /*}*/
-            /*.order-table th {*/
-                /*font-weight: normal;*/
-                /*-webkit-font-smoothing: antialiased;*/
-                /*padding: 1em;*/
-                /*color: rgba(0,0,0,0.45);*/
-                /*text-shadow: 0 0 1px rgba(0,0,0,0.1);*/
-                /*font-size: 1.5em;*/
-            /*}*/
-            /*.order-table td {*/
-                /*color: #f7f7f7;*/
-                /*padding: 0.7em 1em 0.7em 1.15em;*/
-                /*text-shadow: 0 0 1px rgba(255,255,255,0.1);*/
-                /*font-size: 1.4em;*/
-            /*}*/
-            /*.order-table tr {*/
-                /*-webkit-transition: background 0.3s, box-shadow 0.3s;*/
-                /*-moz-transition: background 0.3s, box-shadow 0.3s;*/
-                /*transition: background 0.3s, box-shadow 0.3s;*/
-            /*}*/
-            /*.order-table {*/
-                /*background:#eee;*/
-            /*}*/
-            /*.order-table-1 tr:hover {*/
-                /*background: rgba(0,0,0,0.19);*/
-            /*}*/
-            /*.order-table-2 tr:hover {*/
-                /*background: rgba(0,0,0,0.1);*/
-            /*}*/
-            /*.flat-table-2 {*/
-                /*background: #f06060;*/
-            /*}*/
-            /*.flat-table-3 {*/
-                /*background: #52be7f;*/
-            /*}*/
-            /*.flat-table-3 tr:hover {*/
-                /*background: rgba(0,0,0,0.1);*/
-            /*}*/
-        </style>
         <title>adminPage</title>
     </head>
     <body>
@@ -1033,7 +981,7 @@
         <button class="accordion" onclick="test()">Show all students</button>
         <div class="panel">
         <%--<button name="objectType" id="ot" class="aclass" onclick="test()">All students</button>--%>
-            <table class="order-table table" id="personDataTable" style="visibility: hidden" width="100%" class="flat-table-1">
+            <table id="personDataTable" style="visibility: hidden" width="100%" class="order-table">
                 <thead>
                 <tr>
                     <th align="left" >ID</th>
