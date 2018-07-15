@@ -59,6 +59,14 @@
                     complete: [
                         function (response) {
                             var lecturer = $.parseJSON(response.responseText);
+                            alert("Info about lecturer:" +
+                                "\nname: " + lecturer.name +
+                                "\ninfo: " + lecturer.info +
+                                "\ndegree: " + lecturer.degree +
+                                "\nworks: " + lecturer.works +
+                                "\ninterests: " + lecturer.interests +
+                                "\ncathedra:" + lecturer.cathedra);
+
                         }
                     ]
                 });
