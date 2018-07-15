@@ -12,7 +12,7 @@ public interface DAOStudent {
 	public void removeStudent(Student student);
 	public List<Student> getStudents();
 	public Student validateStudent(Login login);
-	public void registerStudentForSubject(Student student,Subject subject);
+	public void registerStudentForSubject(Student student, Subject subject);
 	public List<Student> getStudentsOnSubject(Subject subject);
 	public void updateStudent(Student student);
 	public void removeStudentFromSubject(Subject subject, Student student);

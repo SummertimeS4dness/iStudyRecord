@@ -11,8 +11,8 @@ public interface DAOMark {
 	public List<Mark> getMarksForSubject(Subject subject);
 	public List<Mark> getMarksForStudent(Student student);
 	public List<Mark> getMarksForLecturer(Lecturer lecturer);
-	public List<Mark> getMarksForStudentAndSubject(Student student,Subject subject);
-	public List<Mark> getMarksForLecturerAndSubject(Lecturer lecturer,Subject subject);
+	public List<Mark> getMarksForStudentAndSubject(Student student, Subject subject);
+	public List<Mark> getMarksForLecturerAndSubject(Lecturer lecturer, Subject subject);
 	public List<Mark> getMarksForGroupAndSubject(Subject subject, Object object);
 
 }
