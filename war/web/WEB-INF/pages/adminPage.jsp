@@ -10,7 +10,6 @@
 <%@ page import="mvc.beans.Student" %>
 <%@ page import="mvc.beans.Lecturer" %>
 <%@ page import="mvc.beans.Object" %>
-<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@taglib  uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ page errorPage="errorPage.jsp" %>
 <html>
@@ -504,18 +503,24 @@
                                         '<td>' + obj[i].lecturerId + '</td>' +
                                         '<td>' + obj[i].lecturerName + '</td>' +
                                         '<td>' + obj[i].amount + '</td>' +
-                                        '<td><button id="' + i+"f" + '"class="myclassE">show students</button> </td>'+
+                                        '<td><button id="' + i+"f" + '"class="myclassL">show students</button> </td>'+
                                         '<td><button id="' + i + '"class="myclassL">edit</button> </td></tr>';
                                     var a = obj;
                                     var b=obj[i];
                                     $(document).off().on('click', 'button.myclassL', function (event) {
+                                        alert(this.id)
+                                        if(this.id.substring(this.id.length-1)=='f'){
+                                             //listLecturers();
+                                             showStudentsForSubject(a,this.id.substring(0,this.id.length-1));
+                                        }
+                                        else{
                                         listLecturers();
-                                        onSubjectEdit(this.id, a);
+                                        onSubjectEdit(this.id, a);}
                                     });
-                                    $(document).on('click', 'button.myclassE', function (event) {
-                                        // listLecturers();
-                                        showStudentsForSubject(b);
-                                    });
+//                                    $(document).off().on('click', 'button.myclassE', function (event) {
+//                                        // listLecturers();
+//                                        showStudentsForSubject(b);
+//                                    });
                                 }
                                 $("#subjects tbody").append(trHTML);
                             }
@@ -525,7 +530,8 @@
                     subjectsShown = 0;
                 }
             }
-            function showStudentsForSubject(subject) {
+            function showStudentsForSubject(a,b) {
+                var subject = a[b];
                 $.ajax({
                     type: "GET",
                     url: 'studentsForSubject',
@@ -547,13 +553,14 @@
                             }
                             trHTML+='<tr><td><button class="myclassRR">Remove selected</button> </td><td><button class="myclassAD">Add students</button></td><td><button class="myclassCN">Cancel</button></td></tr>'
                             $("#studentsOnSubject tbody").append(trHTML);
-                            $(document).on('click', '.myclassRR', function (event) {
+                            $("#studentsOnSubject").off().on('click', '.myclassRR', function (event) {
                                 selectedStudents(subject);
                             });
-                            $(document).on('click', '.myclassAD', function (event) {
+                            $("#studentsOnSubject").on('click', '.myclassAD', function (event) {
                                 addStudentForSubject(subject);
+                                showStudentsForSubject(a,b);
                             });
-                            $(document).on('click', '.myclassCN', function (event) {
+                            $("#studentsOnSubject").on('click', '.myclassCN', function (event) {
                                 document.getElementById("studentsOnSubject").style.visibility="hidden";
                                 document.getElementById("studentsToAdd").style.visibility="hidden";
 
@@ -586,15 +593,20 @@
                                 '</tr>';
 
                             }
-                            trHTML+='<tr><td><button class="myclassADS">Add selected</button> </td><td><button class="myclassCLRSLC">Clear selection</button></td><td><button class="myclassCLS">Cancel</button></td></tr>'
-                            $(document).on('click', '.myclassADS', function (event) {
-                                addSelectedForSubject(subject);
-                            });
-                            $(document).on('click', '.myclassCLRSLC', function (event) {
-                                clearSelectionForAdd();
-                            });
-                            $(document).on('click', '.myclassCLS', function (event) {
-                                document.getElementById("studentsToAdd").style.visibility="hidden";
+                            trHTML+='<tr><td><button class="myclass1" name="add">Add selected</button> </td><td><button class="myclass1" name="clear">Clear selection</button></td><td><button class="myclass1" name="cancel">Cancel</button></td></tr>'
+                            var sub = subject;
+                            $("#studentsToAdd").off().on('click', '.myclass1', function (event) {
+                                if(this.name=="add"){
+
+                                    addSelectedForSubject(sub);
+                                }
+                                if(this.name=="cancel"){
+                                    document.getElementById("studentsToAdd").style.visibility="hidden";
+                                }
+                                if(this.name="clear"){
+                                    clearSelectionForAdd();
+                                }
+                                addStudentForSubject(sub);
                             });
                             $("#studentsToAdd tbody").append(trHTML);
                         }
@@ -636,7 +648,8 @@
                     success: function (response) {
                         subjectsShown=0;
                         subjects();
-                        showStudentsForSubject(subject);
+                        var st = [subject]
+                        showStudentsForSubject(st,0);
                         // document.getElementById("studentsOnSubject").style.visibility="hidden";
                     },error: function (xhr, status, errorThrown) {
                         alert(status + " " + errorThrown.toString());
@@ -670,7 +683,8 @@
                     success: function (response) {
                         subjectsShown=0;
                         subjects();
-                        showStudentsForSubject(subject);
+                        var st = [subject]
+                        showStudentsForSubject(st,0);
                         //document.getElementById("studentsOnSubject").style.visibility="hidden";
                     },error: function (xhr, status, errorThrown) {
                         alert(status + " " + errorThrown.toString());
@@ -1128,8 +1142,8 @@
             </table >
             <table width="100%">
                 <tr>
-                    <td>
-                        <table class="order-table table" id="studentsOnSubject" style="visibility: hidden" width="50%" >
+                    <td width="50%">
+                        <table class="order-table table" id="studentsOnSubject" style="visibility: hidden" width="100%" >
                             <thead>
                             <tr>
                                 <th align="left" >ID</th>
@@ -1141,7 +1155,7 @@
                             </tbody>
                         </table>
                     </td>
-                    <td>
+                    <td width="50%">
                         <table class="order-table table" id="studentsToAdd" style="visibility: hidden" width="100%" >
                             <thead>
                             <tr>
