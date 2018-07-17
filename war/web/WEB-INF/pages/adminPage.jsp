@@ -508,7 +508,6 @@
                                     var a = obj;
                                     var b=obj[i];
                                     $(document).off().on('click', 'button.myclassL', function (event) {
-                                        alert(this.id)
                                         if(this.id.substring(this.id.length-1)=='f'){
                                              //listLecturers();
                                              showStudentsForSubject(a,this.id.substring(0,this.id.length-1));
