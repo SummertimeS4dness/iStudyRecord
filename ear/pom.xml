@@ -29,6 +29,32 @@
                 <configuration>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>com.oracle.weblogic</groupId>
+                <artifactId>weblogic-maven-plugin</artifactId>
+                <version>12.2.1-0-0</version>
+                <configuration>
+                    <adminurl>t3://localhost:7001</adminurl>
+                    <user>user</user>
+                    <password>password</password>
+                    <name>ear-1.0-SNAPSHOT</name>
+                    <remote>true</remote>
+                    <upload>true</upload>
+                    <targets>AdminServer</targets>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>deploy</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>deploy</goal>
+                        </goals>
+                        <configuration>
+                            <source>ear/target/ear-1.0-SNAPSHOT.ear</source>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
