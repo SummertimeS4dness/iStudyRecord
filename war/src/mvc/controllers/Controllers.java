@@ -2,7 +2,6 @@ package mvc.controllers;
 
 import mvc.beans.*;
 import mvc.beans.Object;
-import mvc.dao.DAOImpl;
 import mvc.dao.daointerfaces.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,8 +22,6 @@ import java.util.List;
 
 @Controller
 public class Controllers {
-    @Autowired
-    private DAOImpl dao;
 
     @Autowired
     private DAOStudent daoStudent;
@@ -185,38 +182,6 @@ public class Controllers {
     public List<Subject> showSubjects() {
         return daoSubject.getSubjects();
     }
-    /*@RequestMapping("/viewAll1")
-    public ModelAndView showMarksForGroup(){
-        return null;
-    }
-
-    @RequestMapping("/viewAll1")
-    public void setMark(){
-
-    }
-
-    @RequestMapping("/viewAll1")
-    public void registerStudent(Student student) {
-
-    }
-
-    @RequestMapping("/viewAll1")
-    public void registerLecturer(Lecturer lecturer) {
-
-    }
-
-    @RequestMapping("/viewAll1")
-    public Student validateStudent(String login, String password) {
-        return null;
-    }
-
-    @RequestMapping("/viewAll1")
-    public Lecturer validateLecturer(String login, String password) {
-        return null;
-    }
-
-    @RequestMapping("/viewAll1")
-    public void createLesson(){}*/
 
     @RequestMapping(value = "/registerStudent", method = RequestMethod.GET)
     public ModelAndView registerStudent() {
@@ -229,7 +194,6 @@ public class Controllers {
     @RequestMapping(value = "/registerStudentProcess", method = RequestMethod.POST)
     public ModelAndView registerStudentProcess(@ModelAttribute("student") Student student, BindingResult resultStudent, @ModelAttribute("object") Object object,
                                                BindingResult resultLecturer) {
-        //Object object = new Object("student", "student", 0);
         daoStudent.createStudent(student, object);
 
         return new ModelAndView("welcome", "firstname", student.getName());
@@ -430,7 +394,6 @@ public class Controllers {
     public void addStudentsForSubject(@RequestBody Student[] students) {
         Subject subject = new Subject(students[0].getId());
         subject.setLecturerId(Integer.parseInt(students[0].getPassword()));
-        // System.out.println(subject.getId() + " " +subject.getLecturerId());
         for (int i = 1; i < students.length; i++) {
             daoStudent.registerStudentForSubject(students[i], subject);
         }
@@ -439,7 +402,6 @@ public class Controllers {
     @RequestMapping(value = "/addObject", method = RequestMethod.POST, consumes = "application/json")
     @ResponseStatus(value = HttpStatus.OK)
     public void createObject(@RequestBody Object object) {
-        // System.out.println(object.getParentId());
         daoObject.createObject(object);
     }
 }

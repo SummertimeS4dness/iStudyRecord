@@ -53,7 +53,6 @@ public class DAOSubjectImpl implements DAOSubject {
         List<Subject> subjects = template.query(sql, new SubjecttMapper());
         return subjects;
     }
-    //HFDKJSHFJKDSHFK
     @Override
     public List<Subject> showSubjectsForGroup(Object object) {
         String sql = "SELECT * FROM SUBJECTS JOIN STUDENT_SUBJECT_LISTS ON (SUBJECTS.SUBJECT_ID = STUDENT_SUBJECT_LISTS.SUBJECT_ID) " +

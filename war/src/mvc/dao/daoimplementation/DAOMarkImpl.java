@@ -41,12 +41,6 @@ public class DAOMarkImpl implements DAOMark {
         return marks;
     }
 
-    /*@Override
-    public List<Mark> getMarksForStudent(Student student) {
-        String sql = "SELECT * from MARKS WHERE STUDENT_ID=" + student.getId();
-        List<Mark> marks = template.query(sql, new MarkMapper());
-        return marks;
-    }*/
     @Override
     public List<Mark> getMarksForStudent(Student student) {
         System.out.println(student.getId());
@@ -76,7 +70,7 @@ public class DAOMarkImpl implements DAOMark {
         List<Mark> marks = template.query(sql, new MarkMapper());
         return marks;
     }
-    //dgjdfhgj
+
     @Override
     public List<Mark> getMarksForGroupAndSubject(Subject subject, Object object) {
         String sql = "SELECT * from MARKS JOIN OBJECTS ON (MARKS.STUDENT_ID=OBJECTS.OBJECT_ID) JOIN STUDENT_INFO ON" +

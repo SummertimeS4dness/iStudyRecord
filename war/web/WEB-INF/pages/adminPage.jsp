@@ -68,7 +68,6 @@
 
                 for (i = 0; i < acc.length; i++) {
                     acc[i].addEventListener("click", function () {
-                       // list();
                         this.classList.toggle("active");
                         var panel = this.nextElementSibling;
                         if (panel.style.display === "block") {
@@ -91,20 +90,16 @@
                         var ddl2 = $("#selectGroupOnEdit");
                         var ddl3=$("#selectParent");
                         ddl.find('option').remove();
-                      //  ddl.append("<option style=\"display:none\" selected=\"selected\"/>");
                         ddl2.find('option').remove();
                         ddl3.find('option').remove();
 
-                      //  ddl2.append("<option style=\"display:none\" selected=\"selected\"/>");
                         for (k = 0; k < groups.length; k++) {
                             ddl.append("<option value='" + groups[k].id + "'>" + groups[k].description + "</option>");
                             ddl2.append("<option value='" + groups[k].id + "'>" + groups[k].description + "</option>");
                             ddl3.append("<option value='" + groups[k].id + "'>" + groups[k].description + "</option>");
                         }
 
-//                $("#selectGroup").html("");
-//                $(array_list).each(function (i) { //populate child options
-//                    $("#selectGroup").append("<option value=\""+array_list[i].id+"\">"+array_list[i].description+"</option>");
+
                     }
                     ]
                 });
@@ -129,9 +124,7 @@
                             ddl2.append("<option value='" + cathedras[k].id + "'>" + cathedras[k].description + "</option>");
                             ddl3.append("<option value='" + cathedras[k].id + "'>" + cathedras[k].description + "</option>");
                         }
-//                $("#selectGroup").html("");
-//                $(array_list).each(function (i) { //populate child options
-//                    $("#selectGroup").append("<option value=\""+array_list[i].id+"\">"+array_list[i].description+"</option>");
+
                     }
                     ]
                 });
@@ -153,9 +146,7 @@
                             ddl.append("<option value='" + lecturers[k].id + "'>" + lecturers[k].name + "</option>");
                              ddl2.append("<option value='" + lecturers[k].id + "'>" + lecturers[k].name + "</option>");
                         }
-//                $("#selectGroup").html("");
-//                $(array_list).each(function (i) { //populate child options
-//                    $("#selectGroup").append("<option value=\""+array_list[i].id+"\">"+array_list[i].description+"</option>");
+
                     }
                     ]
                 });
@@ -199,12 +190,7 @@
                     });
                 } else {
                     lecturerShown = 0;
-//                    document.getElementById("personDataTable").style.visibility = "hidden";
                     document.getElementById("lecturerPerson").style.visibility = "hidden";
-//                    document.getElementById("studentId").textContent = '';
-//                    document.getElementById("studentName").value = '';
-//                    document.getElementById("studentLogin").value = '';
-//                    document.getElementById("studentPassword").value = '';
                 }
             }
             function onLecturerEdit(pos, mass) {
@@ -478,7 +464,6 @@
                 document.getElementById("subjectShortName").value = subject.shortName;
                 document.getElementById("subjectFullName").value = subject.fullName;
                 document.getElementById("subjectInfo").value = subject.info;
-                // $("#selectGroupOnEdit").value = (student.group);
             }
             function subjects() {
                 if (subjectsShown == 0) {
@@ -516,10 +501,6 @@
                                         listLecturers();
                                         onSubjectEdit(this.id, a);}
                                     });
-//                                    $(document).off().on('click', 'button.myclassE', function (event) {
-//                                        // listLecturers();
-//                                        showStudentsForSubject(b);
-//                                    });
                                 }
                                 $("#subjects tbody").append(trHTML);
                             }
@@ -539,7 +520,6 @@
                     data:{id:subject.id},
                     complete: [
                         function (response) {
-                            //alert(response.responseText);
                             document.getElementById("subjects").style.visibility = "visible";
                             $("#studentsOnSubject").find("tr:not(:first)").remove();
                             var trHTML = '';
@@ -649,7 +629,6 @@
                         subjects();
                         var st = [subject]
                         showStudentsForSubject(st,0);
-                        // document.getElementById("studentsOnSubject").style.visibility="hidden";
                     },error: function (xhr, status, errorThrown) {
                         alert(status + " " + errorThrown.toString());
                     }
@@ -684,7 +663,6 @@
                         subjects();
                         var st = [subject]
                         showStudentsForSubject(st,0);
-                        //document.getElementById("studentsOnSubject").style.visibility="hidden";
                     },error: function (xhr, status, errorThrown) {
                         alert(status + " " + errorThrown.toString());
                     }
@@ -839,8 +817,6 @@
                     });
                 } else {
                     objectShown= 0;
-                    //document.getElementById("objects").style.visibility = "hidden";
-                    // document.getElementById("studentPersone").style.visibility = "hidden";
                 }
             }
             function onObjectEdit(mass,pos) {
@@ -965,7 +941,7 @@
                 background-color: #eee;
                 color: #444;
                 cursor: pointer;
-                padding: 18px;
+                padding: 8px;
                 width: 100%;
                 border: none;
                 text-align: left;
@@ -993,7 +969,6 @@
         <input type="search" class="light-table-filter" data-table="order-table" placeholder="Filter">
         <button class="accordion" onclick="test()">Show all students</button>
         <div class="panel">
-        <%--<button name="objectType" id="ot" class="aclass" onclick="test()">All students</button>--%>
             <table id="personDataTable" style="visibility: hidden" width="100%" class="order-table">
                 <thead>
                 <tr>

@@ -85,17 +85,6 @@
                         }
                     });
                 }
-                /*$.ajax({
-                    type: "GET",
-                    contentType: 'application/json; charset=utf-8',
-                    dataType: "json",
-                    url: "getName",
-                    complete: [
-                        function (response) {
-                            $("h1").append('Hello, ' + response.responseText)
-                        }
-                    ]
-                });*/
             });
             /*filter*/(function(document) {
                 'use strict';
@@ -142,7 +131,7 @@
                 background-color: #eee;
                 color: #444;
                 cursor: pointer;
-                padding: 18px;
+                padding: 8px;
                 width: 100%;
                 border: none;
                 text-align: left;

@@ -1,10 +1,4 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: User
-  Date: 04.07.2018
-  Time: 18:15
-  To change this template use File | Settings | File Templates.
---%>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page errorPage="errorPage.jsp" %>
 <html>
@@ -270,7 +264,7 @@
             background-color: #eee;
             color: #444;
             cursor: pointer;
-            padding: 18px;
+            padding: 8px;
             width: 100%;
             border: none;
             text-align: left;
