@@ -2,13 +2,14 @@ package mvc.dao.daoimplementation;
 
 import mvc.beans.Object;
 import mvc.beans.Student;
+import mvc.beans.Subject;
 import mvc.dao.daointerfaces.DAOObject;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
+import java.util.*;
 
 public class DAOObjectImpl implements DAOObject {
     private JdbcTemplate template;
@@ -77,7 +78,6 @@ public List<Object> getUniversities() {
 
     @Override
     public Object getParent(Object object) {
-        
         String sql = "SELECT * FROM OBJECTS  WHERE OBJECT_ID=(SELECT PARENT_ID FROM OBJECTS  WHERE OBJECT_ID="+object.getId()+") ORDER BY OBJECT_ID";
         List<Object> objects = template.query(sql, new ObjectMapper());
         return objects.get(0);
@@ -95,7 +95,22 @@ public List<Object> getUniversities() {
     String sql = "UPDATE OBJECTS SET PARENT_ID=?, OBJECT_DESCRIPTOIN = ? WHERE OBJECT_ID=?";
     template.update(sql,object.getParentId(),object.getDescription(), object.getId());
 }
-    
+    @Override
+    public List<Object> showGroupsForSubject(Subject subject) {
+        String sql = "SELECT * FROM OBJECTS JOIN STUDENT_SUBJECT_LISTS ON (OBJECTS.OBJECT_ID = STUDENT_SUBJECT_LISTS.STUDENT_ID) " +
+                "JOIN SUBJECTS ON (SUBJECTS.SUBJECT_ID=STUDENT_SUBJECT_LISTS.SUBJECT_ID) WHERE SUBJECTS.SUBJECT_ID=" + subject.getId();
+        List<Object> students = template.query(sql, new ObjectMapper());
+        List<Object> groups = new ArrayList<>();
+        List<Integer> numbers = new ArrayList<>();
+        for (Object obj: students) {
+            if(!numbers.contains(obj.getParentId())) {
+                numbers.add(obj.getParentId());
+                Object group = getParent(obj);
+                groups.add(group);
+            }
+        }
+        return groups;
+    }
     static class ObjectMapper implements RowMapper<Object> {
         public Object mapRow(ResultSet rs, int arg1) throws SQLException {
             int id = rs.getInt("object_id");

@@ -82,6 +82,15 @@ public class DAOStudentImpl implements DAOStudent {
         List<Student> users = template.query(sql, new StudentMapper());
         return users;
     }
+
+    @Override
+    public List<Student> getStudentsForGroup(Object object) {
+        String sql = "SELECT * FROM STUDENT_INFO JOIN OBJECTS ON " +
+                "(STUDENT_INFO.STUDENT_ID=OBJECTS.OBJECT_ID) WHERE PARENT_ID=" + object.getId();
+        List<Student> users = template.query(sql, new StudentMapper());
+        return users;
+    }
+
 @Override
 public void removeStudentFromSubject(Subject subject, Student student) {
     String sql ="DELETE FROM STUDENT_SUBJECT_LISTS WHERE STUDENT_ID=? AND SUBJECT_ID=?";

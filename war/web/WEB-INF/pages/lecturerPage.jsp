@@ -85,21 +85,6 @@
                 $.ajax({
                     type: "POST",
                     contentType: 'application/json; charset=utf-8',
-                    url: 'getStudentsForSubject',
-                    data: JSON.stringify(subject),
-                    complete: [
-                        function (response) {
-                            var students = $.parseJSON(response.responseText);
-                            $('<option disabled selected value></option>').appendTo('#markStudent');
-                            $.each(students, function (i, st) {
-                                $('<option value="' + st.id + '">' + st.name + '</option>').appendTo('#markStudent');
-                            });
-                        }
-                    ]
-                });
-                $.ajax({
-                    type: "POST",
-                    contentType: 'application/json; charset=utf-8',
                     url: 'getLessonsForSubject',
                     data: JSON.stringify(subject),
                     complete: [
@@ -112,8 +97,46 @@
                         }
                     ]
                 });
+                $.ajax({
+                    type: "POST",
+                    contentType: 'application/json; charset=utf-8',
+                    url: 'getGroupsForSubject',
+                    data: JSON.stringify(subject),
+                    complete: [
+                        function (response) {
+                            var groups = $.parseJSON(response.responseText);
+                            $('<option disabled selected value></option>').appendTo('#markGroup');
+                            $.each(groups, function (i, gr) {
+                                $('<option value="' + gr.id + '">' + gr.description + '</option>').appendTo('#markGroup');
+                            });
+                        }
+                    ]
+                });
+                $('#markGroup').empty();
                 $('#markStudent').empty();
                 $('#markLesson').empty();
+            });
+            //jdfkghdfkhgkjdfg
+            $('#markGroup').change(function () {
+                var group = {
+                    id: document.getElementById("markGroup").options[document.getElementById("markGroup").selectedIndex].value
+                }
+                $.ajax({
+                    type: "POST",
+                    contentType: 'application/json; charset=utf-8',
+                    url: 'getStudentsForGroup',
+                    data: JSON.stringify(group),
+                    complete: [
+                        function (response) {
+                            var students = $.parseJSON(response.responseText);
+                            $('<option disabled selected value></option>').appendTo('#markStudent');
+                            $.each(students, function (i, st) {
+                                $('<option value="' + st.id + '">' + st.name + '</option>').appendTo('#markStudent');
+                            });
+                        }
+                    ]
+                });
+                $('#markStudent').empty();
             });
         }
 
@@ -329,6 +352,10 @@
         <tr>
             <td><label>Lesson</label></td>
             <td><select id="markLesson"></select></td>
+        </tr>
+        <tr>
+            <td><label>Group</label></td>
+            <td><select id="markGroup"></select></td>
         </tr>
         <tr>
             <td><label>Student</label></td>

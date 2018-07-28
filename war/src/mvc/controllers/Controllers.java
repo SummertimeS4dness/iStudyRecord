@@ -81,6 +81,12 @@ public class Controllers {
         return daoSubject.showSubjectsForGroup(object);
     }
 
+    @RequestMapping(value = "/getGroupsForSubject", method = RequestMethod.POST, consumes = "application/json", produces = {"application/json"}, headers = "Accept=*/*")
+    @ResponseBody
+    public List<Object> getGroupsForSubject(@RequestBody Subject subject) {
+        return daoObject.showGroupsForSubject(subject);
+    }
+
     @RequestMapping(value = "/getMarksForGroupAndSubject", method = RequestMethod.GET, consumes = "application/json", produces = {"application/json"}, headers = "Accept=*/*")
     @ResponseBody
     public List<Mark> getMarksForGroupAndSubject(@RequestParam("objId") int objId, @RequestParam("subjId") int subjId) {
@@ -95,6 +101,12 @@ public class Controllers {
     @ResponseBody
     public List<Student> showStudentsForSubjects(@RequestBody Subject subject) {
         return daoStudent.getStudentsOnSubject(subject);
+    }
+
+    @RequestMapping(value = "/getStudentsForGroup", method = RequestMethod.POST, produces = {"application/json"}, headers = "Accept=*/*")
+    @ResponseBody
+    public List<Student> getStudentsForGroup(@RequestBody Object group) {
+        return daoStudent.getStudentsForGroup(group);
     }
 
     @RequestMapping(value = "/getLessonsForSubject", method = RequestMethod.POST, produces = {"application/json"}, headers = "Accept=*/*")

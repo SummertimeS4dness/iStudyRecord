@@ -1,6 +1,7 @@
 package mvc.dao.daointerfaces;
 
 import mvc.beans.Object;
+import mvc.beans.Subject;
 
 import java.util.List;
 
@@ -17,4 +18,5 @@ public interface DAOObject {
 	public Object getParent(Object object);
 	public List<Object> getChildObjects(Object object);
 	public void updateObject(Object object);
+	public List<Object> showGroupsForSubject(Subject subject);
 }
