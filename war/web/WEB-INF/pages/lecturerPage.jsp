@@ -74,7 +74,6 @@
                     $.each(subjects, function (i, sub) {
                         $('<option value="' + sub.id + '">' + sub.fullName + '</option>').appendTo('#markSubject');
                     });
-                    $('<option value="' + 56 + '">' + "hello" + '</option>').appendTo('#markSubject');
                 }]
             });
 
@@ -178,7 +177,6 @@
                     $.each(groups, function (i, gr) {
                         $('<option value="' + gr.id + '">' + gr.description + '</option>').appendTo('#marksForGroupGroup');
                     });
-                    $('<option value="' + 56 + '">' + "hello" + '</option>').appendTo('#marksForGroupGroup');
                 }]
             });
             $('#marksForGroupGroup').change(function () {
@@ -198,7 +196,6 @@
                         $.each(subjects, function (i, sub) {
                             $('<option value="' + sub.id + '">' + sub.fullName + '</option>').appendTo('#marksForGroupSubject');
                         });
-                        $('<option value="' + 56 + '">' + "hello" + '</option>').appendTo('#marksForGroupSubject');
                     }]
                 });
             });
