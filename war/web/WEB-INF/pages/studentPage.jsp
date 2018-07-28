@@ -37,8 +37,9 @@
                             var trHTML = '';
                             var obj = $.parseJSON(response.responseText);
                             for (var i = 0; i < obj.length; i++) {
-                                trHTML += '<tr onclick="getLecturerBySubject(' + obj[i].subjectId + ')"><td><label>' +
-                                    obj[i].subject + '</label></td><td>' + obj[i].lecturer + '</td><td>' + obj[i].stringDate + '</td></tr>';
+                                trHTML += '<tr ><td><label>' + obj[i].subject + '</label></td><td><button onclick=' +
+                                    '"getLecturerBySubject(' + obj[i].subjectId + ')">' + obj[i].lecturer + '</button>' +
+                                    '</td><td>' + obj[i].stringDate + '</td></tr>';
                                 console.log(trHTML);
                             }
                             $("#scheduleTable tbody").append(trHTML);
