@@ -230,25 +230,29 @@ public class Controllers {
         this.login = new Login(login.getNickname(), login.getPassword(), type);
         if ("student".equals(type)) {
             student = daoStudent.validateStudent(login);
-            ID = student.getId();
             if (student != null) {
+                ID = student.getId();
                 mav = new ModelAndView("redirect:/studentPage");
             } else {
                 mav = new ModelAndView("login");
-                mav.addObject("message", "Username or Password is wrong!!");
+                mav.addObject("message", "Username or Password is wrong!");
             }
         } else if ("lecturer".equals(type)) {
             lecturer = daoLecturer.validateLecturer(login);
-            ID = lecturer.getId();
             if (lecturer != null) {
+                ID = lecturer.getId();
                 mav = new ModelAndView("redirect:/lecturerPage");
             } else {
                 mav = new ModelAndView("login");
-                mav.addObject("message", "Username or Password is wrong!!");
+                mav.addObject("message", "Username or Password is wrong!");
             }
         } else if ("admin".equals(type)) {
             if (login.getPassword().equals("admin") && login.getNickname().equals("admin")) {
                 mav = new ModelAndView("redirect:/adminPage");
+            }
+            else {
+                mav = new ModelAndView("login");
+                mav.addObject("message", "Username or Password is wrong!");
             }
         }
         return mav;

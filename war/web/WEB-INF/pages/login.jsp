@@ -39,7 +39,7 @@
 	</form:form>
 	<table align="center">
 		<tr>
-			<td style="font-style: italic; color: red;">${message}</td>
+			<td style="color: red;">${message}</td>
 		</tr>
 	</table>
 </body>

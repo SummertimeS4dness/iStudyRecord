@@ -105,7 +105,11 @@ public List<Lecturer> getLecturers() {
 @Override
 public Lecturer validateLecturer(Login login) {
 	String lecturerValidate = "SELECT * FROM LECTURERS WHERE LECTURER_LOGIN = ? AND LECTURER_PASSWORD=?";
-	Lecturer lecturer = template.query(lecturerValidate, new LecturerMapper(),login.getNickname(),login.getPassword()).get(0);
+	List<Lecturer> list = template.query(lecturerValidate, new LecturerMapper(),login.getNickname(),login.getPassword());
+	Lecturer lecturer = null;
+	if(list.size() != 0) {
+		lecturer = list.get(0);
+	}
 	return lecturer;
 }
 
