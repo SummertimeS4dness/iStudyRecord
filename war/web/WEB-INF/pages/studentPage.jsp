@@ -65,7 +65,7 @@
                                 "\ndegree: " + lecturer.degree +
                                 "\nworks: " + lecturer.works +
                                 "\ninterests: " + lecturer.interests +
-                                "\ncathedra:" + lecturer.cathedra);
+                                "\ncathedra: " + lecturer.cathedra);
 
                         }
                     ]
@@ -171,6 +171,7 @@
         </div>
         <button class="accordion" onclick="getSchedule()">Schedule</button>
         <div class="panel">
+            <p>To see info about lecturer click on it in the schedule</p>
             <table id="scheduleTable"  align="left" style="width: 50%" class="order-table">
                 <thead>
                 <tr>
