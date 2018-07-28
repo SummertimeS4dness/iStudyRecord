@@ -5,6 +5,7 @@ import mvc.beans.Object;
 import mvc.dao.daointerfaces.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -378,9 +379,14 @@ public class Controllers {
     }
 
     @RequestMapping(value = "/createMark", method = RequestMethod.POST, consumes = "application/json")
-    @ResponseStatus(value = HttpStatus.OK)
-    public void createMark(@RequestBody Mark mark) {
-        daoMark.createMark(mark);
+    @ResponseBody
+    public ResponseEntity<?> createMark(@RequestBody Mark mark) {
+        String check = daoMark.createMark(mark);
+        if("OK".equals(check)) {
+            return new ResponseEntity(HttpStatus.OK);
+        } else {
+            return new ResponseEntity(check, HttpStatus.BAD_REQUEST);
+        }
     }
 
     @RequestMapping(value = "/updateSubject", method = RequestMethod.POST, consumes = "application/json")

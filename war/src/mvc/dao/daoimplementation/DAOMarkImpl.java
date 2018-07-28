@@ -21,11 +21,15 @@ public class DAOMarkImpl implements DAOMark {
     }
 
     @Override
-    public void createMark(Mark mark) {
+    public String createMark(Mark mark) {
         String sql = "INSERT INTO MARKS VALUES (MARK_SEQUENCE.nextval,?,?,?,?,?)";
-        template.update(sql, mark.getLessonId(), mark.getScore(), mark.getSubjectId(), mark.getStudentId(), mark.getLecturerId());
-
-
+        String toReturn = "OK";
+        try {
+            template.update(sql, mark.getLessonId(), mark.getScore(), mark.getSubjectId(), mark.getStudentId(), mark.getLecturerId());
+        } catch (Exception e) {
+            toReturn = e.getMessage();
+        }
+        return toReturn;
     }
 
     @Override

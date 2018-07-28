@@ -161,7 +161,11 @@
                 contentType: 'application/json; charset=utf-8',
                 url: "createMark",
                 data: JSON.stringify(mark),
-                success: function (response) {
+                success: function (data, textStatus, xhr) {
+                    alert("Mark put");
+                },
+                error: function (data, textStatus, xhr) {
+                    alert("Something went wrong, mark not put\nText of error: " + data.responseText);
                 }
             });
         }

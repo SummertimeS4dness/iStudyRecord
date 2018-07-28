@@ -6,7 +6,7 @@ import mvc.beans.Object;
 import java.util.List;
 
 public interface DAOMark {
-	public void createMark(Mark mark);
+	public String createMark(Mark mark);
 	public void removeMark(Mark mark);
 	public List<Mark> getMarksForSubject(Subject subject);
 	public List<Mark> getMarksForStudent(Student student);
