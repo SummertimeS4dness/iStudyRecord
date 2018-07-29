@@ -18,6 +18,7 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
         <script type="text/javascript" src="http://code.jquery.com/jquery.js"></script>
         <script type="text/javascript">
+            //<editor-fold desc="..">
             (function(document) {
                 'use strict';
 
@@ -151,12 +152,11 @@
                     ]
                 });
             }
-            //lecturer
+           //</editor-fold>
+            //<editor-fold desc="lecturer">
             function lecturers() {
                 if (lecturerShown == 0) {
                     lecturerShown = 1;
-
-
                     $.ajax({
                         type: "GET",
                         url: 'lecturers',
@@ -298,8 +298,10 @@
                     contentType: 'application/json; charset=utf-8',
                     data:JSON.stringify(lecturer),
                     complete: [function (response) {
-                        lecturerShown=0;
-                        lecturers();
+                        if(lecturerShown==1){
+                            lecturerShown=0;
+                            lecturers();
+                        }
                         document.getElementById("lecturerNameToCreate").value='';
                         document.getElementById("lecturerLoginToCreate").value='';
                         document.getElementById("lecturerPasswordToCreate").value='';
@@ -308,7 +310,8 @@
                 });
 
             }
-            //student
+            //</editor-fold>
+            //<editor-fold desc="student">
             function onCancelStudent() {
                 document.getElementById("studentPersone").style.visibility = "hidden";
             }
@@ -439,15 +442,19 @@
                     contentType: 'application/json; charset=utf-8',
                     data:JSON.stringify(student),
                     complete: [function (response) {
-                        shown=0;
-                        test();
+                        if(shown==1){
+                            shown=0;
+                            alert("done");
+                            test();
+                        }
                         document.getElementById("studentNameToCreate").value='';
                         document.getElementById("studentLoginToCreate").value='';
                         document.getElementById("studentPasswordToCreate").value='';
                     }]
                 });
             }
-            //subject
+            //</editor-fold>
+            //<editor-fold desc="subject">
             function onCancelSubject() {
                 document.getElementById("subjectBody").style.visibility = "hidden";
             }
@@ -738,6 +745,10 @@
                     url: "createSubject",
                     data: JSON.stringify(subject),
                     success: function (response) {
+                        if(subjectsShown==1){
+                            subjectsShown=0;
+                            subjects();
+                        }
                         document.getElementById("subjectSortNameCreate").value='';
                         document.getElementById("subjectNameCreate").value='';
                         document.getElementById("subjectInfoCreate").value='';
@@ -748,7 +759,8 @@
                 });
 
             }
-            //object
+            //</editor-fold>
+            //<editor-fold desc="object">
             function fillSelectOfObject(object) {
                 $("#selectParent").find('option').remove();
                 var whatToFill;
@@ -875,8 +887,10 @@
                     contentType: 'application/json; charset=utf-8',
                     data:JSON.stringify(object),
                     complete: [function (response) {
-                        objectShown = 0;
-                        objects();
+                        if(objectShown==1) {
+                            objectShown = 0;
+                            objects();
+                        }
                         document.getElementById("objectDescriptionCreate").value='';
                         cancelSelectParent();
                     }]
@@ -932,9 +946,7 @@
             function onCancelObject() {
                 document.getElementById("objectBody").style.visibility = "hidden";
             }
-        </script>
-        <script>
-
+            //</editor-fold>
         </script>
         <style>
             .accordion {
