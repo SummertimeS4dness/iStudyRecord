@@ -13,11 +13,20 @@
                 dataType: "json",
                 complete: [
                     function (response) {
-                        $("#scheduleTable").find("tr:not(:first)").remove();
+                        $("#scheduleTable tr").remove();
                         var trHTML = '';
                         var obj = $.parseJSON(response.responseText);
+                        var res = obj[0].day;
+                        var count = 1;
+                        trHTML += '<tr><td colspan="2" align="center"><b>' + obj[0].day + '</b></tr>';
                         for (var i = 0; i < obj.length; i++) {
-                            trHTML += '<tr><td><label>' + obj[i].subject + '</label></td><td>' + obj[i].stringDate + '</td></tr>';
+                            if(res != obj[i].day) {
+                                trHTML += '<tr><td colspan="3"><br/></td></tr><tr><td colspan="2" align="center"><b>' + obj[i].day + '</b></td></tr>';
+                                res = obj[i].day;
+                                count = 1;
+                            }
+                            trHTML += '<tr><td>' + count + '</td><td>' + obj[i].subject + '</td><td>' + obj[i].time + '</td></tr>';
+                            count++;
                         }
                         $("#scheduleTable tbody").append(trHTML);
                     }
@@ -115,7 +124,6 @@
                 $('#markStudent').empty();
                 $('#markLesson').empty();
             });
-            //jdfkghdfkhgkjdfg
             $('#markGroup').change(function () {
                 var group = {
                     id: document.getElementById("markGroup").options[document.getElementById("markGroup").selectedIndex].value
@@ -178,6 +186,7 @@
                     var groups = $.parseJSON(response.responseText);
                     $("#marksForGroupGroup").find('option').remove();
                     $('<option disabled selected value></option>').appendTo('#marksForGroupGroup');
+                    $('<option value="%">All</option>').appendTo('#marksForGroupGroup');
                     $.each(groups, function (i, gr) {
                         $('<option value="' + gr.id + '">' + gr.description + '</option>').appendTo('#marksForGroupGroup');
                     });
@@ -215,12 +224,19 @@
                     contentType: 'application/json; charset=utf-8',
                     data:{objId:object.objId,subjId:object.subjId},
                     complete: [function (response) {
-                        $("#marksForGroupTable").find("tr:not(:first)").remove();
+                        $("#marksForGroupTable tr").remove();
                         var trHTML = '';
                         var obj = $.parseJSON(response.responseText);
+                        var res = obj[0].stringDate;
+                        var count = 1;
+                        trHTML += '<tr><td colspan="2" align="center"><b>' + count + ". " + obj[0].stringDate + '</b></tr>';
                         for (var i = 0; i < obj.length; i++) {
-                            trHTML += '<tr><td>' + obj[i].studentName + '</td><td>' + obj[i].score + '</td><td>' + obj[i].stringDate + '</td></tr>';
-                            console.log(trHTML);
+                            if(res != obj[i].stringDate) {
+                                count++;
+                                trHTML += '<tr><td colspan="2"><br/></td></tr><tr><td colspan="2" align="center"><b>' + count + ". " + obj[i].stringDate + '</b></td></tr>';
+                                res = obj[i].stringDate;
+                            }
+                            trHTML += '<tr><td>' + obj[i].studentName + '</td><td>' + obj[i].score + '</td><td></td></tr>';
                         }
                         $("#marksForGroupTable tbody").append(trHTML);
                     }]
@@ -315,12 +331,12 @@
 <input type="search" class="light-table-filter" data-table="order-table" placeholder="Filter">
 <button class="accordion" onclick="getSchedule()">Schedule</button>
 <div class="panel">
-    <table id="scheduleTable" align="left" class="order-table" style="width: 50%">
+    <table id="scheduleTable" align="left" class="order-table">
         <thead>
-        <tr>
+        <%--<tr>
             <th align="left">Subject</th>
             <th align="left">Date</th>
-        </tr>
+        </tr>--%>
         </thead>
         <tbody></tbody>
     </table>
@@ -385,13 +401,13 @@
             <td><select id="marksForGroupSubject"></select></td>
         </tr>
     </table>
-    <table id="marksForGroupTable" align="left" class="order-table" style="width: 50%">
+    <table id="marksForGroupTable" align="left" class="order-table">
         <thead>
-        <tr>
+        <%--<tr>
             <th align="left">Student</th>
             <th align="left">Mark</th>
             <th align="left">Date</th>
-        </tr>
+        </tr>--%>
         </thead>
         <tbody></tbody>
     </table>

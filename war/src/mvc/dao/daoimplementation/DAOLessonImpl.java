@@ -15,6 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class DAOLessonImpl implements DAOLesson {
     private JdbcTemplate template;
@@ -88,36 +89,52 @@ public class DAOLessonImpl implements DAOLesson {
         public Lesson mapRow(ResultSet rs, int arg1) throws SQLException {
             int lessonId = rs.getInt("lesson_id");
             String lessonDate = rs.getString("lesson_date");
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.ENGLISH);
             Date parsed = null;
             try {
                 parsed = format.parse(lessonDate);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
+            format.applyPattern("EEEE dd-MM-yyyy HH:mm");
+            lessonDate = format.format(parsed);
+            format.applyPattern("HH:mm");
+            String time = format.format(parsed);
+            format.applyPattern("EEEE dd-MM-yyyy");
+            String day = format.format(parsed);
             int subjectId = rs.getInt("subject_id");
             int lecturerId = rs.getInt("lecturer_id");
             String subject = rs.getString("subject_full_name");
             String lecturer = rs.getString("lecturer_name");
             Lesson lesson = new Lesson(parsed, subjectId, lecturerId, lessonId, subject, lecturer, lessonDate);
+            lesson.setTime(time);
+            lesson.setDay(day);
             return lesson;
         }
     }
     class LessonMapper2 implements RowMapper<Lesson> {
         public Lesson mapRow(ResultSet rs, int arg1) throws SQLException {
             String lessonDate = rs.getString("lesson_date");
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.ENGLISH);
             Date parsed = null;
             try {
                 parsed = format.parse(lessonDate);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
+            format.applyPattern("EEEE dd-MM-yyyy HH:mm");
+            lessonDate = format.format(parsed);
+            format.applyPattern("HH:mm");
+            String time = format.format(parsed);
+            format.applyPattern("EEEE dd-MM-yyyy");
+            String day = format.format(parsed);
             int id = rs.getInt("subject_id");
             Lesson lesson = new Lesson();
             lesson.setDate(parsed);
             lesson.setStringDate(lessonDate);
             lesson.setSubjectId(id);
+            lesson.setTime(time);
+            lesson.setDay(day);
             return lesson;
         }
     }

@@ -12,6 +12,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class DAOMarkImpl implements DAOMark {
     private JdbcTemplate template;
@@ -107,13 +108,15 @@ public class DAOMarkImpl implements DAOMark {
             int lecturerID = rs.getInt("lecturer_id");
             String subjectName = rs.getString("subject_full_name");
             String date = rs.getString("lesson_date");
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.ENGLISH);
             Date parsed = null;
             try {
                 parsed = format.parse(date);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
+            format.applyPattern("EEEE dd-MM-yyyy HH:mm");
+            date = format.format(parsed);
             Mark mark = new Mark(id, lessonId, score, subjectID, studentID, lecturerID, subjectName, date);
             mark.setDate(parsed);
             return mark;
@@ -129,13 +132,15 @@ public class DAOMarkImpl implements DAOMark {
             int lecturerID = rs.getInt("lecturer_id");
             String studentName = rs.getString("student_name");
             String date = rs.getString("lesson_date");
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.ENGLISH);
             Date parsed = null;
             try {
                 parsed = format.parse(date);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
+            format.applyPattern("EEEE dd-MM-yyyy HH:mm");
+            date = format.format(parsed);
             Mark mark = new Mark(id, lessonId, score, subjectID, studentID, lecturerID);
             mark.setStringDate(date);
             mark.setStudentName(studentName);

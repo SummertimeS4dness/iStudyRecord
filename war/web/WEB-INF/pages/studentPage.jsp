@@ -14,12 +14,20 @@
                     dataType: "json",
                     complete: [
                         function (response) {
-                            $("#marksTable").find("tr:not(:first)").remove();
+                            $("#marksTable tr").remove();
                             var trHTML = '';
                             var obj = $.parseJSON(response.responseText);
+                            var res = obj[0].stringDate;
+                            var count = 1;
+                            trHTML += '<tr><td colspan="2" align="center"><b>' + count + ". " + obj[0].stringDate + '</b></tr>';
                             for (var i = 0; i < obj.length; i++) {
-                                trHTML += '<tr><td>' + obj[i].subjectName + '</td><td>' + obj[i].score + '</td><td>' + obj[i].stringDate + '</td></tr>';
-                                console.log(trHTML);
+                                if(res != obj[i].stringDate) {
+                                    count++;
+                                    trHTML += '<tr><td colspan="2"><br/></td></tr><tr><td colspan="2" align="center"><b>'
+                                        + count + ". " + obj[i].stringDate + '</b></td></tr>';
+                                    res = obj[i].stringDate;
+                                }
+                                trHTML += '<tr><td>' + obj[i].subjectName + '</td><td>' + obj[i].score + '</td></tr>';
                             }
                             $("#marksTable tbody").append(trHTML);
                         }
@@ -33,14 +41,21 @@
                     dataType: "json",
                     complete: [
                         function (response) {
-                            $("#scheduleTable").find("tr:not(:first)").remove();
+                            $("#scheduleTable tr").remove();
                             var trHTML = '';
                             var obj = $.parseJSON(response.responseText);
+                            var res = obj[0].day;
+                            var count = 1;
+                            trHTML += '<tr><td colspan="3" align="center"><b>' + count + ". " + obj[0].day + '</b></tr>';
                             for (var i = 0; i < obj.length; i++) {
-                                trHTML += '<tr ><td><label>' + obj[i].subject + '</label></td><td><button onclick=' +
+                                if(res != obj[i].day) {
+                                    count++;
+                                    trHTML += '<tr><td colspan="3"><br/></td></tr><tr><td colspan="3" align="center"><b>' + count + ". " + obj[i].day + '</b></td></tr>';
+                                    res = obj[i].day;
+                                }
+                                trHTML += '<tr><td><label>' + obj[i].subject + '</label></td><td><button onclick=' +
                                     '"getLecturerBySubject(' + obj[i].subjectId + ')">' + obj[i].lecturer + '</button>' +
-                                    '</td><td>' + obj[i].stringDate + '</td></tr>';
-                                console.log(trHTML);
+                                    '</td><td>' + obj[i].time + '</td></tr>';
                             }
                             $("#scheduleTable tbody").append(trHTML);
                         }
@@ -159,13 +174,13 @@
         <input type="search" class="light-table-filter" data-table="order-table" placeholder="Filter">
         <button class="accordion" onclick="getMarks()">Marks</button>
         <div class="panel">
-            <table id="marksTable"  align="left" class="order-table" style="width: 50%">
+            <table id="marksTable"  align="left" class="order-table">
                 <thead>
-                <tr>
+                <%--<tr>
                     <th align="left">Subject</th>
                     <th align="left">Score</th>
                     <th align="left">Date</th>
-                </tr>
+                </tr>--%>
                 </thead>
                 <tbody></tbody>
             </table>
@@ -173,13 +188,13 @@
         <button class="accordion" onclick="getSchedule()">Schedule</button>
         <div class="panel">
             <p>To see info about lecturer click on it in the schedule</p>
-            <table id="scheduleTable"  align="left" style="width: 50%" class="order-table">
+            <table id="scheduleTable"  align="left" class="order-table">
                 <thead>
-                <tr>
+                <%--<tr>
                     <th align="left">Subject</th>
                     <th align="left">Lecturer</th>
                     <th align="left">Date</th>
-                </tr>
+                </tr>--%>
                 </thead>
                 <tbody>
                 </tbody>

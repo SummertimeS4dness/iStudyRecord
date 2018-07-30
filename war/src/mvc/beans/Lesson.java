@@ -10,6 +10,8 @@ public class Lesson implements Comparable<Lesson>{
     private int lessonId;
     private String subject;
     private String lecturer;
+    private String time;
+    private String day;
 
     public Lesson() { }
 
@@ -62,6 +64,22 @@ public class Lesson implements Comparable<Lesson>{
         this.date = date;
         this.subject = subject;
         this.stringDate = stringDate;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setDay(String day) {
+        this.day = day;
+    }
+
+    public String getDay() {
+        return day;
     }
 
     public String getStringDate() {
