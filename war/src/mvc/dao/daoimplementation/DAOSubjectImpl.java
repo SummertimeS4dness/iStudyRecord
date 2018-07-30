@@ -21,7 +21,6 @@ public class DAOSubjectImpl implements DAOSubject {
 
     @Override
     public void createSubject(Subject subject) {
-        System.out.println(subject.getLecturerId());
         String sql = "INSERT INTO SUBJECTS VALUES (SUBJECT_SEQUENCE.nextval,?,?,?,?)";
         template.update(sql,  subject.getShortName(), subject.getFullName(), subject.getInfo(), subject.getLecturerId());
     }
@@ -61,6 +60,13 @@ public class DAOSubjectImpl implements DAOSubject {
         return subjects;
     }
 
+    @Override
+    public String getSubjectById(int id) {
+        String sql = "SELECT * FROM SUBJECTS WHERE SUBJECT_ID=" + id;
+        List<Subject> subject = template.query(sql, new SubjecttMapper());
+        return subject.get(0).getFullName();
+    }
+
     class SubjecttMapper implements RowMapper<Subject> {
         public Subject mapRow(ResultSet rs, int arg1) throws SQLException {
             Subject subject = new Subject();
@@ -92,7 +98,7 @@ public class DAOSubjectImpl implements DAOSubject {
     }
 @Override
 public void updateSubject(Subject subject) {
-    String sql = "UPDATE SUBJECTS SET SUBJECT_SHORT_NAME=?,SUBJECT_FULL_NAME=?,SUBJECT_INFO =?,LECTURER_ID=? WHERE SUBJECT_ID-=?";
+    String sql = "UPDATE SUBJECTS SET SUBJECT_SHORT_NAME=?,SUBJECT_FULL_NAME=?,SUBJECT_INFO =?,LECTURER_ID=? WHERE SUBJECT_ID=?";
     template.update(sql,subject.getShortName(),subject.getFullName(),subject.getInfo(),subject.getLecturerId(),subject.getId());
 }
 }

@@ -120,6 +120,10 @@ public class Controllers {
     @ResponseBody
     public List<Lesson> showScheduleForLecturer() {
         List<Lesson> list = daoLesson.getLessonForLecturer(new Lecturer(ID, login.getNickname(), login.getPassword()));
+        for(Lesson les: list) {
+            String res = daoSubject.getSubjectById(les.getSubjectId());
+            les.setSubject(res);
+        }
         Collections.sort(list);
         return list;
     }

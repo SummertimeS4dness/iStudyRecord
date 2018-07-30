@@ -15,4 +15,5 @@ public interface DAOSubject {
 	public List<Subject> showSubjectsForLecturer(Lecturer lecturer);
 	public List<Subject> showSubjectsForGroup(Object object);
 	public void updateSubject(Subject subject);
+	public String getSubjectById(int id);
 }

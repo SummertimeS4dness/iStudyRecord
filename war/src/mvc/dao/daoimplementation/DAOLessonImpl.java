@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -52,10 +53,16 @@ public class DAOLessonImpl implements DAOLesson {
 
     @Override
     public List<Lesson> getLessonForLecturer(Lecturer lecturer) {
-        String sql = "SELECT * FROM LESSONS JOIN STUDENT_SUBJECT_LISTS ON" +
-                " (LESSONS.SUBJECT_ID=STUDENT_SUBJECT_LISTS.SUBJECT_ID) JOIN SUBJECTS ON(LESSONS.LECTURER_ID = SUBJECTS.LECTURER_ID) " +
-                "WHERE LESSONS.LECTURER_ID=" + lecturer.getId();
+        String sql = "SELECT * FROM LESSONS WHERE LESSONS.LECTURER_ID=" + lecturer.getId();
         List<Lesson> lessons = template.query(sql, new LessonMapper2());
+        /*List<Lesson> toReturn = new ArrayList<>();
+        List<Integer> numbers = new ArrayList<>();
+        for (Lesson les: lessons) {
+            if(!numbers.contains(les.getLessonId())) {
+                numbers.add(les.getLessonId());
+                toReturn.add(les);
+            }
+        }*/
         return lessons;
     }
 
@@ -106,8 +113,11 @@ public class DAOLessonImpl implements DAOLesson {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            String subject = rs.getString("subject_full_name");
-            Lesson lesson = new Lesson(parsed, subject, lessonDate);
+            int id = rs.getInt("subject_id");
+            Lesson lesson = new Lesson();
+            lesson.setDate(parsed);
+            lesson.setStringDate(lessonDate);
+            lesson.setSubjectId(id);
             return lesson;
         }
     }
