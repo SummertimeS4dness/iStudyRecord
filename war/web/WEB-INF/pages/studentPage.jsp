@@ -176,11 +176,6 @@
         <div class="panel">
             <table id="marksTable"  align="left" class="order-table">
                 <thead>
-                <%--<tr>
-                    <th align="left">Subject</th>
-                    <th align="left">Score</th>
-                    <th align="left">Date</th>
-                </tr>--%>
                 </thead>
                 <tbody></tbody>
             </table>
@@ -190,11 +185,6 @@
             <p>To see info about lecturer click on it in the schedule</p>
             <table id="scheduleTable"  align="left" class="order-table">
                 <thead>
-                <%--<tr>
-                    <th align="left">Subject</th>
-                    <th align="left">Lecturer</th>
-                    <th align="left">Date</th>
-                </tr>--%>
                 </thead>
                 <tbody>
                 </tbody>
