@@ -62,6 +62,7 @@
             var lecturerShown=0;
             var subjectsShown=0;
             var objectShown=0;
+            var lessonsShown=0;
             $(document).ready(function () {
 
                 var acc = document.getElementsByClassName("accordion");
@@ -90,16 +91,19 @@
                         var ddl = $("#selectGroup");
                         var ddl2 = $("#selectGroupOnEdit");
                         var ddl3=$("#selectParent");
+                        var ddl4=$("#selectGroupForLessons");
                         ddl.find('option').remove();
                         ddl2.find('option').remove();
                         ddl3.find('option').remove();
-
+                        ddl4.find('option').remove();
                         for (k = 0; k < groups.length; k++) {
                             ddl.append("<option value='" + groups[k].id + "'>" + groups[k].description + "</option>");
                             ddl2.append("<option value='" + groups[k].id + "'>" + groups[k].description + "</option>");
                             ddl3.append("<option value='" + groups[k].id + "'>" + groups[k].description + "</option>");
-                        }
+                            ddl4.append("<option value='" + groups[k].id + "'>" + groups[k].description + "</option>");
 
+                        }
+                        ddl4.append("<option value='"+"%"+"'> - all</option>")
 
                     }
                     ]
@@ -246,6 +250,7 @@
                         lecturerShown = 0;
                         lecturers()
                         document.getElementById("lecturerPerson").style.visibility = "hidden";
+                        listLecturers();
                     },
                     error: function (xhr, status, errorThrown) {
                         alert(status + " " + errorThrown.toString());
@@ -273,6 +278,7 @@
                         lecturerShown = 0;
                         lecturers();
                         document.getElementById("lecturerPerson").style.visibility = "hidden";
+                        listLecturers();
                     },
                     error: function (xhr, status, errorThrown) {
                         alert(status + " " + errorThrown.toString());
@@ -301,6 +307,7 @@
                         if(lecturerShown==1){
                             lecturerShown=0;
                             lecturers();
+                            listLecturers();
                         }
                         document.getElementById("lecturerNameToCreate").value='';
                         document.getElementById("lecturerLoginToCreate").value='';
@@ -876,7 +883,7 @@
                     description:document.getElementById("objectDescriptionCreate").value,
                     type:document.getElementById("objectTypeCreate").options[document.getElementById("objectTypeCreate").selectedIndex].text,
                     parentId:document.getElementById("parentTypeCreate").options[document.getElementById("parentTypeCreate").selectedIndex].value};
-                if(object.type=""||object.description==""||(object.parentId=""&&object.type!="university")){
+                if(object.type==""||object.description==""||(object.parentId==""&&object.type!="university")){
                     alert("fill everyting");
                     return;
                 }
@@ -903,10 +910,11 @@
                     description:document.getElementById("objectDescription").value,
                     type:document.getElementById("objectType").textContent,
                     parentId:document.getElementById("selectParent").options[document.getElementById("selectParent").selectedIndex].value};
-                if(object.type=""||object.description==""||(object.parentId=""&&object.type!="university")){
+                if(object.type==""||object.description==""||(object.parentId==""&&object.type!="university")){
                     alert("fill everyting");
                     return;
                 }
+                alert( JSON.stringify(object))
                 $.ajax({
                     type: "POST",
                     contentType: 'application/json; charset=utf-8',
@@ -947,7 +955,95 @@
                 document.getElementById("objectBody").style.visibility = "hidden";
             }
             //</editor-fold>
+            //<editor-fold desc="lesson">
+            function lessons() {
+                    if (lessonsShown == 0) {
+                        lessonsShown = 1;
+                        var group = {
+                            id:document.getElementById("selectGroupForLessons").options[document.getElementById("selectGroupForLessons").selectedIndex].value
+                        }
+                        $.ajax({
+                            type: "GET",
+                            url: 'lessonsForGroup',
+                            dataType: "json",
+                            contentType: 'application/json; charset=utf-8',
+                            data:{id:group.id},
+                            complete: [
+                                function (response) {
+                                    document.getElementById("lecturersTable").style.visibility = "visible";
+                                    $("#lessons").find("tr:not(:first)").remove();
+                                    var trHTML = '';
+                                    var obj = $.parseJSON(response.responseText);
+                                    for (var i = 0; i < obj.length; i++) {
+                                        trHTML += '<tr>'+'' +
+                                            '<td>' + obj[i].lessonId + '</td>' +
+                                            '<td>' + obj[i].subjectId+ '</td>' +
+                                            '<td>' + obj[i].subject+ '</td>' +
+                                            '<td>' + obj[i].lecturerId + '</td>' +
+                                            '<td>' + obj[i].lecturer + '</td>' +
+                                            '<td>' + obj[i].stringDate+ '</td>' +
+                                            '<td><button id="' + i + '"class="editLesson">edit</button> </td></tr>';
+                                        var a = obj;
+                                        $(document).off().on('click', 'button.editLesson', function (event) {
+                                            onLessonEdit(a,this.id);
+                                        });
+                                    }
+                                    $("#lessons tbody").append(trHTML);
+                                    document.getElementById("lessons").style.visibility = "visible";
+                                }
+                            ]
+                        });
+                    } else {
+                        lessonsShown = 0;
+                        document.getElementById("lessons").style.visibility = "hidden";
+                    }
+
+            }
+            function onLessonEdit(arr, poss ) {
+                var lesson = arr[poss];
+                document.getElementById("onDateEditTable").style.visibility = "visible";
+                $("#datepicker").datepicker({
+                    autoclose: true,
+                    todayHighlight: true,
+                    dateFormat: 'yyyy-mm-dd'
+                }).datepicker('update', new Date(lesson.stringDate));
+                var time = lesson.stringDate.substring(lesson.stringDate.indexOf(" ")+1,lesson.stringDate.lastIndexOf(":"))
+                document.getElementById("timepicker").value =time;
+                document.getElementById("lessonId").textContent =lesson.lessonId;
+            }
+            function savaDateChange() {
+                var date = new Date(document.getElementById("datepickerText").value);
+                var parsedDate = date.getFullYear()+"-"+(('0' + (date.getMonth()+1)).slice(-2))+"-"+(('0' + date.getDate()).slice(-2))
+                var lesson = {
+                    lessonId: document.getElementById("lessonId").textContent,
+                    stringDate:parsedDate+" "+document.getElementById("timepicker").value}
+                    $.ajax({
+                    type: "post",
+                    url: "updateLessonDate",
+                    dataType: "json",
+                    contentType: 'application/json; charset=utf-8',
+                    data:JSON.stringify(lesson),
+                    complete: [function (response) {
+                        document.getElementById("onDateEditTable").style.visibility = "hidden";
+                        lessonsShown=0;
+                        lessons();
+
+                    }]
+                });
+                }
+
+
+
+            //</editor-fold>
         </script>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.css" rel="stylesheet" type="text/css" />
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.js"></script>
+        <style>
+            label{margin-left: 20px;}
+            #datepicker{width:180px; margin: 0 20px 20px 20px;}
+            #datepicker > span:hover{cursor: pointer;}
+        </style>
         <style>
             .accordion {
                 background-color: #eee;
@@ -1258,7 +1354,7 @@
             </table>
         </div>
         <button class="accordion" >Add ...</button>
-         <div class="panel">
+        <div class="panel">
              <table>
                  <tr><td>Description</td><td> <input type="text" id="objectDescriptionCreate"></td></tr>
                  <tr><td>Type</td><td>  <select id="objectTypeCreate">
@@ -1272,5 +1368,50 @@
                  <tr><td> <button onclick="createObject()" id="createObject" disabled>Create</button></td></tr>
              </table>
          </div>
+        <button class="accordion" onclick="listStudent()">Show lesson</button>
+        <div class="panel">
+            <table>
+                <tr>
+                    <td><select id="selectGroupForLessons"/></td>
+                </tr>
+                <tr>
+                    <td><button id="showLessons" onclick="lessons()">Show lessons</button></td>
+                </tr>
+            </table>
+            <table class="order-table table" id="lessons" style="visibility: hidden" width="100%">
+                <thead>
+                <tr>
+                    <th align="left" >LessonID</th>
+                    <th align="left" >SubjectID</th>
+                    <th align="left" >Subject</th>
+                    <th align="left" >LecturerID</th>
+                    <th align="left" >Lecturer</th>
+                    <th align="left" >Date</th>
+                    <th align="left" ></th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+            <table id="onDateEditTable"  style="visibility: hidden" >
+                <tr>
+                    <th align="left">Date</th>
+                    <th align="left">Time</th>
+                </tr>
+                <tr>
+                   <td> <div id="datepicker" class="input-group date" data-date-format="yyyy-mm-dd">
+                        <input class="form-control" type="text" readonly id="datepickerText"/>
+                        <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                    </div></td>
+                    <td>
+                        <label style="visibility: collapse" id="lessonId"></label>
+                        <input id="timepicker" class="timepicker" type="time">
+                    </td>
+                </tr>
+                <tr>
+                    <td><button onclick="savaDateChange()">Save</button></td>
+                </tr>
+            </table>
+        </div>
     </body>
 </html>

@@ -2,11 +2,14 @@ package mvc.dao.daoimplementation;
 
 import mvc.beans.Lecturer;
 import mvc.beans.Lesson;
+import mvc.beans.Object;
 import mvc.beans.Student;
 import mvc.beans.Subject;
 import mvc.dao.daointerfaces.DAOLesson;
+import mvc.dao.daointerfaces.DAOSubject;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.lang.Nullable;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,6 +23,8 @@ import java.util.Locale;
 public class DAOLessonImpl implements DAOLesson {
     private JdbcTemplate template;
 
+    
+    
     public void setTemplate(JdbcTemplate template) {
         this.template = template;
     }
@@ -31,6 +36,12 @@ public class DAOLessonImpl implements DAOLesson {
     }
 
     @Override
+    public void updateLessonDate(Lesson lesson) {
+        String sql="UPDATE LESSONS SET LESSON_DATE =TO_DATE(TO_CHAR(?),'YYYY-MM-DD HH24:MI') WHERE LESSON_ID=?";
+        template.update(sql,lesson.getStringDate(),lesson.getLessonId());
+    }
+
+@Override
     public void removeLesson(Lesson lesson) {
         String sql = "DELETE FROM LESSONS WHERE LESSON_ID=?";
         template.update(sql, lesson.getLessonId());
@@ -75,7 +86,17 @@ public class DAOLessonImpl implements DAOLesson {
         return lessons;
     }
 
-    class LessonMapper implements RowMapper<Lesson> {
+@Override
+public List<Lesson> getLessonForGroup(Object object) {
+    String sql = "SELECT * FROM LESSONS  JOIN STUDENT_SUBJECT_LISTS  ON (LESSONS.SUBJECT_ID=STUDENT_SUBJECT_LISTS.SUBJECT_ID )" +
+            "JOIN LECTURERS ON (LECTURERS.LECTURER_ID=LESSONS.LECTURER_ID) "+
+            "JOIN SUBJECTS ON (LESSONS.SUBJECT_ID=SUBJECTS.SUBJECT_ID)"+
+            " WHERE STUDENT_ID IN (SELECT OBJECT_ID FROM OBJECTS WHERE PARENT_ID=?)";
+    List<Lesson> lessons = template.query(sql,new LessonMapperWithSubjectAndLecturer(),object.getId());
+    return lessons;
+}
+
+class LessonMapper implements RowMapper<Lesson> {
         public Lesson mapRow(ResultSet rs, int arg1) throws SQLException {
             int lessonId = rs.getInt("lesson_id");
             String lessonDate = rs.getString("lesson_date");
@@ -135,6 +156,27 @@ public class DAOLessonImpl implements DAOLesson {
             lesson.setSubjectId(id);
             lesson.setTime(time);
             lesson.setDay(day);
+            return lesson;
+        }
+    }
+    class LessonMapperWithSubjectAndLecturer implements RowMapper<Lesson>{
+        @Override
+        public Lesson mapRow(ResultSet resultSet, int i) throws SQLException {
+            int lessonId = resultSet.getInt("lesson_id");
+            int subId= resultSet.getInt("subject_id");
+            String dateString = resultSet.getString("lesson_date");
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            Date date = null;
+            try {
+                date = format.parse(dateString);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            int lecturerId=resultSet.getInt("lecturer_id");
+            String lecturerName = resultSet.getString("lecturer_name");
+            String subjectName = resultSet.getString("subject_short_name");
+            Lesson lesson = new Lesson(date, subId, lecturerId, lessonId, subjectName, lecturerName);
+            lesson.setStringDate(dateString);
             return lesson;
         }
     }
