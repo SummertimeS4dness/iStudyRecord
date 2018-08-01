@@ -101,7 +101,13 @@ public void updateStudent(Student student) {
     String sql = "UPDATE STUDENT_INFO SET STUDENT_NAME=?, STUDENT_LOGIN=?,STUDENT_PASSWORD=? WHERE STUDENT_ID=?";
     template.update(sql,student.getName(),student.getLogin(),student.getPassword(),student.getId());
 }
-
+@Override
+public void setStarosta(Student student) {
+    String sql1 = "UPDATE STUDENT_INFO SET  IS_STAROSTA = 0 WHERE STUDENT_ID IN (SELECT OBJECT_ID FROM OBJECTS WHERE PARENT_ID=?)";
+    template.update(sql1,student.getGroupId());
+    String sql = "UPDATE STUDENT_INFO SET IS_STAROSTA=? WHERE STUDENT_ID=?";
+    template.update(sql,student.getIsStarosta(),student.getId());
+}
 class StudentMapper implements RowMapper<Student> {
         public Student mapRow(ResultSet rs, int arg1) throws SQLException {
             Student student = new Student();
@@ -109,6 +115,7 @@ class StudentMapper implements RowMapper<Student> {
             student.setLogin(rs.getString("student_login"));
             student.setPassword(rs.getString("student_password"));
             student.setName(rs.getString("student_name"));
+            student.setIsStarosta(rs.getInt("is_starosta"));
             String sql = "SELECT * FROM OBJECTS WHERE OBJECT_ID=(SELECT PARENT_ID FROM OBJECTS WHERE OBJECT_ID=" + rs.getInt("student_id")+")ORDER BY OBJECT_ID";
             List<Object> objects = template.query(sql, new DAOObjectImpl.ObjectMapper());
             student.setGroup(objects.get(0).getDescription());

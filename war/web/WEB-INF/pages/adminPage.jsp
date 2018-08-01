@@ -156,6 +156,30 @@
                     ]
                 });
             }
+            function listStudentsForStarosta(group) {
+                var students;
+                $.ajax({
+                    type: "GET",
+                    url: 'studentsForGroup',
+                    dataType: "json",
+                    data:{"id":group.id},
+                    complete: [function (response) {
+                        students = $.parseJSON(response.responseText);
+                        var ddl = $("#straostaSelectOnEdit");
+                        ddl.find('option').remove();
+                        for (k = 0; k < students.length; k++) {
+                            if(students[k].isStarosta==1){
+                                ddl.append("<option value='" + students[k].id + "' class='bolden'>" + students[k].name + "</option>");
+                                $("#straostaSelectOnEdit").val(students[k].id).change();
+                            }else{
+                                ddl.append("<option value='" + students[k].id + "'>" + students[k].name + "</option>");
+                            }
+                        }
+
+                    }
+                    ]
+                });
+            }
            //</editor-fold>
             //<editor-fold desc="lecturer">
             function lecturers() {
@@ -405,12 +429,20 @@
                                 var trHTML = '';
                                 var obj = $.parseJSON(response.responseText);
                                 for (var i = 0; i < obj.length; i++) {
+                                    var gr = obj[i].group.substring(0,obj[i].group.indexOf(" cours"));
+                                    var cours = obj[i].group.substring(obj[i].group.lastIndexOf(" cours")+7,obj[i].group.length-1);
+                                    var starosta = "";
+                                    if(obj[i].isStarosta==1){
+                                        starosta="STAROSTA"
+                                    }
                                     trHTML += '<tr>' +
                                         '<td>' + obj[i].id + '</td>' +
                                         '<td>' + obj[i].name + '</td>' +
                                         '<td>' + obj[i].login + '</td>' +
                                         '<td>' + obj[i].password + '</td>' +
-                                        '<td>' +obj[i].group+'</td>' +
+                                        '<td>' +gr+'</td>' +
+                                        '<td>' +cours+'</td>' +
+                                        '<td>' +starosta+'</td>' +
                                         '<td><button id="' + i + '"class="myclass">edit</button> </td>' +
                                         '</tr>';
                                     var a = obj;
@@ -780,6 +812,7 @@
                 }else if(object.type=="cathedra"){
                     whatToFill="getFaculty";
                 }else if(object.type=="group"){
+                    listStudentsForStarosta(object);
                     whatToFill='getFaculty';
                 }else if(object.type=="faculty"){
                     whatToFill='getUniversity';
@@ -843,11 +876,22 @@
                 document.getElementById("objectBody").style.visibility = "visible";
                 document.getElementById("objectId").textContent = a.id;
                 document.getElementById("objectType").textContent = a.type;
-                document.getElementById("objectDescription").value = a.description;
+                if(a.type=="group"){
+                    var descr = a.description.substring(0,a.description.indexOf(" cours"))
+                    document.getElementById("objectDescription").value = descr;
+                    document.getElementById("starosta").style.display="block";
+                    $('#coursSelectOnEdit').removeAttr('disabled');
+                    $("#coursSelectOnEdit").val();
+                    listStudentsForStarosta(a);
+                }else{
+                    document.getElementById("starosta").style.display="none";
+                    document.getElementById("objectDescription").value = a.description;
+                }
                 fillSelectOfObject(a);
             }
             function selectParent() {
                 var toSelect=document.getElementById("objectTypeCreate").options[document.getElementById("objectTypeCreate").selectedIndex].value
+                var t =(document.getElementById("objectTypeCreate").options[document.getElementById("objectTypeCreate").selectedIndex].text)
                 if(toSelect!="no"){
                     $.ajax({
                         type: "GET",
@@ -871,16 +915,20 @@
                 $('#parentTypeCreate').removeAttr('disabled');
                 $('#createObject').removeAttr('disabled');
                 $('#objectTypeCreate').attr('disabled', 'disabled');
+                if(t=="group"){
+                    document.getElementById("selectCoursTR").style.visibility="visible"
+                }
             }
             function cancelSelectParent() {
                 $('#objectTypeCreate').removeAttr('disabled');
                 $('#parentTypeCreate').attr('disabled', 'disabled');
                 $('#createObject').attr('disabled', 'disabled');
+
             }
             function createObject() {
                 var  object={
                     id:0,
-                    description:document.getElementById("objectDescriptionCreate").value,
+                    description:document.getElementById("objectDescriptionCreate").value +document.getElementById("coursSelect").value,
                     type:document.getElementById("objectTypeCreate").options[document.getElementById("objectTypeCreate").selectedIndex].text,
                     parentId:document.getElementById("parentTypeCreate").options[document.getElementById("parentTypeCreate").selectedIndex].value};
                 if(object.type==""||object.description==""||(object.parentId==""&&object.type!="university")){
@@ -899,28 +947,39 @@
                             objects();
                         }
                         document.getElementById("objectDescriptionCreate").value='';
+                        document.getElementById("selectCoursTR").style.visibility="hidden";
                         cancelSelectParent();
                     }]
 
                 });
             }
             function saveObjectChange() {
-                var  object={
-                    id:document.getElementById("objectId").textContent,
-                    description:document.getElementById("objectDescription").value,
-                    type:document.getElementById("objectType").textContent,
-                    parentId:document.getElementById("selectParent").options[document.getElementById("selectParent").selectedIndex].value};
+                var id=0;
+               if(document.getElementById("objectType").textContent=="group"){
+                   var  object={
+                       id:document.getElementById("objectId").textContent,
+                       description:document.getElementById("objectDescription").value+document.getElementById("coursSelectOnEdit").value,
+                       type:document.getElementById("objectType").textContent,
+                       parentId:document.getElementById("selectParent").options[document.getElementById("selectParent").selectedIndex].value};
+                   var id = document.getElementById("straostaSelectOnEdit").options[document.getElementById("straostaSelectOnEdit").selectedIndex].value
+               }else {
+                   var  object={
+                       id:document.getElementById("objectId").textContent,
+                       description:document.getElementById("objectDescription").value,
+                       type:document.getElementById("objectType").textContent,
+                       parentId:document.getElementById("selectParent").options[document.getElementById("selectParent").selectedIndex].value};
+               }
                 if(object.type==""||object.description==""||(object.parentId==""&&object.type!="university")){
                     alert("fill everyting");
                     return;
                 }
-                alert( JSON.stringify(object))
                 $.ajax({
                     type: "POST",
                     contentType: 'application/json; charset=utf-8',
                     url: "updateObject",
                     data: JSON.stringify(object),
                     success: function (response) {
+
                         objectShown = 0;
                         objects();
                         document.getElementById("objectBody").style.visibility = "hidden";
@@ -929,6 +988,24 @@
                         alert(status + " " + errorThrown.toString());
                     }
                 });
+                $('#coursSelectOnEdit').attr('disabled', 'disabled');
+                if(document.getElementById("objectType").textContent=="group"){
+                    var student={
+                        id:id,
+                        isStarosta:1,
+                        groupId:object.id
+                    }
+                    $.ajax({
+                        type: "POST",
+                        url: "setStarosta",
+                        contentType: 'application/json; charset=utf-8',
+                        dataType: 'json',
+                        data: JSON.stringify(student),
+                        success: function (response) {
+                        }
+                    });
+                }
+
             }
             function removeObject(){
                 var  object={
@@ -950,9 +1027,16 @@
                         alert(status + " " + errorThrown.toString());
                     }
                 });
+                $('#coursSelectOnEdit').attr('disabled', 'disabled');
+                document.getElementById("starosta").style.display="none";
+
+
             }
             function onCancelObject() {
                 document.getElementById("objectBody").style.visibility = "hidden";
+                $('#coursSelectOnEdit').attr('disabled', 'disabled');
+                document.getElementById("starosta").style.display="none";
+
             }
             //</editor-fold>
             //<editor-fold desc="lesson">
@@ -1040,6 +1124,7 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.js"></script>
         <style>
+            .bolden{font-family:"Arial Black"}
             label{margin-left: 20px;}
             #datepicker{width:180px; margin: 0 20px 20px 20px;}
             #datepicker > span:hover{cursor: pointer;}
@@ -1074,7 +1159,7 @@
     <body>
         <div id="result"></div>
         <h3>Search</h3>
-        <input type="search" class="light-table-filter" data-table="order-table" placeholder="Filter">
+        <input type="search" class="light-table-filter" data-table="order-table" placeholder="Input something to search">
         <button class="accordion" onclick="test()">Show all students</button>
         <div class="panel">
             <table id="personDataTable" style="visibility: hidden" width="100%" class="order-table">
@@ -1085,6 +1170,8 @@
                     <th align="left" >Login</th>
                     <th align="left" >Password</th>
                     <th align="left" >Group</th>
+                    <th align="left" >Cours</th>
+                    <th align="left" ></th>
                     <th align="left" >Edit</th>
                 </tr>
                 </thead>
@@ -1274,14 +1361,25 @@
                     <td>id</td>
                     <td>Type</td>
                     <td>Description</td>
-                    <td>Parent id</td>
                     <td>ParentId</td>
+                    <td>Cours</td>
                 </tr>
                 <tr>
                     <td><label id="objectId">id</label></td>
                     <td><label id="objectType">type</label></td>
                     <td><input id="objectDescription"/></td>
                     <td><select id="selectParent" selected></select></td>
+                    <td><select id="coursSelectOnEdit" disabled>
+                        <option value=" cours(1)">1</option>
+                        <option value=" cours(2)">2</option>
+                        <option value=" cours(3)">3</option>
+                        <option value=" cours(4)">4</option>
+                        <option value=" cours(5)">5</option>
+                        <option value=" cours(6)">6</option>
+                    </select></td>
+                    <td>
+                        <div id="starosta" style="display: none;">Starosta <select id="straostaSelectOnEdit"/></div>
+                    </td>
                 </tr>
                 <tr>
                     <td>
@@ -1365,6 +1463,14 @@
                  </select></td></tr>
                  <tr><td><button onclick="selectParent()">Choose parent</button></td><td><button onclick="cancelSelectParent()">Back</button></td></tr>
                  <tr><td>Parent</td><td>  <select id="parentTypeCreate" disabled/></td></tr>
+                 <tr style="visibility: hidden" id="selectCoursTR"><td>Cours</td><td><select id="coursSelect">
+                     <option value=" cours(1)">1</option>
+                     <option value=" cours(2)">2</option>
+                     <option value=" cours(3)">3</option>
+                     <option value=" cours(4)">4</option>
+                     <option value=" cours(5)">5</option>
+                     <option value=" cours(6)">6</option>
+                 </select></td></tr>
                  <tr><td> <button onclick="createObject()" id="createObject" disabled>Create</button></td></tr>
              </table>
          </div>

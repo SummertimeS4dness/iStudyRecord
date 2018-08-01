@@ -17,4 +17,5 @@ public interface DAOStudent {
 	public void updateStudent(Student student);
 	public void removeStudentFromSubject(Subject subject, Student student);
 	public List<Student> getStudentsForGroup(Object object);
+	public void setStarosta(Student student);
 }

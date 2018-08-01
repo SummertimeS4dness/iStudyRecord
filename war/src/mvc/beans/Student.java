@@ -6,9 +6,23 @@ public class Student {
     private String login;
     private String password;
     private String name;
-    
+    private int isStarosta;
     private String group;
     private int groupId;
+
+public int getIsStarosta() {
+    return isStarosta;
+}
+
+public Student(int id, int isStarosta,int groupId) {
+    this.id = id;
+    this.isStarosta = isStarosta;
+    this.groupId=groupId;
+}
+
+public void setIsStarosta(int isStarosta) {
+    this.isStarosta = isStarosta;
+}
 
 public String getGroup() {
     return group;

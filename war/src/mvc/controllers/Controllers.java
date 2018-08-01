@@ -116,6 +116,18 @@ public List<Lesson> showLessonsForSubjects(@RequestBody Subject subject) {
     return daoLesson.getLessonForSubject(subject);
 }
 
+@RequestMapping(value = "/studentsForGroup", method = RequestMethod.GET, produces = {"application/json"}, headers = "Accept=*/*")
+@ResponseBody
+public List<Student> studentsForGroup(@RequestParam int id)
+{
+    Object object = new Object(id);
+    return daoStudent.getStudentsForGroup(object);
+}
+
+
+
+
+
 @RequestMapping(value = "/lecturerSchedule", method = RequestMethod.GET, produces = {"application/json"}, headers = "Accept=*/*")
 @ResponseBody
 public List<Lesson> showScheduleForLecturer() {
@@ -230,7 +242,10 @@ public ModelAndView registerLecturerProcess(@ModelAttribute("lecturer") Lecturer
     
     return new ModelAndView("welcome", "firstname", lecturer.getName());
 }
-
+@RequestMapping(value = "/setStarosta", method = RequestMethod.POST, consumes = "application/json")
+public void setStarosta(@RequestBody Student student) {
+    daoStudent.setStarosta(student);
+}
 @RequestMapping(value = "/login", method = RequestMethod.GET)
 public ModelAndView login() {
     ModelAndView mav = new ModelAndView("login");
