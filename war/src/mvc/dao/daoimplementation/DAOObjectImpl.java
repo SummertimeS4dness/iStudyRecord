@@ -71,7 +71,8 @@ public List<Object> getUniversities() {
 
     @Override
     public List<Object> getObjects() {
-        String sql = "SELECT * FROM OBJECTS ORDER BY OBJECT_ID";
+        String sql = "SELECT a.*, b.OBJECT_DESCRIPTOIN FROM OBJECTS a, OBJECTS b WHERE a.PARENT_ID=b.OBJECT_ID ORDER BY a.OBJECT_ID";
+       // String sql = "SELECT * FROM OBJECTS JOIN OBJECTS par ON PARENT_ID=par.OBJECT_ID ORDER BY OBJECT_ID";
         List<Object> objects = template.query(sql, new ObjectMapper());
         return objects;
     }
@@ -117,7 +118,9 @@ public List<Object> getUniversities() {
             String description = rs.getString("object_descriptoin");
             String type = rs.getString("object_type");
             int parentId = rs.getInt("parent_id");
+            String parentDescr = rs.getString("object_descriptoin");
             Object object = new Object(id, description, type, parentId);
+            object.setParentDescription(parentDescr);
             return object;
         }
     }

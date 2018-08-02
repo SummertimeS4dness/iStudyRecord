@@ -74,10 +74,15 @@ public List<Lesson> showScheduleForStudent() {
 public List<Subject> showSubjectsForLecturer() {
     return daoSubject.showSubjectsForLecturer(new Lecturer(ID, login.getNickname(), login.getPassword()));
 }
-
-@RequestMapping(value = "/getSubjectsForGroup", method = RequestMethod.GET, consumes = "application/json", produces = {"application/json"}, headers = "Accept=*/*")
+@RequestMapping(value = "/getLecturersForSubject", method = RequestMethod.GET, produces = {"application/json"}, consumes = "application/json", headers = "Accept=*/*")
 @ResponseBody
-public List<Subject> getSubjectsForGroup(@RequestParam("id") int id) {
+public List<Lecturer> getLecturersForSubject(@RequestParam("id") int id){
+    return daoLecturer.getLecturersForSubject(new Subject(id));
+}
+@RequestMapping(value = "/getSubjectsForGroup", method = RequestMethod.GET, produces = {"application/json"})
+@ResponseBody
+public List<Subject> getSubjectsForGroup(@RequestParam int id) {
+    System.out.println("helo");
     Object object = new Object(id);
     return daoSubject.showSubjectsForGroup(object);
 }
@@ -319,7 +324,7 @@ public ModelAndView testAdmin(@RequestBody Student student) {
 @ResponseStatus(value = HttpStatus.OK)
 public void updateStudent(@RequestBody Student student) {
     daoStudent.updateStudent(student);
-    daoObject.updateObject(new Object(student.getId(), student.getGroup(), "", student.getGroupId()));
+    daoObject.updateObject(new Object(student.getId(), student.getName(), "student", student.getGroupId()));
 }
 
 @RequestMapping(value = "/deleteStudent", method = RequestMethod.DELETE, consumes = "application/json")

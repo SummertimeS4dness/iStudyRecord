@@ -52,7 +52,13 @@ public Lecturer getLecturerForSubject(Subject subject) {
 	List<Lecturer> lecturers = template.query(sql, new LecturerMapper());
 	return lecturers.get(0);
 }
-
+@Override
+public List<Lecturer> getLecturersForSubject(Subject subject) {
+	String sql = "SELECT * FROM LECTURERS JOIN SUBJECTS ON (SUBJECTS.LECTURER_ID=LECTURERS.LECTURER_ID)" +
+			"WHERE SUBJECT_ID=" + subject.getId();
+	List<Lecturer> lecturers = template.query(sql, new LecturerMapper());
+	return lecturers;
+}
 @Override
 public Lecturer getLecturerForMark(Mark mark) {
 	String sql = "SELECT * FROM LECTURERS JOIN MARKS ON (MARKS.LECTURER_ID=LECTURERS.LECTURER_ID)" +

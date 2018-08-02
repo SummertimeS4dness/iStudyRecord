@@ -180,6 +180,7 @@
                     ]
                 });
             }
+
            //</editor-fold>
             //<editor-fold desc="lecturer">
             function lecturers() {
@@ -856,6 +857,7 @@
                                         '<td>' + obj[i].type + '</td>' +
                                         '<td>' + obj[i].description + '</td>' +
                                         '<td>' + obj[i].parentId + '</td>' +
+                                        '<td>' + obj[i].parentDescription + '</td>' +
                                         '<td><button id="' + i + '"class="myclassObj">edit</button> </td>' +
                                         '</tr>';
                                     var a = obj;
@@ -872,6 +874,7 @@
                 }
             }
             function onObjectEdit(mass,pos) {
+                $( "#objectDescription" ).prop( "disabled", false );
                 var a = mass[pos];
                 document.getElementById("objectBody").style.visibility = "visible";
                 document.getElementById("objectId").textContent = a.id;
@@ -884,6 +887,9 @@
                     $("#coursSelectOnEdit").val();
                     listStudentsForStarosta(a);
                 }else{
+                    if(a.type=="student"||a.type=="lecturer"){
+                        $( "#objectDescription" ).prop( "disabled", true );
+                    }
                     document.getElementById("starosta").style.display="none";
                     document.getElementById("objectDescription").value = a.description;
                 }
@@ -1115,9 +1121,80 @@
                     }]
                 });
                 }
+            function addLessonStart() {
+                $( "#lecturerOnLesson" ).prop( "disabled", true );
+                $( "#subjectOnLesson" ).prop( "disabled", false );
+                $( "#saveLesson" ).prop( "disabled", true);
+                $.ajax({
+                    typfalse: "GET",
+                    url: 'subjects',
+                    dataType: "json",
+                    complete: [function (response) {
+                        var subjects = $.parseJSON(response.responseText);
+                        var ddl = $("#subjectOnLesson");
+                        ddl.find('option').remove();
+                        for (k = 0; k < subjects.length; k++) {
+                                ddl.append("<option value='" + subjects[k].id + "'>" + subjects[k].shortName + "</option>");
+                        }
 
 
+                    }
+                    ]
+                });
+            }
+            function addLessonSelectLecturer() {
+                $( "#subjectOnLesson" ).prop( "disabled", true );
+                $( "#saveLesson" ).prop( "disabled", false );
+                $( "#lecturerOnLesson" ).prop( "disabled", false );
+                var subject = {
+                    id:(document.getElementById("subjectOnLesson").options[document.getElementById("subjectOnLesson").selectedIndex].value)
+                }
+                $.ajax({
+                    type: "GET",
+                    url:'getLecturersForSubject',
+                    dataType: "json",
+                    contentType: 'application/json; charset=utf-8',
+                    data:{"id":subject.id},
+                    complete: [function (response) {
+                        var lecturers = $.parseJSON(response.responseText);
+                        var ddl = $("#lecturerOnLesson");
+                        ddl.find('option').remove();
+                        for (k = 0; k < lecturers.length; k++) {
+                            ddl.append("<option value='" + lecturers[k].id + "'>" + lecturers[k].name + "</option>");
+                        }
 
+
+                    }]
+                });
+            }
+            function addLessonSave() {
+                var time = document.getElementById("timePickerForLesson").value.replace("T"," ");
+                var subjectId = (document.getElementById("subjectOnLesson").options[document.getElementById("subjectOnLesson").selectedIndex].value)
+                var lecturerId = (document.getElementById("lecturerOnLesson").options[document.getElementById("lecturerOnLesson").selectedIndex].value)
+                if(time==""||subjectId==""||lecturerId==""){
+                    alert("fill everything")
+                }else {
+                    var lesson = {
+                        lessonId: 0,
+                        subjectId: subjectId,
+                        lecturerId: lecturerId,
+                        stringDate: time
+                    }
+                    $.ajax({
+                        type: "POST",
+                        contentType: 'application/json; charset=utf-8',
+                        url: "createLesson",
+                        data:(JSON.stringify(lesson)),
+                        success: function (response) {
+                            addLessonStart()
+                        },error: function (xhr, status, errorThrown) {
+                            alert(status + " " + errorThrown.toString());
+                        }
+
+                    });
+                }
+
+            }
             //</editor-fold>
         </script>
         <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.css" rel="stylesheet" type="text/css" />
@@ -1350,6 +1427,7 @@
                     <th align="left" >Type</th>
                     <th align="left" >Description</th>
                     <th align="left" >ParentID</th>
+                    <th align="left" >Parent description</th>
                     <th align="left" ></th>
                 </tr>
                 </thead>
@@ -1517,6 +1595,26 @@
                 <tr>
                     <td><button onclick="savaDateChange()">Save</button></td>
                 </tr>
+            </table>
+        </div>
+        <button class="accordion" onclick="addLessonStart()">Add lesson</button>
+        <div class="panel">
+            <table id="lessonAdd">
+                <tr>
+                    <td>Subject</td>
+                    <td><select id="subjectOnLesson"></select></td>
+                </tr>
+                <tr><td><button id="lecturerSelectOnLesson" onclick="addLessonSelectLecturer()">Select lecturer</button></td>
+                <td><button  onclick="addLessonStart()">Back</button></td></tr>
+                <tr>
+                    <td>Lecturer</td>
+                    <td><select id="lecturerOnLesson"></select></td>
+                </tr>
+                <tr>
+                    <td><input type="datetime-local" id="timePickerForLesson"></td>
+                    <td><button id="saveLesson" onclick="addLessonSave()">Save</button></td>
+                </tr>
+
             </table>
         </div>
     </body>

@@ -5,7 +5,7 @@ public class Object {
     private String description;
     private String type;
     private int parentId;
-
+    private String parentDescription;
     public Object() {
         super();
     }
@@ -21,8 +21,15 @@ public class Object {
         this.id = id;
     }
 
+public String getParentDescription() {
+    return parentDescription;
+}
 
-    public int getId() {
+public void setParentDescription(String parentDescription) {
+    this.parentDescription = parentDescription;
+}
+
+public int getId() {
         return id;
     }
 
