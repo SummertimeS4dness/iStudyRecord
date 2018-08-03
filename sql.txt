@@ -29,6 +29,7 @@ begin
       "STUDENT_NAME" Varchar2 (20) NOT NULL ,
       "STUDENT_LOGIN" Varchar2 (20) NOT NULL ,
       "STUDENT_PASSWORD" Varchar2 (20) NOT NULL ,
+      "IS_STAROSTA" NUMBER DEFAULT 0 ,
       primary key ("STUDENT_ID")
     ) ';
     execute immediate v_sql;
