@@ -1369,9 +1369,9 @@
                 </tr>
                 <tr>
                     <td><label id="subjectId">id</label></td>
-                    <td><input id="subjectShortName"/></td>
-                    <td><input id="subjectFullName"/></td>
-                    <td><input id="subjectInfo"/></td>
+                    <td><input id="subjectShortName" maxlength="30"/></td>
+                    <td><input id="subjectFullName" maxlength="100"/></td>
+                    <td><input id="subjectInfo" maxlength="100"/></td>
                     <td><select id="selectSubjectOnEdit" selected></select></td>
                 </tr>
                 <tr>

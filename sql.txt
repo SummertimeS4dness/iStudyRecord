@@ -65,9 +65,9 @@ begin
     v_sql:='
       Create table "SUBJECTS" (
         "SUBJECT_ID" NUMBER (20) NOT NULL ,
-        "SUBJECT_SHORT_NAME" Varchar2 (20) NOT NULL ,
-        "SUBJECT_FULL_NAME" Varchar2 (20) NOT NULL ,
-        "SUBJECT_INFO" Varchar2 (20) NOT NULL ,
+        "SUBJECT_SHORT_NAME" Varchar2 (30) NOT NULL ,
+        "SUBJECT_FULL_NAME" Varchar2 (100) NOT NULL ,
+        "SUBJECT_INFO" Varchar2 (100) NOT NULL ,
         "LECTURER_ID" Number,
         primary key ("SUBJECT_ID","LECTURER_ID")
       )';
