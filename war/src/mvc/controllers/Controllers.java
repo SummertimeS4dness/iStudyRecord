@@ -14,6 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.jws.WebParam;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
@@ -213,8 +214,11 @@ public Lecturer showLecturerBySubject(@RequestBody Subject subject) {
 
 @RequestMapping(value = "/subjects", method = RequestMethod.GET, produces = {"application/json"}, headers = "Accept=*/*")
 @ResponseBody
-public List<Subject> showSubjects() {
-    return daoSubject.getSubjects();
+public List<Subject> showSubjects() throws IOException {
+    throw new IOException("Folder not found!");
+   //return daoSubject.getSubjects();
+   
+   
 }
 
 @RequestMapping(value = "/registerStudent", method = RequestMethod.GET)
