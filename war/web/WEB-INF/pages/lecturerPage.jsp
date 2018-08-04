@@ -72,6 +72,12 @@
         }
 
         function listMarkSubjectAndStudent() {
+            $('#markYear').empty();
+            $('#markMonth').empty();
+            $('#markDay').empty();
+            $('#markTime').empty();
+            var lessons;
+            var year, month, day;
             $.ajax({
                 type: "GET",
                 url: 'getSubjectsForLecturer',
@@ -97,14 +103,78 @@
                     data: JSON.stringify(subject),
                     complete: [
                         function (response) {
-                            var lessons = $.parseJSON(response.responseText);
-                            $('#markLesson').find('option').remove();
-                            $('<option disabled selected value></option>').appendTo('#markLesson');
+                            lessons = $.parseJSON(response.responseText);
+                            /*$('<option disabled selected value></option>').appendTo('#markLesson');
                             $.each(lessons, function (i, les) {
                                 $('<option value="' + les.lessonId + '">' + les.stringDate + '</option>').appendTo('#markLesson');
+                            });*/
+                            $('#markYear').find('option').remove();
+                            $('<option disabled selected value></option>').appendTo('#markYear');
+                            $.each(lessons, function (i, les) {
+                                var opts = [];
+                                $('#markYear option').each(
+                                    function() {
+                                        opts.push($(this).text());
+                                });
+                                if ($.inArray(les.year, opts) == -1) {
+                                    $('<option>' + les.year + '</option>').appendTo('#markYear');
+                                }
                             });
                         }
                     ]
+                });
+                $('#markYear').change(function () {
+                    year = document.getElementById("markYear").options[document.getElementById("markYear").selectedIndex].value
+                    $('#markMonth').find('option').remove();
+                    $('<option disabled selected value></option>').appendTo('#markMonth');
+                    $.each(lessons, function (i, les) {
+                        if(les.year == year) {
+                            //alert("from change: " + les.year)
+                            var opts = [];
+                            $('#markMonth option').each(
+                                function () {
+                                    opts.push($(this).text());
+                                });
+                            if ($.inArray(les.month, opts) == -1) {
+                                $('<option>' + les.month + '</option>').appendTo('#markMonth');
+                            }
+                        }
+                    });
+                });
+                $('#markMonth').change(function () {
+                    month = document.getElementById("markMonth").options[document.getElementById("markMonth").selectedIndex].value
+                    $('#markDay').find('option').remove();
+                    $('<option disabled selected value></option>').appendTo('#markDay');
+                    $.each(lessons, function (i, les) {
+                        if(les.month == month && les.year == year) {
+                            //alert("from change: " + les.year)
+                            var opts = [];
+                            $('#markDay option').each(
+                                function () {
+                                    opts.push($(this).text());
+                                });
+                            if ($.inArray(les.day, opts) == -1) {
+                                $('<option>' + les.day + '</option>').appendTo('#markDay');
+                            }
+                        }
+                    });
+                });
+                $('#markDay').change(function () {
+                    day = document.getElementById("markDay").options[document.getElementById("markDay").selectedIndex].value
+                    $('#markTime').find('option').remove();
+                    $('<option disabled selected value></option>').appendTo('#markTime');
+                    $.each(lessons, function (i, les) {
+                        if(les.month == month && les.year == year && les.day == day) {
+                            var opts = [];
+                            $('#markTime option').each(
+                                function () {
+                                    opts.push($(this).text());
+                                });
+                            if ($.inArray(les.day, opts) == -1) {
+                                $('<option value="' + les.lessonId + '">' + les.time + '</option>').appendTo('#markTime');
+                            }
+                        }
+                    });
                 });
                 $.ajax({
                     type: "POST",
@@ -124,7 +194,6 @@
                 });
                 $('#markGroup').empty();
                 $('#markStudent').empty();
-                $('#markLesson').empty();
             });
             $('#markGroup').change(function () {
                 var group = {
@@ -153,7 +222,12 @@
         function createMark() {
             var x=document.getElementById("markScore").value;
             var regex=/^[0-9]+$/;
-            if(document.getElementById("markLesson").options[document.getElementById("markLesson").selectedIndex].value == "" ||
+            if(/*document.getElementById("markLesson").options[document.getElementById("markLesson").selectedIndex].value == "" ||*/
+                document.getElementById("markYear").options[document.getElementById("markYear").selectedIndex].value == "" ||
+                document.getElementById("markMonth").options[document.getElementById("markMonth").selectedIndex].value == "" ||
+                document.getElementById("markDay").options[document.getElementById("markDay").selectedIndex].value == "" ||
+                document.getElementById("markTime").options[document.getElementById("markTime").selectedIndex].value == "" ||
+                document.getElementById("markGroup").options[document.getElementById("markGroup").selectedIndex].value == "" ||
                 document.getElementById("markSubject").options[document.getElementById("markSubject").selectedIndex].value == "" ||
                 document.getElementById("markStudent").options[document.getElementById("markStudent").selectedIndex].value == "" ||
                 !x.match(regex) || x < 0 || x > 100) {
@@ -161,7 +235,7 @@
                 return
             }
             var mark = {
-                lessonId: document.getElementById("markLesson").options[document.getElementById("markLesson").selectedIndex].value,
+                lessonId: document.getElementById("markTime").options[document.getElementById("markTime").selectedIndex].value,
                 score: document.getElementById("markScore").value,
                 subjectId: document.getElementById("markSubject").options[document.getElementById("markSubject").selectedIndex].value,
                 studentId: document.getElementById("markStudent").options[document.getElementById("markStudent").selectedIndex].value,
@@ -370,8 +444,20 @@
             <td><select id="markSubject"></select></td>
         </tr>
         <tr>
-            <td><label>Lesson</label></td>
-            <td><select id="markLesson"></select></td>
+            <td><label>Year</label></td>
+            <td><select id="markYear"></select></td>
+        </tr>
+        <tr>
+            <td><label>Month</label></td>
+            <td><select id="markMonth"></select></td>
+        </tr>
+        <tr>
+            <td><label>Day</label></td>
+            <td><select id="markDay"></select></td>
+        </tr>
+        <tr>
+            <td><label>Time</label></td>
+            <td><select id="markTime"></select></td>
         </tr>
         <tr>
             <td><label>Group</label></td>

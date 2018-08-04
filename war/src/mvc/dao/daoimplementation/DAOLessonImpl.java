@@ -30,8 +30,7 @@ public static final String getLessonForStudent = "SELECT * FROM LESSONS JOIN STU
         " (LESSONS.SUBJECT_ID=STUDENT_SUBJECT_LISTS.SUBJECT_ID) JOIN SUBJECTS ON (STUDENT_SUBJECT_LISTS.SUBJECT_ID=SUBJECTS.SUBJECT_ID)" +
         " JOIN LECTURERS ON (SUBJECTS.LECTURER_ID=LECTURERS.LECTURER_ID) WHERE STUDENT_ID=?";
 public static final String getLessonForLecturer = "SELECT * FROM LESSONS WHERE LESSONS.LECTURER_ID=?";
-public static final String getLessonForSubject = "SELECT * FROM LESSONS JOIN STUDENT_SUBJECT_LISTS ON" +
-        " (LESSONS.SUBJECT_ID=STUDENT_SUBJECT_LISTS.SUBJECT_ID) WHERE LESSONS.SUBJECT_ID=?";
+public static final String getLessonForSubject = "SELECT * FROM LESSONS WHERE LESSONS.SUBJECT_ID=?";
 public static final String getLessonForGroup = "SELECT * FROM LESSONS  JOIN STUDENT_SUBJECT_LISTS  ON (LESSONS.SUBJECT_ID=STUDENT_SUBJECT_LISTS.SUBJECT_ID )" +
         "JOIN LECTURERS ON (LECTURERS.LECTURER_ID=LESSONS.LECTURER_ID) " +
         "JOIN SUBJECTS ON (LESSONS.SUBJECT_ID=SUBJECTS.SUBJECT_ID)" +
@@ -79,7 +78,7 @@ private JdbcTemplate template;
 
     @Override
     public List<Lesson> getLessonForSubject(Subject subject) {
-        List<Lesson> lessons = template.query(getLessonForSubject, new LessonMapper(),subject.getId());
+        List<Lesson> lessons = template.query(getLessonForSubject, new LessonMapper2(),subject.getId());
         return lessons;
     }
 
@@ -129,6 +128,7 @@ class LessonMapper implements RowMapper<Lesson> {
     class LessonMapper2 implements RowMapper<Lesson> {
         public Lesson mapRow(ResultSet rs, int arg1) throws SQLException {
             String lessonDate = rs.getString("lesson_date");
+            String lessonId = rs.getString("lesson_id");
             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.ENGLISH);
             Date parsed = null;
             try {
@@ -142,6 +142,10 @@ class LessonMapper implements RowMapper<Lesson> {
             String time = format.format(parsed);
             format.applyPattern("EEEE dd-MM-yyyy");
             String day = format.format(parsed);
+            format.applyPattern("yyyy");
+            String year = format.format(parsed);
+            format.applyPattern("MMMM");
+            String month = format.format(parsed);
             int id = rs.getInt("subject_id");
             Lesson lesson = new Lesson();
             lesson.setDate(parsed);
@@ -149,6 +153,9 @@ class LessonMapper implements RowMapper<Lesson> {
             lesson.setSubjectId(id);
             lesson.setTime(time);
             lesson.setDay(day);
+            lesson.setYear(year);
+            lesson.setMonth(month);
+            lesson.setLessonId(Integer.parseInt(lessonId));
             return lesson;
         }
     }

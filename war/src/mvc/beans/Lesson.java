@@ -13,6 +13,8 @@ public class Lesson implements Comparable<Lesson>{
     private String lecturer;
     private String time;
     private String day;
+    private String year;
+    private String month;
 
     public Lesson() { }
 
@@ -139,24 +141,45 @@ public class Lesson implements Comparable<Lesson>{
         return subject;
     }
 
+    public String getYear() {
+        return year;
+    }
+
+    public String getMonth() {
+        return month;
+    }
+
+    public void setYear(String year) {
+        this.year = year;
+    }
+
+    public void setMonth(String month) {
+        this.month = month;
+    }
+
     @Override
     public int compareTo(Lesson o) {
         return getDate().compareTo(o.getDate());
     }
 
-@Override
-public String toString() {
-    return "Lesson{" +
-            "stringDate='" + stringDate + '\'' +
-            ", subjectId=" + subjectId +
-            ", lecturerId=" + lecturerId +
-            ", lessonId=" + lessonId +
-            ", subject='" + subject + '\'' +
-            ", lecturer='" + lecturer + '\'' +
-            '}';
-}
+    @Override
+    public String toString() {
+        return "Lesson{" +
+                "stringDate='" + stringDate + '\'' +
+                ", date=" + date +
+                ", subjectId=" + subjectId +
+                ", lecturerId=" + lecturerId +
+                ", lessonId=" + lessonId +
+                ", subject='" + subject + '\'' +
+                ", lecturer='" + lecturer + '\'' +
+                ", time='" + time + '\'' +
+                ", day='" + day + '\'' +
+                ", year='" + year + '\'' +
+                ", month='" + month + '\'' +
+                '}';
+    }
 
-@Override
+    @Override
 public boolean equals(Object a) {
         Lesson o = (Lesson) a;
     if (this == o) return true;
