@@ -13,8 +13,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import org.apache.log4j.Logger;
 
 public class DAOMarkImpl implements DAOMark {
+    private final static Logger logger = Logger.getLogger(DAOMarkImpl.class);
+
 public static final String createMark = "INSERT INTO MARKS VALUES (MARK_SEQUENCE.nextval,?,?,?,?,?)";
 public static final String removeMark = "DELETE FROM MARKS WHERE MARK_ID=?";
 public static final String getMarksForGroup = "SELECT * from MARKS WHERE SUBJECT_ID=?";
@@ -39,6 +42,7 @@ private JdbcTemplate template;
             template.update(createMark, mark.getLessonId(), mark.getScore(), mark.getSubjectId(), mark.getStudentId(), mark.getLecturerId());
         } catch (Exception e) {
             toReturn = e.getMessage();
+            logger.error("Error in creating new mark: " + e);
         }
         return toReturn;
     }
@@ -113,7 +117,7 @@ private JdbcTemplate template;
             try {
                 parsed = format.parse(date);
             } catch (ParseException e) {
-                e.printStackTrace();
+                logger.error("Error in parsing mark's date: " + e);
             }
             format.applyPattern("EEEE dd-MM-yyyy HH:mm");
             date = format.format(parsed);
@@ -137,7 +141,7 @@ private JdbcTemplate template;
             try {
                 parsed = format.parse(date);
             } catch (ParseException e) {
-                e.printStackTrace();
+                logger.error("Error in parsing mark's date: " + e);
             }
             format.applyPattern("EEEE dd-MM-yyyy HH:mm");
             date = format.format(parsed);

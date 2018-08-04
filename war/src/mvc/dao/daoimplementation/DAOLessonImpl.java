@@ -16,8 +16,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import org.apache.log4j.Logger;
+
 
 public class DAOLessonImpl implements DAOLesson {
+    private final static Logger logger = Logger.getLogger(DAOLessonImpl.class);
+
 public static final String updateLessonDate = "UPDATE LESSONS SET LESSON_DATE =TO_DATE(TO_CHAR(?),'YYYY-MM-DD HH24:MI') WHERE LESSON_ID=?";
 public static final String addLesson = "INSERT INTO LESSONS VALUES (LESSON_SEQUENCE.nextval,TO_DATE(TO_CHAR(?),'YYYY-MM-DD HH24:MI'),?,?)";
 public static final String removeLesson = "DELETE FROM LESSONS WHERE LESSON_ID=?";
@@ -104,7 +108,7 @@ class LessonMapper implements RowMapper<Lesson> {
             try {
                 parsed = format.parse(lessonDate);
             } catch (ParseException e) {
-                e.printStackTrace();
+                logger.error("Error in parsing lesson's date: " + e);
             }
             format.applyPattern("EEEE dd-MM-yyyy HH:mm");
             lessonDate = format.format(parsed);
@@ -130,7 +134,7 @@ class LessonMapper implements RowMapper<Lesson> {
             try {
                 parsed = format.parse(lessonDate);
             } catch (ParseException e) {
-                e.printStackTrace();
+                logger.error("Error in parsing lesson's date: " + e);
             }
             format.applyPattern("EEEE dd-MM-yyyy HH:mm");
             lessonDate = format.format(parsed);
@@ -159,7 +163,7 @@ class LessonMapper implements RowMapper<Lesson> {
             try {
                 date = format.parse(dateString);
             } catch (ParseException e) {
-                e.printStackTrace();
+                logger.error("Error in parsing lesson's date: " + e);
             }
             int lecturerId=resultSet.getInt("lecturer_id");
             String lecturerName = resultSet.getString("lecturer_name");
