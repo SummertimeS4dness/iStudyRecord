@@ -1,5 +1,7 @@
 package mvc.beans;
 
+import java.lang.Object;
+
 public class Login {
 
     private String nickname;
@@ -39,4 +41,31 @@ public class Login {
     public void setStatus(String status) {
         this.status = status;
     }
+
+@Override
+public String toString() {
+    return "Login{" +
+            "nickname='" + nickname + '\'' +
+            ", password='" + password + '\'' +
+            ", status='" + status + '\'' +
+            '}';
+}
+
+@Override
+public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    
+    Login login = (Login) o;
+    
+    if (!nickname.equals(login.nickname)) return false;
+    return password.equals(login.password);
+}
+
+@Override
+public int hashCode() {
+    int result = nickname.hashCode();
+    result = 31 * result + password.hashCode();
+    return result;
+}
 }

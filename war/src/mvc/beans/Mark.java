@@ -1,5 +1,6 @@
 package mvc.beans;
 
+import java.lang.Object;
 import java.util.Date;
 
 public class Mark implements Comparable<Mark> {
@@ -125,4 +126,45 @@ public class Mark implements Comparable<Mark> {
     public int compareTo(Mark o) {
         return getDate().compareTo(o.getDate());
     }
+
+@Override
+public String toString() {
+    return "Mark{" +
+            "id=" + id +
+            ", lessonId=" + lessonId +
+            ", score=" + score +
+            ", subjectId=" + subjectId +
+            ", studentId=" + studentId +
+            ", lecturerId=" + lecturerId +
+            ", subjectName='" + subjectName + '\'' +
+            ", studentName='" + studentName + '\'' +
+            ", stringDate='" + stringDate + '\'' +
+            '}';
+}
+
+@Override
+public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    
+    Mark mark = (Mark) o;
+    
+    if (id != mark.id) return false;
+    if (lessonId != mark.lessonId) return false;
+    if (score != mark.score) return false;
+    if (subjectId != mark.subjectId) return false;
+    if (studentId != mark.studentId) return false;
+    return lecturerId == mark.lecturerId;
+}
+
+@Override
+public int hashCode() {
+    int result = id;
+    result = 31 * result + lessonId;
+    result = 31 * result + score;
+    result = 31 * result + subjectId;
+    result = 31 * result + studentId;
+    result = 31 * result + lecturerId;
+    return result;
+}
 }

@@ -1,5 +1,7 @@
 package mvc.beans;
 
+import java.lang.Object;
+
 public class Lecturer {
     private int id;
     private String login;
@@ -125,4 +127,39 @@ public void setCathedraId(int cathedraId) {
     public String getInterests() {
         return interests;
     }
+
+@Override
+public String toString() {
+    return "Lecturer{" +
+            "id=" + id +
+            ", login='" + login + '\'' +
+            ", password='" + password + '\'' +
+            ", name='" + name + '\'' +
+            ", info='" + info + '\'' +
+            ", degree='" + degree + '\'' +
+            ", works='" + works + '\'' +
+            ", interests='" + interests + '\'' +
+            ", cathedra='" + cathedra + '\'' +
+            ", cathedraId=" + cathedraId +
+            '}';
+}
+
+@Override
+public boolean equals(Object a) {
+    Lecturer o=(Lecturer) a;
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    
+    Lecturer lecturer = (Lecturer) o;
+    
+    if (id != lecturer.id) return false;
+    return login.equals(lecturer.login);
+}
+
+@Override
+public int hashCode() {
+    int result = id;
+    result = 31 * result + login.hashCode();
+    return result;
+}
 }

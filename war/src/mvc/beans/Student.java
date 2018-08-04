@@ -1,5 +1,7 @@
 package mvc.beans;
 
+import java.lang.Object;
+
 public class Student {
     
     private int id;
@@ -89,4 +91,34 @@ public Student(int id, String login, String password, String name) {
         return name;
     }
 
+@Override
+public String toString() {
+    return "Student{" +
+            "id=" + id +
+            ", login='" + login + '\'' +
+            ", password='" + password + '\'' +
+            ", name='" + name + '\'' +
+            ", isStarosta=" + isStarosta +
+            ", group='" + group + '\'' +
+            ", groupId=" + groupId +
+            '}';
+}
+
+@Override
+public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    
+    Student student = (Student) o;
+    
+    if (id != student.id) return false;
+    return login.equals(student.login);
+}
+
+@Override
+public int hashCode() {
+    int result = id;
+    result = 31 * result + login.hashCode();
+    return result;
+}
 }

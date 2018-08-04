@@ -1,5 +1,6 @@
 package mvc.beans;
 
+import java.lang.Object;
 import java.util.Date;
 
 public class Lesson implements Comparable<Lesson>{
@@ -143,5 +144,36 @@ public class Lesson implements Comparable<Lesson>{
         return getDate().compareTo(o.getDate());
     }
 
+@Override
+public String toString() {
+    return "Lesson{" +
+            "stringDate='" + stringDate + '\'' +
+            ", subjectId=" + subjectId +
+            ", lecturerId=" + lecturerId +
+            ", lessonId=" + lessonId +
+            ", subject='" + subject + '\'' +
+            ", lecturer='" + lecturer + '\'' +
+            '}';
+}
+
+@Override
+public boolean equals(Object a) {
+        Lesson o = (Lesson) a;
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
     
+    Lesson lesson = (Lesson) o;
+    
+    if (subjectId != lesson.subjectId) return false;
+    if (lecturerId != lesson.lecturerId) return false;
+    return lessonId == lesson.lessonId;
+}
+
+@Override
+public int hashCode() {
+    int result = subjectId;
+    result = 31 * result + lecturerId;
+    result = 31 * result + lessonId;
+    return result;
+}
 }

@@ -1,5 +1,7 @@
 package mvc.beans;
 
+import java.lang.Object;
+
 public class Subject {
     private int id;
     private String shortName;
@@ -79,4 +81,35 @@ public Subject(int id, String shortName, String fullName, String info, int lectu
     public void setLecturerId(int lecturerId) {
         this.lecturerId = lecturerId;
     }
+
+@Override
+public String toString() {
+    return "Subject{" +
+            "id=" + id +
+            ", shortName='" + shortName + '\'' +
+            ", fullName='" + fullName + '\'' +
+            ", info='" + info + '\'' +
+            ", lecturerId=" + lecturerId +
+            ", amount=" + amount +
+            ", lecturerName='" + lecturerName + '\'' +
+            '}';
+}
+
+@Override
+public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    
+    Subject subject = (Subject) o;
+    
+    if (id != subject.id) return false;
+    return lecturerId == subject.lecturerId;
+}
+
+@Override
+public int hashCode() {
+    int result = id;
+    result = 31 * result + lecturerId;
+    return result;
+}
 }

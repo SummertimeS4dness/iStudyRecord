@@ -60,4 +60,30 @@ public int getId() {
     public void setParentId(int parentId) {
         this.parentId = parentId;
     }
+
+@Override
+public String toString() {
+    return "Object{" +
+            "id=" + id +
+            ", description='" + description + '\'' +
+            ", type='" + type + '\'' +
+            ", parentId=" + parentId +
+            ", parentDescription='" + parentDescription + '\'' +
+            '}';
+}
+
+@Override
+public boolean equals(java.lang.Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    
+   Object object = (Object)o;
+    
+    return id == object.id;
+}
+
+@Override
+public int hashCode() {
+    return id;
+}
 }
