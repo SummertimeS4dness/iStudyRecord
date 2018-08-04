@@ -215,10 +215,7 @@ public Lecturer showLecturerBySubject(@RequestBody Subject subject) {
 @RequestMapping(value = "/subjects", method = RequestMethod.GET, produces = {"application/json"}, headers = "Accept=*/*")
 @ResponseBody
 public List<Subject> showSubjects() throws IOException {
-    throw new IOException("Folder not found!");
-   //return daoSubject.getSubjects();
-   
-   
+   return daoSubject.getSubjects();
 }
 
 @RequestMapping(value = "/registerStudent", method = RequestMethod.GET)
