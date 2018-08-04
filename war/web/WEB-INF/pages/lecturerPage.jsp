@@ -98,6 +98,7 @@
                     complete: [
                         function (response) {
                             var lessons = $.parseJSON(response.responseText);
+                            $('#markLesson').find('option').remove();
                             $('<option disabled selected value></option>').appendTo('#markLesson');
                             $.each(lessons, function (i, les) {
                                 $('<option value="' + les.lessonId + '">' + les.stringDate + '</option>').appendTo('#markLesson');
@@ -113,9 +114,10 @@
                     complete: [
                         function (response) {
                             var groups = $.parseJSON(response.responseText);
+                            $('#markGroup').find('option').remove();
                             $('<option disabled selected value></option>').appendTo('#markGroup');
                             $.each(groups, function (i, gr) {
-                                $('<option value="' + gr.id + '">' + gr.description + '</option>').appendTo('#markGroup');
+                                $('<option value="' + gr.id + '">' + gr.description.substring(0,gr.description.indexOf(" cours")) + '</option>').appendTo('#markGroup');
                             });
                         }
                     ]
@@ -136,6 +138,7 @@
                     complete: [
                         function (response) {
                             var students = $.parseJSON(response.responseText);
+                            $('#markStudent').find('option').remove();
                             $('<option disabled selected value></option>').appendTo('#markStudent');
                             $.each(students, function (i, st) {
                                 $('<option value="' + st.id + '">' + st.name + '</option>').appendTo('#markStudent');
@@ -182,13 +185,13 @@
                 type: "GET",
                 url: 'getGroup',
                 dataType: "json",
-                complete: [function (response) {
-                    var groups = $.parseJSON(response.responseText);
-                    $("#marksForGroupGroup").find('option').remove();
-                    $('<option disabled selected value></option>').appendTo('#marksForGroupGroup');
-                    $('<option value="%">All</option>').appendTo('#marksForGroupGroup');
-                    $.each(groups, function (i, gr) {
-                        $('<option value="' + gr.id + '">' + gr.description + '</option>').appendTo('#marksForGroupGroup');
+                complete: [
+                    function (response) {
+                        var groups = $.parseJSON(response.responseText);
+                        $("#marksForGroupGroup").find('option').remove();
+                        $('<option disabled selected value></option>').appendTo('#marksForGroupGroup');
+                        $.each(groups, function (i, gr) {
+                        $('<option value="' + gr.id + '">' + gr.description.substring(0,gr.description.indexOf(" cours")) + '</option>').appendTo('#marksForGroupGroup');
                     });
                 }]
             });

@@ -101,6 +101,7 @@
                         }
                     });
                 }
+
             });
             /*filter*/(function(document) {
                 'use strict';
@@ -170,7 +171,7 @@
         <title>Welcome</title>
     </head>
     <body>
-        <h1>Hello, ${name}</h1>
+        <h1>Hello, ${name}. Your group - ${group}, starosta - ${starosta}</h1>
         <input type="search" class="light-table-filter" data-table="order-table" placeholder="Filter">
         <button class="accordion" onclick="getMarks()">Marks</button>
         <div class="panel">

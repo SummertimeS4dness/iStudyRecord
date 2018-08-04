@@ -26,6 +26,7 @@ public static final String getChildObjects = "SELECT * FROM OBJECTS WHERE PARENT
 public static final String updateObject = "UPDATE OBJECTS SET PARENT_ID=?, OBJECT_DESCRIPTOIN = ? WHERE OBJECT_ID=?";
 public static final String showGroupsForSubject = "SELECT * FROM OBJECTS JOIN STUDENT_SUBJECT_LISTS ON (OBJECTS.OBJECT_ID = STUDENT_SUBJECT_LISTS.STUDENT_ID) " +
         "JOIN SUBJECTS ON (SUBJECTS.SUBJECT_ID=STUDENT_SUBJECT_LISTS.SUBJECT_ID) WHERE SUBJECTS.SUBJECT_ID=?";
+
 private JdbcTemplate template;
 
     public void setTemplate(JdbcTemplate template) {
@@ -97,6 +98,7 @@ public List<Object> getUniversities() {
     public void updateObject(Object object) {
     template.update(updateObject,object.getParentId(),object.getDescription(), object.getId());
 }
+
     @Override
     public List<Object> showGroupsForSubject(Subject subject) {
         List<Object> students = template.query(showGroupsForSubject, new ObjectMapper(),subject.getId());

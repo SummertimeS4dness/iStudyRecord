@@ -83,7 +83,6 @@ public List<Lecturer> getLecturersForSubject(@RequestParam("id") int id){
 @RequestMapping(value = "/getSubjectsForGroup", method = RequestMethod.GET, produces = {"application/json"})
 @ResponseBody
 public List<Subject> getSubjectsForGroup(@RequestParam int id) {
-    System.out.println("helo");
     Object object = new Object(id);
     return daoSubject.showSubjectsForGroup(object);
 }
@@ -302,8 +301,14 @@ public String destinationAdminPage() {
 
 @RequestMapping(value = "/studentPage", method = RequestMethod.GET)
 public ModelAndView destinationStudentPage() {
+    Object obj = new Object();
+    obj.setId(ID);
+    String group = daoObject.getParent(obj).getDescription();
+    String starosta = daoStudent.showStarostaForStudent(ID).getName();
     ModelAndView mav = new ModelAndView("studentPage", "name", login.getNickname());
     mav.addObject("studentID", ID);
+    mav.addObject("group", group);
+    mav.addObject("starosta", starosta);
     return mav;
 }
 

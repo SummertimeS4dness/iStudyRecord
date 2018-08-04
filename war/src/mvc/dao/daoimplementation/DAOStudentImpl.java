@@ -31,6 +31,10 @@ public static final String updateStudent = "UPDATE STUDENT_INFO SET STUDENT_NAME
 public static final String setStarosta1 = "UPDATE STUDENT_INFO SET  IS_STAROSTA = 0 WHERE STUDENT_ID IN (SELECT OBJECT_ID FROM OBJECTS WHERE PARENT_ID=?)";
 public static final String setStarosta2 = "UPDATE STUDENT_INFO SET IS_STAROSTA=? WHERE STUDENT_ID=?";
 public static final String selectParentForStudent = "SELECT * FROM OBJECTS WHERE OBJECT_ID=(SELECT PARENT_ID FROM OBJECTS WHERE OBJECT_ID=?)ORDER BY OBJECT_ID";
+    public static final String showStarostaForStudent = "SELECT * FROM STUDENT_INFO JOIN OBJECTS ON (STUDENT_INFO.STUDENT_ID = OBJECTS.OBJECT_ID) " +
+            "WHERE OBJECTS.PARENT_ID=(SELECT PARENT_ID FROM OBJECTS WHERE OBJECT_ID=?) AND STUDENT_INFO.IS_STAROSTA=1";
+
+
 private JdbcTemplate template;
 
     public void setTemplate(JdbcTemplate template) {
@@ -105,6 +109,13 @@ public void setStarosta(Student student) {
     template.update(setStarosta1,student.getGroupId());
     template.update(setStarosta2,student.getIsStarosta(),student.getId());
 }
+
+    @Override
+    public Student showStarostaForStudent(int id) {
+        List<Student> starosta = template.query(showStarostaForStudent, new StudentMapper(), Integer.toString(id));
+        return starosta.get(0);
+    }
+
 class StudentMapper implements RowMapper<Student> {
         public Student mapRow(ResultSet rs, int arg1) throws SQLException {
             Student student = new Student();
