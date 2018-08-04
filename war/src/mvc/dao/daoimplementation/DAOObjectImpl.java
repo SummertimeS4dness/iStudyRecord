@@ -12,7 +12,21 @@ import java.sql.SQLException;
 import java.util.*;
 
 public class DAOObjectImpl implements DAOObject {
-    private JdbcTemplate template;
+public static final String getGroups = "SELECT * FROM OBJECTS WHERE OBJECT_TYPE='group' ORDER BY OBJECT_ID";
+public static final String getStudents = "SELECT * FROM OBJECTS WHERE OBJECT_TYPE='student' ORDER BY OBJECT_ID";
+public static final String getLecturers = "SELECT * FROM OBJECTS WHERE OBJECT_TYPE='lecturer'ORDER BY OBJECT_ID";
+public static final String getCathedras = "SELECT * FROM OBJECTS WHERE OBJECT_TYPE='cathedra'ORDER BY OBJECT_ID";
+public static final String getFaculties = "SELECT * FROM OBJECTS WHERE OBJECT_TYPE='faculty'ORDER BY OBJECT_ID";
+public static final String getUniversities = "SELECT * FROM OBJECTS WHERE OBJECT_TYPE='university'ORDER BY OBJECT_ID";
+public static final String createObject = "INSERT INTO OBJECTS VALUES (OBJECT_SEQUENCE.nextval,?,?,?)";
+public static final String removeObject = "DELETE FROM OBJECTS WHERE OBJECT_ID=?";
+public static final String getObjects = "SELECT a.*, b.OBJECT_DESCRIPTOIN FROM OBJECTS a, OBJECTS b WHERE a.PARENT_ID=b.OBJECT_ID ORDER BY a.OBJECT_ID";
+public static final String getParent = "SELECT * FROM OBJECTS  WHERE OBJECT_ID=(SELECT PARENT_ID FROM OBJECTS  WHERE OBJECT_ID=?) ORDER BY OBJECT_ID";
+public static final String getChildObjects = "SELECT * FROM OBJECTS WHERE PARENT_ID=? ORDER BY OBJECT_ID";
+public static final String updateObject = "UPDATE OBJECTS SET PARENT_ID=?, OBJECT_DESCRIPTOIN = ? WHERE OBJECT_ID=?";
+public static final String showGroupsForSubject = "SELECT * FROM OBJECTS JOIN STUDENT_SUBJECT_LISTS ON (OBJECTS.OBJECT_ID = STUDENT_SUBJECT_LISTS.STUDENT_ID) " +
+        "JOIN SUBJECTS ON (SUBJECTS.SUBJECT_ID=STUDENT_SUBJECT_LISTS.SUBJECT_ID) WHERE SUBJECTS.SUBJECT_ID=?";
+private JdbcTemplate template;
 
     public void setTemplate(JdbcTemplate template) {
         this.template = template;
@@ -20,87 +34,72 @@ public class DAOObjectImpl implements DAOObject {
 
 @Override
 public List<Object> getGrops() {
-    String sql = "SELECT * FROM OBJECTS WHERE OBJECT_TYPE='group' ORDER BY OBJECT_ID";
-    List<Object> objects = template.query(sql, new ObjectMapper());
+    List<Object> objects = template.query(getGroups, new ObjectMapper());
     return objects;
 }
 @Override
 public List<Object> getStudents() {
-    String sql = "SELECT * FROM OBJECTS WHERE OBJECT_TYPE='student' ORDER BY OBJECT_ID";
-    List<Object> objects = template.query(sql, new ObjectMapper());
+    List<Object> objects = template.query(getStudents, new ObjectMapper());
     return objects;
 }
 @Override
 public List<Object> getLecturers() {
-    String sql = "SELECT * FROM OBJECTS WHERE OBJECT_TYPE='lecturer'ORDER BY OBJECT_ID";
-    List<Object> objects = template.query(sql, new ObjectMapper());
+    List<Object> objects = template.query(getLecturers, new ObjectMapper());
     return objects;
 }
 @Override
 public List<Object> getCathedras() {
-    String sql = "SELECT * FROM OBJECTS WHERE OBJECT_TYPE='cathedra'ORDER BY OBJECT_ID";
-    List<Object> objects = template.query(sql, new ObjectMapper());
+    List<Object> objects = template.query(getCathedras, new ObjectMapper());
     return objects;
 }
 @Override
 public List<Object> getFaculties() {
-    String sql = "SELECT * FROM OBJECTS WHERE OBJECT_TYPE='faculty'ORDER BY OBJECT_ID";
-    List<Object> objects = template.query(sql, new ObjectMapper());
+    List<Object> objects = template.query(getFaculties, new ObjectMapper());
     return objects;
 }
 @Override
 public List<Object> getUniversities() {
-    String sql = "SELECT * FROM OBJECTS WHERE OBJECT_TYPE='university'ORDER BY OBJECT_ID";
-    List<Object> objects = template.query(sql, new ObjectMapper());
+    List<Object> objects = template.query(getUniversities, new ObjectMapper());
     return objects;
 }
 @Override
     public void createObject(Object object) {
-        String sql = "INSERT INTO OBJECTS VALUES (OBJECT_SEQUENCE.nextval,?,?,?)";
     if(object.getParentId()==0)
-        template.update(sql,object.getDescription(), object.getType(), null);
+        template.update(createObject,object.getDescription(), object.getType(), null);
     else
-        template.update(sql,object.getDescription(), object.getType(), object.getParentId());
+        template.update(createObject,object.getDescription(), object.getType(), object.getParentId());
     }
 
     @Override
     public void removeObject(Object object) {
-        String sql = "DELETE FROM OBJECTS WHERE OBJECT_ID=?";
-        template.update(sql, object.getId());
+        template.update(removeObject, object.getId());
     }
 
     @Override
     public List<Object> getObjects() {
-        String sql = "SELECT a.*, b.OBJECT_DESCRIPTOIN FROM OBJECTS a, OBJECTS b WHERE a.PARENT_ID=b.OBJECT_ID ORDER BY a.OBJECT_ID";
-       // String sql = "SELECT * FROM OBJECTS JOIN OBJECTS par ON PARENT_ID=par.OBJECT_ID ORDER BY OBJECT_ID";
-        List<Object> objects = template.query(sql, new ObjectMapper());
+        List<Object> objects = template.query(getObjects, new ObjectMapper());
         return objects;
     }
 
     @Override
     public Object getParent(Object object) {
-        String sql = "SELECT * FROM OBJECTS  WHERE OBJECT_ID=(SELECT PARENT_ID FROM OBJECTS  WHERE OBJECT_ID="+object.getId()+") ORDER BY OBJECT_ID";
-        List<Object> objects = template.query(sql, new ObjectMapper());
+        List<Object> objects = template.query(getParent, new ObjectMapper(),object.getId());
         return objects.get(0);
     }
 
     @Override
     public List<Object> getChildObjects(Object object) {
-        String sql = "SELECT * FROM OBJECTS WHERE PARENT_ID=" + object.getId()+" ORDER BY OBJECT_ID";
-        List<Object> objects = template.query(sql, new ObjectMapper());
+        List<Object> objects = template.query(getChildObjects, new ObjectMapper(),object.getId());
         return objects;
     }
 
     @Override
     public void updateObject(Object object) {
-    String sql = "UPDATE OBJECTS SET PARENT_ID=?, OBJECT_DESCRIPTOIN = ? WHERE OBJECT_ID=?";
-    template.update(sql,object.getParentId(),object.getDescription(), object.getId());
+    template.update(updateObject,object.getParentId(),object.getDescription(), object.getId());
 }
     @Override
     public List<Object> showGroupsForSubject(Subject subject) {
-        String sql = "SELECT * FROM OBJECTS JOIN STUDENT_SUBJECT_LISTS ON (OBJECTS.OBJECT_ID = STUDENT_SUBJECT_LISTS.STUDENT_ID) " +
-                "JOIN SUBJECTS ON (SUBJECTS.SUBJECT_ID=STUDENT_SUBJECT_LISTS.SUBJECT_ID) WHERE SUBJECTS.SUBJECT_ID=" + subject.getId();
-        List<Object> students = template.query(sql, new ObjectMapper());
+        List<Object> students = template.query(showGroupsForSubject, new ObjectMapper(),subject.getId());
         List<Object> groups = new ArrayList<>();
         List<Integer> numbers = new ArrayList<>();
         for (Object obj: students) {

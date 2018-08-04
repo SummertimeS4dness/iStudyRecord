@@ -2,8 +2,8 @@ INSERT INTO OBJECTS VALUES ('1','university1','university',null);
 INSERT INTO OBJECTS VALUES ('2','faculty1','faculty','1');
 INSERT INTO OBJECTS VALUES ('3','cathedra1','cathedra','2');
 INSERT INTO OBJECTS VALUES ('4','cathedra2','cathedra','2');
-INSERT INTO OBJECTS VALUES ('5','group1','group','2');
-INSERT INTO OBJECTS VALUES ('6','group2','group','2');
+INSERT INTO OBJECTS VALUES ('5','group1 cours(1)','group','2');
+INSERT INTO OBJECTS VALUES ('6','group2 cours(2)','group','2');
 
 INSERT INTO OBJECTS VALUES('7','lecturer1','lecturer','3');
 INSERT INTO LECTURERS VALUES ('7','lecturer1','lecturer1','lecturer1','info1','degree1','works1','interests1');

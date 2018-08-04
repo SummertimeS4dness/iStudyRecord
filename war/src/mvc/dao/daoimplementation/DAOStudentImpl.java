@@ -15,7 +15,23 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class DAOStudentImpl implements DAOStudent {
-    private JdbcTemplate template;
+public static final String selectID = "(SELECT OBJECT_SEQUENCE.nextval FROM DUAL)";
+public static final String objectInsert = "insert into OBJECTS values(?,?,?,?)";
+public static final String createStudent = "insert into STUDENT_INFO values(?,?,?,?)";
+public static final String removeStudent = "DELETE FROM OBJECTS WHERE OBJECT_ID = ?";
+public static final String getStudents = "SELECT * FROM STUDENT_INFO ORDER BY STUDENT_ID";
+public static final String validateStudent = "SELECT * FROM STUDENT_INFO WHERE STUDENT_LOGIN = ? AND STUDENT_PASSWORD=? ORDER BY STUDENT_ID";
+public static final String registerStudentForSubject = "INSERT INTO STUDENT_SUBJECT_LISTS VALUES(?,?,?)";
+public static final String getStudentsOnSubject = "select * from STUDENT_INFO JOIN STUDENT_SUBJECT_LISTS ON " +
+        "(STUDENT_INFO.STUDENT_ID=STUDENT_SUBJECT_LISTS.STUDENT_ID) WHERE SUBJECT_ID=?";
+public static final String getStudentForGroup = "SELECT * FROM STUDENT_INFO JOIN OBJECTS ON " +
+        "(STUDENT_INFO.STUDENT_ID=OBJECTS.OBJECT_ID) WHERE PARENT_ID=?";
+public static final String removeStudentFromSubject = "DELETE FROM STUDENT_SUBJECT_LISTS WHERE STUDENT_ID=? AND SUBJECT_ID=?";
+public static final String updateStudent = "UPDATE STUDENT_INFO SET STUDENT_NAME=?, STUDENT_LOGIN=?,STUDENT_PASSWORD=? WHERE STUDENT_ID=?";
+public static final String setStarosta1 = "UPDATE STUDENT_INFO SET  IS_STAROSTA = 0 WHERE STUDENT_ID IN (SELECT OBJECT_ID FROM OBJECTS WHERE PARENT_ID=?)";
+public static final String setStarosta2 = "UPDATE STUDENT_INFO SET IS_STAROSTA=? WHERE STUDENT_ID=?";
+public static final String selectParentForStudent = "SELECT * FROM OBJECTS WHERE OBJECT_ID=(SELECT PARENT_ID FROM OBJECTS WHERE OBJECT_ID=?)ORDER BY OBJECT_ID";
+private JdbcTemplate template;
 
     public void setTemplate(JdbcTemplate template) {
         this.template = template;
@@ -23,45 +39,35 @@ public class DAOStudentImpl implements DAOStudent {
 
     @Override
     public void createStudent(Student student, Object object) {
-        String selectID="(SELECT OBJECT_SEQUENCE.nextval FROM DUAL)";
         int id = template.query(selectID, new RowMapper<Integer>() {
             @Override
             public Integer mapRow(ResultSet resultSet, int i) throws SQLException {
                 return resultSet.getInt(1);
             }
         }).get(0);
-        String objectInsert = "insert into OBJECTS values(?,?,?,?)";
         int parentId=object.getParentId();
         if(parentId==0)
         template.update(objectInsert,id,object.getDescription(),object.getType(), null);
         else
         template.update(objectInsert,id,object.getDescription(),object.getType(), object.getParentId());
-        String studentInsert = "insert into STUDENT_INFO values(?,?,?,?)";
-        template.update(studentInsert,id, student.getName(), student.getLogin(), student.getPassword());
+        template.update(createStudent,id, student.getName(), student.getLogin(), student.getPassword());
     }
 
 
     @Override
     public void removeStudent(Student student) {
-        //String objectRemove = "DELETE FROM OBJECTS,STUDENT_INFO WHERE OBJECTS.OBJECT_ID=? AND STUDENT_INFO.STUDENT_ID=?";
-        String objectRemove = "DELETE FROM OBJECTS WHERE OBJECT_ID = ?";
-        template.update(objectRemove, student.getId());
-
-       // String studentRemove = "DELETE FROM STUDENT_INFO WHERE STUDENT_ID = ?";
-       // template.update(studentRemove, student.getId());
+        template.update(removeStudent, student.getId());
     }
     
     @Override
     public List<Student> getStudents() {
-        String sql = "SELECT * FROM STUDENT_INFO ORDER BY STUDENT_ID";
-        List<Student> users = template.query(sql, new StudentMapper());
+        List<Student> users = template.query(getStudents, new StudentMapper());
         return users;
     }
 
     @Override
     public Student validateStudent(Login login) {
-        String studentValidate = "SELECT * FROM STUDENT_INFO WHERE STUDENT_LOGIN = ? AND STUDENT_PASSWORD=? ORDER BY STUDENT_ID";
-        List<Student> list = template.query(studentValidate, new StudentMapper(),login.getNickname(),login.getPassword());
+        List<Student> list = template.query(validateStudent, new StudentMapper(),login.getNickname(),login.getPassword());
         Student student = null;
         if(list.size() != 0) {
             student = list.get(0);
@@ -71,42 +77,33 @@ public class DAOStudentImpl implements DAOStudent {
 
     @Override
     public void registerStudentForSubject(Student student, Subject subject) {
-        String registerForSubject = "INSERT INTO STUDENT_SUBJECT_LISTS VALUES(?,?,?)";
-        template.update(registerForSubject, subject.getId(), student.getId(), subject.getLecturerId());
+        template.update(registerStudentForSubject, subject.getId(), student.getId(), subject.getLecturerId());
     }
 
     @Override
     public List<Student> getStudentsOnSubject(Subject subject) {
-        String sql = "select * from STUDENT_INFO JOIN STUDENT_SUBJECT_LISTS ON " +
-                "(STUDENT_INFO.STUDENT_ID=STUDENT_SUBJECT_LISTS.STUDENT_ID) WHERE SUBJECT_ID=" + subject.getId();
-        List<Student> users = template.query(sql, new StudentMapper());
+        List<Student> users = template.query(getStudentsOnSubject, new StudentMapper(),subject.getId());
         return users;
     }
 
     @Override
     public List<Student> getStudentsForGroup(Object object) {
-        String sql = "SELECT * FROM STUDENT_INFO JOIN OBJECTS ON " +
-                "(STUDENT_INFO.STUDENT_ID=OBJECTS.OBJECT_ID) WHERE PARENT_ID=" + object.getId();
-        List<Student> users = template.query(sql, new StudentMapper());
+        List<Student> users = template.query(getStudentForGroup, new StudentMapper(),object.getId());
         return users;
     }
 
 @Override
 public void removeStudentFromSubject(Subject subject, Student student) {
-    String sql ="DELETE FROM STUDENT_SUBJECT_LISTS WHERE STUDENT_ID=? AND SUBJECT_ID=?";
-    template.update(sql,student.getId(),subject.getId());
+    template.update(removeStudentFromSubject,student.getId(),subject.getId());
 }
 @Override
 public void updateStudent(Student student) {
-    String sql = "UPDATE STUDENT_INFO SET STUDENT_NAME=?, STUDENT_LOGIN=?,STUDENT_PASSWORD=? WHERE STUDENT_ID=?";
-    template.update(sql,student.getName(),student.getLogin(),student.getPassword(),student.getId());
+    template.update(updateStudent,student.getName(),student.getLogin(),student.getPassword(),student.getId());
 }
 @Override
 public void setStarosta(Student student) {
-    String sql1 = "UPDATE STUDENT_INFO SET  IS_STAROSTA = 0 WHERE STUDENT_ID IN (SELECT OBJECT_ID FROM OBJECTS WHERE PARENT_ID=?)";
-    template.update(sql1,student.getGroupId());
-    String sql = "UPDATE STUDENT_INFO SET IS_STAROSTA=? WHERE STUDENT_ID=?";
-    template.update(sql,student.getIsStarosta(),student.getId());
+    template.update(setStarosta1,student.getGroupId());
+    template.update(setStarosta2,student.getIsStarosta(),student.getId());
 }
 class StudentMapper implements RowMapper<Student> {
         public Student mapRow(ResultSet rs, int arg1) throws SQLException {
@@ -116,8 +113,7 @@ class StudentMapper implements RowMapper<Student> {
             student.setPassword(rs.getString("student_password"));
             student.setName(rs.getString("student_name"));
             student.setIsStarosta(rs.getInt("is_starosta"));
-            String sql = "SELECT * FROM OBJECTS WHERE OBJECT_ID=(SELECT PARENT_ID FROM OBJECTS WHERE OBJECT_ID=" + rs.getInt("student_id")+")ORDER BY OBJECT_ID";
-            List<Object> objects = template.query(sql, new DAOObjectImpl.ObjectMapper());
+            List<Object> objects = template.query(selectParentForStudent, new DAOObjectImpl.ObjectMapper(),rs.getInt("student_id"));
             student.setGroup(objects.get(0).getDescription());
             student.setGroupId(objects.get(0).getId());
             return student;
