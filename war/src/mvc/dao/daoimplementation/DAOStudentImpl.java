@@ -33,6 +33,7 @@ public static final String setStarosta2 = "UPDATE STUDENT_INFO SET IS_STAROSTA=?
 public static final String selectParentForStudent = "SELECT * FROM OBJECTS WHERE OBJECT_ID=(SELECT PARENT_ID FROM OBJECTS WHERE OBJECT_ID=?)ORDER BY OBJECT_ID";
     public static final String showStarostaForStudent = "SELECT * FROM STUDENT_INFO JOIN OBJECTS ON (STUDENT_INFO.STUDENT_ID = OBJECTS.OBJECT_ID) " +
             "WHERE OBJECTS.PARENT_ID=(SELECT PARENT_ID FROM OBJECTS WHERE OBJECT_ID=?) AND STUDENT_INFO.IS_STAROSTA=1";
+    public static final String getStudentById = "SELECT * FROM STUDENT_INFO WHERE STUDENT_ID=?";
 
 
 private JdbcTemplate template;
@@ -116,7 +117,13 @@ public void setStarosta(Student student) {
         return starosta.get(0);
     }
 
-class StudentMapper implements RowMapper<Student> {
+    @Override
+    public Student getStudentById(int id) {
+        List<Student> student = template.query(getStudentById, new StudentMapper(), Integer.toString(id));
+        return student.get(0);
+    }
+
+    class StudentMapper implements RowMapper<Student> {
         public Student mapRow(ResultSet rs, int arg1) throws SQLException {
             Student student = new Student();
             student.setId(rs.getInt("student_id"));

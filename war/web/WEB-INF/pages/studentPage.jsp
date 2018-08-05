@@ -7,6 +7,48 @@
         <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
         <script type="text/javascript">
+            function getProfile() {
+                $.ajax({
+                    type: "GET",
+                    url: 'getStudentProfile',
+                    dataType: "json",
+                    contentType: 'application/json; charset=utf-8',
+                    data: {id: ${studentID}},
+                    complete: [
+                        function (response) {
+                            var obj = $.parseJSON(response.responseText);
+                            document.getElementById("studentName").value = obj.name;
+                            document.getElementById("studentLogin").value = obj.login;
+                            document.getElementById("studentPassword").value = obj.password;
+                        }
+                    ]
+                });
+            }
+            function save() {
+                var student = {
+                    id: ${studentID},
+                    login: document.getElementById("studentLogin").value,
+                    password: document.getElementById("studentPassword").value,
+                    name: document.getElementById("studentName").value,
+                };
+                if(student.login==""||student.password==""||student.name==""){
+                    alert("Fill everything!");
+                    return;
+                }
+                $.ajax({
+                    type: "POST",
+                    contentType: 'application/json; charset=utf-8',
+                    url: "updateStudentProfile",
+                    data: JSON.stringify(student),
+                    success: function (response) {
+                        getProfile();
+                        alert("Profile data changed successfully!");
+                    },
+                    error: function (xhr, status, errorThrown) {
+                        alert(status + " " + errorThrown.toString());
+                    }
+                });
+            }
             function getMarks() {
                 $.ajax({
                     type: "get",
@@ -173,6 +215,26 @@
     <body>
         <h1>Hello, ${name}. Your group - ${group}, starosta - ${starosta}</h1>
         <input type="search" class="light-table-filter" data-table="order-table" placeholder="Filter">
+        <button class="accordion" onclick="getProfile()">Edit profile data</button>
+        <div class="panel">
+            <table id="student">
+                <tr>
+                    <td>Name</td>
+                    <td>Login</td>
+                    <td>Password</td>
+                </tr>
+                <tr>
+                    <td><input id="studentName"/></td>
+                    <td><input id="studentLogin"/></td>
+                    <td><input id="studentPassword"/></td>
+                </tr>
+                <tr>
+                    <td>
+                        <button id="save" onclick="save()">Save</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
         <button class="accordion" onclick="getMarks()">Marks</button>
         <div class="panel">
             <table id="marksTable"  align="left" class="order-table">

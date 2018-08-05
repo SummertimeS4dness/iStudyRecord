@@ -6,6 +6,56 @@
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <script type="text/javascript">
+        function getProfile() {
+            $.ajax({
+                type: "GET",
+                url: 'getLecturerProfile',
+                dataType: "json",
+                contentType: 'application/json; charset=utf-8',
+                data: {id: ${lecturerID}},
+                complete: [
+                    function (response) {
+                        var obj = $.parseJSON(response.responseText);
+                        document.getElementById("lecturerName").value = obj.name;
+                        document.getElementById("lecturerLogin").value = obj.login;
+                        document.getElementById("lecturerPassword").value = obj.password;
+                        document.getElementById("lecturerInfo").value = obj.password;
+                        document.getElementById("lecturerDegree").value = obj.degree;
+                        document.getElementById("lecturerWorks").value = obj.works;
+                        document.getElementById("lecturerInterests").value = obj.interests;
+                    }
+                ]
+            });
+        }
+        function save() {
+            var lecturer = {
+                id: ${lecturerID},
+                name:  document.getElementById("lecturerName").value,
+                login:  document.getElementById("lecturerLogin").value,
+                password: document.getElementById("lecturerPassword").value,
+                info:  document.getElementById("lecturerInfo").value,
+                degree:  document.getElementById("lecturerDegree").value,
+                works: document.getElementById("lecturerWorks").value,
+                interests:  document.getElementById("lecturerInterests").value,
+            };
+            if(lecturer.login==""||lecturer.password==""||lecturer.name==""){
+                alert("Fill everything!");
+                return;
+            }
+            $.ajax({
+                type: "POST",
+                contentType: 'application/json; charset=utf-8',
+                url: "updateLecturerProfile",
+                data: JSON.stringify(lecturer),
+                success: function (response) {
+                    getProfile();
+                    alert("Profile data changed successfully!");
+                },
+                error: function (xhr, status, errorThrown) {
+                    alert(status + " " + errorThrown.toString());
+                }
+            });
+        }
         function getSchedule() {
             $.ajax({
                 type: "GET",
@@ -406,6 +456,34 @@
 <body>
 <h1>Hello, ${name}</h1>
 <input type="search" class="light-table-filter" data-table="order-table" placeholder="Filter">
+<button class="accordion" onclick="getProfile()">Edit profile data</button>
+<div class="panel">
+    <table id="lecturer">
+        <tr>
+            <td>Name</td>
+            <td>Login</td>
+            <td>Password</td>
+            <td>Info</td>
+            <td>Degree</td>
+            <td>Works</td>
+            <td>Interests</td>
+        </tr>
+        <tr>
+            <td><input id="lecturerName" style='width:100%'/></td>
+            <td><input id="lecturerLogin"style='width:100%'/></td>
+            <td><input id="lecturerPassword"/></td>
+            <td><input id="lecturerInfo"/></td>
+            <td><input id="lecturerDegree"/></td>
+            <td><input id="lecturerWorks"/></td>
+            <td><input id="lecturerInterests"/></td>
+        </tr>
+        <tr>
+            <td>
+                <button id="save" onclick="save()">Save</button>
+            </td>
+        </tr>
+    </table>
+</div>
 <button class="accordion" onclick="getSchedule()">Schedule</button>
 <div class="panel">
     <table id="scheduleTable" align="left" class="order-table">

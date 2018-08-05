@@ -17,10 +17,7 @@ import javax.jws.WebParam;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Controller
 public class Controllers {
@@ -61,6 +58,33 @@ public List<Mark> showMarksForStudent() {
 public String showName() {
     return login.getNickname();
 }
+
+    @RequestMapping(value = "/getStudentProfile", method = RequestMethod.GET, produces = {"application/json"}, headers = "Accept=*/*")
+    @ResponseBody
+    public Student getStudentProfile(@RequestParam("id") int id) {
+        Student student = daoStudent.getStudentById(id);
+        return student;
+    }
+
+    @RequestMapping(value = "/updateStudentProfile", method = RequestMethod.POST, consumes = "application/json")
+    @ResponseStatus(value = HttpStatus.OK)
+    public void updateStudentProfile(@RequestBody Student student) {
+        daoStudent.updateStudent(student);
+    }
+
+    @RequestMapping(value = "/getLecturerProfile", method = RequestMethod.GET, produces = {"application/json"}, headers = "Accept=*/*")
+    @ResponseBody
+    public Lecturer getLecturerProfile(@RequestParam("id") int id) {
+        Lecturer lecturer = daoLecturer.getLecturerById(id);
+        return lecturer;
+    }
+
+    @RequestMapping(value = "/updateLecturerProfile", method = RequestMethod.POST, consumes = "application/json")
+    @ResponseStatus(value = HttpStatus.OK)
+    public void updateLecturerProfile(@RequestBody Lecturer lecturer) {
+        daoLecturer.updateLecturer(lecturer);
+    }
+
 
 @RequestMapping(value = "/studentSchedule", method = RequestMethod.GET, produces = {"application/json"}, headers = "Accept=*/*")
 @ResponseBody

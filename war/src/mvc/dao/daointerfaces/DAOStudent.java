@@ -19,4 +19,5 @@ public interface DAOStudent {
 	public List<Student> getStudentsForGroup(Object object);
 	public void setStarosta(Student student);
 	public Student showStarostaForStudent(int id);
+	public Student getStudentById(int id);
 }

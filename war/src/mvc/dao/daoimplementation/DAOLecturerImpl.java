@@ -31,7 +31,7 @@ public static final String getLecturersForStudent = "SELECT * FROM LECTURERS JOI
 public static final String getlecturers = "SELECT * FROM LECTURERS";
 public static final String validateLecturer  = "SELECT * FROM LECTURERS WHERE LECTURER_LOGIN = ? AND LECTURER_PASSWORD=?";
 public static final String updateLecturer = "UPDATE LECTURERS SET LECTURER_LOGIN =?,LECTURER_PASSWORD=?,LECTURER_NAME=?,LECTURER_INFO=?,LECTURER_DEGREE=?,LECTURER_WORKS=?,LECTURER_INTERESTS=? WHERE LECTURER_ID=?";
-
+    public static final String getLecturerById = "SELECT * FROM LECTURERS WHERE LECTURER_ID=?";
 
 
 public void setTemplate(JdbcTemplate template) {
@@ -89,7 +89,14 @@ public List<Lecturer> getLecturers() {
 	List<Lecturer> lecturers = template.query(getlecturers , new LecturerMapper());
 	return lecturers;
 }
-class LecturerMapper implements RowMapper<Lecturer> {
+
+	@Override
+	public Lecturer getLecturerById(int id) {
+        List<Lecturer> lecturer = template.query(getLecturerById, new LecturerMapper(), Integer.toString(id));
+        return lecturer.get(0);
+	}
+
+	class LecturerMapper implements RowMapper<Lecturer> {
 	public Lecturer mapRow(ResultSet rs, int arg1) throws SQLException {
 		int id = rs.getInt("lecturer_id");
 		String login = rs.getString("lecturer_login");

@@ -16,4 +16,5 @@ public interface DAOLecturer {
 	public Lecturer validateLecturer(Login login);
 	public void updateLecturer(Lecturer lecturer);
 	public List<Lecturer> getLecturersForSubject(Subject subject);
+	public Lecturer getLecturerById(int id);
 }
