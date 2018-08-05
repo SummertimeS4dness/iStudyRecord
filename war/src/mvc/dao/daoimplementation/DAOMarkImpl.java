@@ -29,6 +29,8 @@ public static final String getMarksForLecturerAndSubject = "SELECT * from MARKS 
 public static final String getMarksForGroupAndSubject = "SELECT * from MARKS JOIN OBJECTS ON (MARKS.STUDENT_ID=OBJECTS.OBJECT_ID) JOIN STUDENT_INFO ON" +
         " (OBJECTS.OBJECT_ID=STUDENT_INFO.STUDENT_ID) JOIN LESSONS ON (MARKS.LESSON_ID=LESSONS.LESSON_ID) WHERE " +
         "MARKS.SUBJECT_ID=? AND PARENT_ID=?";
+    public static final String updateMark = "UPDATE MARKS SET SCORE=? WHERE MARK_ID=?";
+
 private JdbcTemplate template;
 
     public void setTemplate(JdbcTemplate template) {
@@ -50,6 +52,11 @@ private JdbcTemplate template;
     @Override
     public void removeMark(Mark mark) {
         template.update(removeMark, mark.getId());
+    }
+
+    @Override
+    public void updateMark(Mark mark) {
+        template.update(updateMark, mark.getScore(), mark.getId());
     }
 
     @Override

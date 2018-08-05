@@ -27,7 +27,7 @@
                 ]
             });
         }
-        function save() {
+        function saveProfile() {
             var lecturer = {
                 id: ${lecturerID},
                 name:  document.getElementById("lecturerName").value,
@@ -305,6 +305,10 @@
             });
         }
         function listGroups() {
+            $("#marksForGroupTable tr").remove();
+            document.getElementById("markEdit").style.visibility = "hidden";
+            $("#marksForGroupGroup").find('option').remove();
+            $("#marksForGroupSubject").find('option').remove();
             $.ajax({
                 type: "GET",
                 url: 'getGroup',
@@ -360,14 +364,47 @@
                         for (var i = 0; i < obj.length; i++) {
                             if(res != obj[i].stringDate) {
                                 count++;
-                                trHTML += '<tr><td colspan="2"><br/></td></tr><tr><td colspan="2" align="center"><b>' + count + ". " + obj[i].stringDate + '</b></td></tr>';
+                                trHTML += '<tr><td colspan="2"><br/></td></tr><tr><td colspan="2" align="center"><b>'
+                                    + count + ". " + obj[i].stringDate + '</b></td></tr>';
                                 res = obj[i].stringDate;
                             }
-                            trHTML += '<tr><td>' + obj[i].studentName + '</td><td>' + obj[i].score + '</td><td></td></tr>';
+                            trHTML += '<tr><td>' + obj[i].studentName + '</td><td>' + obj[i].score + '</td><td><button ' +
+                                'id="' + i + '"class="myclassk">edit</button></td></tr>';
+                            var a = obj;
+                            $(document).off().on('click', 'button.myclassk', function (event) {
+                                onMarkEdit(this.id, a);
+                            });
                         }
                         $("#marksForGroupTable tbody").append(trHTML);
                     }]
                 });
+            });
+        }
+        function onMarkEdit(pos, mass) {
+            document.getElementById("markEdit").style.visibility = "visible";
+            document.getElementById("markIdd").innerHTML = mass[pos].id;
+            document.getElementById("student").innerHTML = mass[pos].studentName;
+            document.getElementById("subject").innerHTML = document.getElementById("marksForGroupSubject").options[document.getElementById("marksForGroupSubject").selectedIndex].text;
+            document.getElementById("lesson").innerHTML = mass[pos].stringDate;
+            document.getElementById("score").value = mass[pos].score;
+        }
+        function saveMark() {
+            var mark = {
+                id: document.getElementById("markIdd").innerHTML,
+                score: document.getElementById("score").value
+            }
+            $.ajax({
+                type: "POST",
+                contentType: 'application/json; charset=utf-8',
+                url: 'updateMark',
+                data: JSON.stringify(mark),
+                success: function (response) {
+                    document.getElementById("markEdit").style.visibility = "hidden";
+                    alert("Mark edited successfully!");
+                },
+                error: function (xhr, status, errorThrown) {
+                    alert(status + " " + errorThrown.toString());
+                }
             });
         }
         $(document).ready(function () {
@@ -479,7 +516,7 @@
         </tr>
         <tr>
             <td>
-                <button id="save" onclick="save()">Save</button>
+                <button id="saveProfile" onclick="saveProfile()">Save</button>
             </td>
         </tr>
     </table>
@@ -577,6 +614,27 @@
         </tr>--%>
         </thead>
         <tbody></tbody>
+    </table>
+    <table id="markEdit" style="visibility: hidden" width="100%" >
+        <tr>
+            <th>ID</th>
+            <th>Subject</th>
+            <th>Student</th>
+            <th>Lesson</th>
+            <th>Score</th>
+        </tr>
+        <tr>
+            <td id="markIdd"></td>
+            <td id="subject"></td>
+            <td id="student"></td>
+            <td id="lesson"></td>
+            <td><input id="score"/></td>
+        </tr>
+        <tr>
+            <td>
+                <button id="saveMark" onclick="saveMark()">Save</button>
+            </td>
+        </tr>
     </table>
 </div>
 </body>
