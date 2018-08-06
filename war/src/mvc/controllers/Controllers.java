@@ -45,7 +45,11 @@ public class Controllers {
     private Login login;
     private int ID;
 
-    @RequestMapping(value = "/marks", method = RequestMethod.GET, produces = {"application/json"}, headers = "Accept=*/*")
+/**
+ * get marks for student
+ * @return marks for current student
+ */
+@RequestMapping(value = "/marks", method = RequestMethod.GET, produces = {"application/json"}, headers = "Accept=*/*")
     @ResponseBody
     public List<Mark> showMarksForStudent() {
         List<Mark> list = daoMark.getMarksForStudent(new Student(ID, login.getNickname(), login.getPassword()));
@@ -53,45 +57,75 @@ public class Controllers {
         return list;
     }
 
-    @RequestMapping(value = "/getName", method = RequestMethod.GET, produces = {"application/json"}, headers = "Accept=*/*")
+/**
+ * get name of loginning user
+ * @return return name
+ */
+@RequestMapping(value = "/getName", method = RequestMethod.GET, produces = {"application/json"}, headers = "Accept=*/*")
     @ResponseBody
     public String showName() {
         return login.getNickname();
     }
 
-    @RequestMapping(value = "/getStudentProfile", method = RequestMethod.GET, produces = {"application/json"}, headers = "Accept=*/*")
+/**
+ * get student by specific id
+ * @param id id of student
+ * @return student with id
+ */
+@RequestMapping(value = "/getStudentProfile", method = RequestMethod.GET, produces = {"application/json"}, headers = "Accept=*/*")
     @ResponseBody
     public Student getStudentProfile(@RequestParam("id") int id) {
         Student student = daoStudent.getStudentById(id);
         return student;
     }
 
-    @RequestMapping(value = "/updateStudentProfile", method = RequestMethod.POST, consumes = "application/json")
+/**
+ * update student in database
+ * @param student student to update
+ */
+@RequestMapping(value = "/updateStudentProfile", method = RequestMethod.POST, consumes = "application/json")
     @ResponseStatus(value = HttpStatus.OK)
     public void updateStudentProfile(@RequestBody Student student) {
         daoStudent.updateStudent(student);
     }
 
-    @RequestMapping(value = "/getLecturerProfile", method = RequestMethod.GET, produces = {"application/json"}, headers = "Accept=*/*")
+/**
+ * get lecturer by specific if
+ * @param id if of lecturer
+ * @return lecturer with id
+ */
+@RequestMapping(value = "/getLecturerProfile", method = RequestMethod.GET, produces = {"application/json"}, headers = "Accept=*/*")
     @ResponseBody
     public Lecturer getLecturerProfile(@RequestParam("id") int id) {
         Lecturer lecturer = daoLecturer.getLecturerById(id);
         return lecturer;
     }
 
-    @RequestMapping(value = "/updateLecturerProfile", method = RequestMethod.POST, consumes = "application/json")
+/**
+ * update lecturer in database
+ * @param lecturer lecturer by id
+ */
+@RequestMapping(value = "/updateLecturerProfile", method = RequestMethod.POST, consumes = "application/json")
     @ResponseStatus(value = HttpStatus.OK)
     public void updateLecturerProfile(@RequestBody Lecturer lecturer) {
         daoLecturer.updateLecturer(lecturer);
     }
 
-    @RequestMapping(value = "/updateMark", method = RequestMethod.POST, consumes = "application/json")
+/**
+ * update mark in database
+ * @param mark mark to update
+ */
+@RequestMapping(value = "/updateMark", method = RequestMethod.POST, consumes = "application/json")
     @ResponseStatus(value = HttpStatus.OK)
     public void updateMark(@RequestBody Mark mark) {
         daoMark.updateMark(mark);
     }
 
-    @RequestMapping(value = "/studentSchedule", method = RequestMethod.GET, produces = {"application/json"}, headers = "Accept=*/*")
+/**
+ * get all lessons for student
+ * @return all lessons for student
+ */
+@RequestMapping(value = "/studentSchedule", method = RequestMethod.GET, produces = {"application/json"}, headers = "Accept=*/*")
     @ResponseBody
     public List<Lesson> showScheduleForStudent() {
         List<Lesson> list = daoLesson.getLessonForStudent(new Student(ID, login.getNickname(), login.getPassword()));
@@ -99,32 +133,57 @@ public class Controllers {
         return list;
     }
 
-    @RequestMapping(value = "/getSubjectsForLecturer", method = RequestMethod.GET, produces = {"application/json"}, headers = "Accept=*/*")
+/**
+ * get all lessons for lecturer
+ * @return all lessons for lecturer
+ */
+@RequestMapping(value = "/getSubjectsForLecturer", method = RequestMethod.GET, produces = {"application/json"}, headers = "Accept=*/*")
     @ResponseBody
     public List<Subject> showSubjectsForLecturer() {
         return daoSubject.showSubjectsForLecturer(new Lecturer(ID, login.getNickname(), login.getPassword()));
     }
 
-    @RequestMapping(value = "/getLecturersForSubject", method = RequestMethod.GET, produces = {"application/json"}, consumes = "application/json", headers = "Accept=*/*")
+/**
+ * get lecturers for subject with specific id
+ * @param id id of subject
+ * @return lecturers for subject with id
+ */
+@RequestMapping(value = "/getLecturersForSubject", method = RequestMethod.GET, produces = {"application/json"}, consumes = "application/json", headers = "Accept=*/*")
     @ResponseBody
     public List<Lecturer> getLecturersForSubject(@RequestParam("id") int id) {
         return daoLecturer.getLecturersForSubject(new Subject(id));
     }
 
-    @RequestMapping(value = "/getSubjectsForGroup", method = RequestMethod.GET, produces = {"application/json"})
+/**
+ * get subject for group with specific id
+ * @param id id of group
+ * @return subjects for group with id
+ */
+@RequestMapping(value = "/getSubjectsForGroup", method = RequestMethod.GET, produces = {"application/json"})
     @ResponseBody
     public List<Subject> getSubjectsForGroup(@RequestParam int id) {
         Object object = new Object(id);
         return daoSubject.showSubjectsForGroup(object);
     }
 
-    @RequestMapping(value = "/getGroupsForSubject", method = RequestMethod.POST, consumes = "application/json", produces = {"application/json"}, headers = "Accept=*/*")
+/**
+ * get groups for subject
+ * @param subject subject to het groups on
+ * @return all groups on subject
+ */
+@RequestMapping(value = "/getGroupsForSubject", method = RequestMethod.POST, consumes = "application/json", produces = {"application/json"}, headers = "Accept=*/*")
     @ResponseBody
     public List<Object> getGroupsForSubject(@RequestBody Subject subject) {
         return daoObject.showGroupsForSubject(subject);
     }
 
-    @RequestMapping(value = "/getMarksForGroupAndSubject", method = RequestMethod.GET, consumes = "application/json", produces = {"application/json"}, headers = "Accept=*/*")
+/**
+ * get all marks for group and subject
+ * @param objId group if
+ * @param subjId subject id
+ * @return all marks for group and subject
+ */
+@RequestMapping(value = "/getMarksForGroupAndSubject", method = RequestMethod.GET, consumes = "application/json", produces = {"application/json"}, headers = "Accept=*/*")
     @ResponseBody
     public List<Mark> getMarksForGroupAndSubject(@RequestParam("objId") int objId, @RequestParam("subjId") int subjId) {
         Object object = new Object(objId);
@@ -134,32 +193,56 @@ public class Controllers {
         return list;
     }
 
-    @RequestMapping(value = "/getStudentsForSubject", method = RequestMethod.POST, produces = {"application/json"}, headers = "Accept=*/*")
+/**
+ * get all students for subject
+ * @param subject subjects to get students on
+ * @return all students on subject
+ */
+@RequestMapping(value = "/getStudentsForSubject", method = RequestMethod.POST, produces = {"application/json"}, headers = "Accept=*/*")
     @ResponseBody
     public List<Student> showStudentsForSubjects(@RequestBody Subject subject) {
         return daoStudent.getStudentsOnSubject(subject);
     }
 
-    @RequestMapping(value = "/getStudentsForGroup", method = RequestMethod.POST, produces = {"application/json"}, headers = "Accept=*/*")
+/**
+ * get all students in group
+ * @param group group to get students in
+ * @return all students in group
+ */
+@RequestMapping(value = "/getStudentsForGroup", method = RequestMethod.POST, produces = {"application/json"}, headers = "Accept=*/*")
     @ResponseBody
     public List<Student> getStudentsForGroup(@RequestBody Object group) {
         return daoStudent.getStudentsForGroup(group);
     }
 
-    @RequestMapping(value = "/getLessonsForSubject", method = RequestMethod.POST, produces = {"application/json"}, headers = "Accept=*/*")
+/**
+ * get all lessons for subject
+ * @param subject subject to get lessons for
+ * @return all lessons in subject
+ */
+@RequestMapping(value = "/getLessonsForSubject", method = RequestMethod.POST, produces = {"application/json"}, headers = "Accept=*/*")
     @ResponseBody
     public List<Lesson> showLessonsForSubjects(@RequestBody Subject subject) {
         return daoLesson.getLessonForSubject(subject);
     }
 
-    @RequestMapping(value = "/studentsForGroup", method = RequestMethod.GET, produces = {"application/json"}, headers = "Accept=*/*")
+/**
+ * get all students in group with specific id
+ * @param id id of group
+ * @return all students is group
+ */
+@RequestMapping(value = "/studentsForGroup", method = RequestMethod.GET, produces = {"application/json"}, headers = "Accept=*/*")
     @ResponseBody
     public List<Student> studentsForGroup(@RequestParam int id) {
         Object object = new Object(id);
         return daoStudent.getStudentsForGroup(object);
     }
 
-    @RequestMapping(value = "/lecturerSchedule", method = RequestMethod.GET, produces = {"application/json"}, headers = "Accept=*/*")
+/**
+ * get lessons for lecturer
+ * @return lessons for lecturer
+ */
+@RequestMapping(value = "/lecturerSchedule", method = RequestMethod.GET, produces = {"application/json"}, headers = "Accept=*/*")
     @ResponseBody
     public List<Lesson> showScheduleForLecturer() {
         List<Lesson> list = daoLesson.getLessonForLecturer(new Lecturer(ID, login.getNickname(), login.getPassword()));
@@ -171,73 +254,122 @@ public class Controllers {
         return list;
     }
 
-    @RequestMapping(value = "/students", method = RequestMethod.GET, produces = {"application/json"}, headers = "Accept=*/*")
+/**
+ * get all students
+ * @return all students
+ */
+@RequestMapping(value = "/students", method = RequestMethod.GET, produces = {"application/json"}, headers = "Accept=*/*")
     @ResponseBody
     public List<Student> showStudents() {
         return daoStudent.getStudents();
     }
 
-    @RequestMapping(value = "/lecturerObjects", method = RequestMethod.GET, produces = {"application/json"}, headers = "Accept=*/*")
+/**
+ * get all objects with type 'lecturer'
+ * @return all 'lecturer' type objects
+ */
+@RequestMapping(value = "/lecturerObjects", method = RequestMethod.GET, produces = {"application/json"}, headers = "Accept=*/*")
     @ResponseBody
     public List<Object> getLcturerOjects() {
         return daoObject.getLecturers();
     }
 
+/**
+ * get all objects with type 'student'
+ * @return all 'student' type objects
+ */
     @RequestMapping(value = "/studentObjects", method = RequestMethod.GET, produces = {"application/json"}, headers = "Accept=*/*")
     @ResponseBody
     public List<Object> getStudentOjects() {
         return daoObject.getStudents();
     }
 
-    @RequestMapping(value = "/lecturers", method = RequestMethod.GET, produces = {"application/json"}, headers = "Accept=*/*")
+/**
+ * get all lecturers
+ * @return all lecturers
+ */
+@RequestMapping(value = "/lecturers", method = RequestMethod.GET, produces = {"application/json"}, headers = "Accept=*/*")
     @ResponseBody
     public List<Lecturer> showLecturers() {
         return daoLecturer.getLecturers();
     }
 
-    @RequestMapping(value = "/getGroup", method = RequestMethod.GET, produces = {"application/json"}, headers = "Accept=*/*")
+/**
+ * get all objects with type 'group'
+ * @return all 'group' type objects
+ */
+@RequestMapping(value = "/getGroup", method = RequestMethod.GET, produces = {"application/json"}, headers = "Accept=*/*")
     @ResponseBody
     public List<Object> showGroups() {
         return daoObject.getGrops();
     }
 
+/**
+ * get all objects with type 'faculties'
+ * @return all 'faculties' type objects
+ */
     @RequestMapping(value = "/getFaculty", method = RequestMethod.GET, produces = {"application/json"}, headers = "Accept=*/*")
     @ResponseBody
     public List<Object> showFaculties() {
         return daoObject.getFaculties();
     }
 
+/**
+ * get all objects with type 'universities'
+ * @return all 'universities' type objects
+ */
     @RequestMapping(value = "/getUniversity", method = RequestMethod.GET, produces = {"application/json"}, headers = "Accept=*/*")
     @ResponseBody
     public List<Object> showUniversities() {
         return daoObject.getUniversities();
     }
 
-    @RequestMapping(value = "/objects", method = RequestMethod.GET, produces = {"application/json"}, headers = "Accept=*/*")
+/**
+ * get all objects
+ * @return all objects
+ */
+@RequestMapping(value = "/objects", method = RequestMethod.GET, produces = {"application/json"}, headers = "Accept=*/*")
     @ResponseBody
     public List<Object> getObjects() {
         return daoObject.getObjects();
     }
-
-    @RequestMapping(value = "/getCathedra", method = RequestMethod.GET, produces = {"application/json"}, headers = "Accept=*/*")
+    
+/**
+ * get all objects with type 'cathedra'
+ * @return all 'cathedra' type objects
+ */
+@RequestMapping(value = "/getCathedra", method = RequestMethod.GET, produces = {"application/json"}, headers = "Accept=*/*")
     @ResponseBody
     public List<Object> showCathedras() {
         return daoObject.getCathedras();
     }
 
+/**
+ * get all objects with type 'lecturer'
+ * @return all 'lecturer' type objects
+ */
     @RequestMapping(value = "/getLecturers", method = RequestMethod.GET, produces = {"application/json"}, headers = "Accept=*/*")
     @ResponseBody
     public List<Lecturer> showLecturersObjects() {
         return daoLecturer.getLecturers();
     }
 
-    @RequestMapping(value = "/getLecturerBySubject", method = RequestMethod.POST, produces = {"application/json"}, consumes = {"application/json"}, headers = "Accept=*/*")
+/**
+ * get lecturer for subject
+ * @param subject subject to get lecturer on
+ * @return
+ */
+@RequestMapping(value = "/getLecturerBySubject", method = RequestMethod.POST, produces = {"application/json"}, consumes = {"application/json"}, headers = "Accept=*/*")
     @ResponseBody
     public Lecturer showLecturerBySubject(@RequestBody Subject subject) {
         return daoLecturer.getLecturerForSubject(subject);
     }
 
-    @RequestMapping(value = "/subjects", method = RequestMethod.GET, produces = {"application/json"}, headers = "Accept=*/*")
+/**
+ * get all subjects
+ * @return all subjects
+ */
+@RequestMapping(value = "/subjects", method = RequestMethod.GET, produces = {"application/json"}, headers = "Accept=*/*")
     @ResponseBody
     public List<Subject> showSubjects(){
         return daoSubject.getSubjects();
