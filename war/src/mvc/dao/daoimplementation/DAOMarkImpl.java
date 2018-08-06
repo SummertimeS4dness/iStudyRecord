@@ -6,6 +6,9 @@ import mvc.dao.daointerfaces.DAOMark;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
@@ -45,7 +48,7 @@ public String createMark(Mark mark) {
             template.update(createMark, mark.getLessonId(), mark.getScore(), mark.getSubjectId(), mark.getStudentId(), mark.getLecturerId());
         } catch (Exception e) {
             toReturn = e.getMessage();
-            logger.error("Error in creating new mark: " + e);
+            printLog(e, "Error in creating new mark:\n");
         }
         return toReturn;
     }
@@ -165,7 +168,7 @@ public List<Mark> getMarksForGroupAndSubject(Subject subject, Object object) {
             try {
                 parsed = format.parse(date);
             } catch (ParseException e) {
-                logger.error("Error in parsing mark's date: " + e);
+                printLog(e, "Error in parsing mark's date:\n");
             }
             format.applyPattern("EEEE dd-MM-yyyy HH:mm");
             date = format.format(parsed);
@@ -189,7 +192,7 @@ public List<Mark> getMarksForGroupAndSubject(Subject subject, Object object) {
             try {
                 parsed = format.parse(date);
             } catch (ParseException e) {
-                logger.error("Error in parsing mark's date: " + e);
+                printLog(e,"Error in parsing mark's date:\n");
             }
             format.applyPattern("EEEE dd-MM-yyyy HH:mm");
             date = format.format(parsed);
@@ -199,5 +202,12 @@ public List<Mark> getMarksForGroupAndSubject(Subject subject, Object object) {
             mark.setDate(parsed);
             return mark;
         }
+    }
+    private void printLog(Exception e, String mes) {
+        Writer result = new StringWriter();
+        PrintWriter printWriter = new PrintWriter(result);
+        e.printStackTrace(printWriter);
+        logger.error(mes);
+        logger.error(result.toString());
     }
 }

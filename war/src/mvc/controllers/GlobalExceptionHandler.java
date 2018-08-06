@@ -1,17 +1,21 @@
 package mvc.controllers;
 
+import org.apache.log4j.Logger;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.servlet.view.RedirectView;
+
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.io.Writer;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
-@ExceptionHandler(Exception.class)
-public void handleIOException(Exception ex) throws Exception {
-	ex.printStackTrace();
-}
+    private final static Logger logger = Logger.getLogger(GlobalExceptionHandler.class);
+    @ExceptionHandler(Exception.class)
+    public void handleIOException(Exception ex) throws Exception {
+        Writer result = new StringWriter();
+        PrintWriter printWriter = new PrintWriter(result);
+        ex.printStackTrace(printWriter);
+        logger.error(result.toString());
+    }
 }

@@ -9,6 +9,9 @@ import mvc.dao.daointerfaces.DAOLesson;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
@@ -139,7 +142,7 @@ class LessonMapper1 implements RowMapper<Lesson> {
             try {
                 parsed = format.parse(lessonDate);
             } catch (ParseException e) {
-                logger.error("Error in parsing lesson's date: " + e);
+                printLog(e);
             }
             format.applyPattern("EEEE dd-MM-yyyy HH:mm");
             lessonDate = format.format(parsed);
@@ -166,7 +169,7 @@ class LessonMapper2 implements RowMapper<Lesson> {
             try {
                 parsed = format.parse(lessonDate);
             } catch (ParseException e) {
-                logger.error("Error in parsing lesson's date: " + e);
+                printLog(e);
             }
             format.applyPattern("EEEE dd-MM-yyyy HH:mm");
             lessonDate = format.format(parsed);
@@ -202,7 +205,7 @@ class LessonMapperWithSubjectAndLecturer implements RowMapper<Lesson>{
             try {
                 date = format.parse(dateString);
             } catch (ParseException e) {
-                logger.error("Error in parsing lesson's date: " + e);
+                printLog(e);
             }
             int lecturerId=resultSet.getInt("lecturer_id");
             String lecturerName = resultSet.getString("lecturer_name");
@@ -212,5 +215,11 @@ class LessonMapperWithSubjectAndLecturer implements RowMapper<Lesson>{
             return lesson;
         }
     }
-
+    private void printLog(ParseException e) {
+        Writer result = new StringWriter();
+        PrintWriter printWriter = new PrintWriter(result);
+        e.printStackTrace(printWriter);
+        logger.error("Error in parsing lesson's date:\n");
+        logger.error(result.toString());
+    }
 }
