@@ -12,21 +12,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+import static mvc.dao.daoimplementation.SQL_STRINGS.*;
+
+
 /**
  * Class for work with Subject object in database
  */
 public class DAOSubjectImpl implements DAOSubject {
-public static final String createSubject = "INSERT INTO SUBJECTS VALUES (SUBJECT_SEQUENCE.nextval,?,?,?,?)";
-public static final String removeSubject = "DELETE FROM SUBJECTS WHERE SUBJECT_ID=?";
-public static final String getSubjects = "SELECT * FROM SUBJECTS";
-public static final String showSubjectsForStudent = "SELECT * FROM SUBJECTS JOIN STUDENT_SUBJECT_LISTS " +
-        "ON (SUBJECTS.SUBJECT_ID=STUDENT_SUBJECT_LISTS.SUBJECT_ID) WHERE STUDENT_ID=?";
-public static final String showSubjectFroLecturer = "SELECT * FROM SUBJECTS WHERE LECTURER_ID=?";
-public static final String showSubjectsForGroup = "SELECT * FROM SUBJECTS JOIN STUDENT_SUBJECT_LISTS ON (SUBJECTS.SUBJECT_ID = STUDENT_SUBJECT_LISTS.SUBJECT_ID) " +
-        "JOIN OBJECTS ON (STUDENT_SUBJECT_LISTS.STUDENT_ID=OBJECTS.OBJECT_ID) WHERE PARENT_ID=?";
-public static final String getSubjectById = "SELECT * FROM SUBJECTS WHERE SUBJECT_ID=?";
-public static final String getLecturerName = "SELECT LECTURER_NAME FROM LECTURERS WHERE LECTURER_ID=?";
-public static final String updateStudent = "UPDATE SUBJECTS SET SUBJECT_SHORT_NAME=?,SUBJECT_FULL_NAME=?,SUBJECT_INFO =?,LECTURER_ID=? WHERE SUBJECT_ID=?";
+
 private JdbcTemplate template;
 
 /**
@@ -145,6 +138,6 @@ class SubjecttMapper implements RowMapper<Subject> {
  */
 @Override
 public void updateSubject(Subject subject) {
-    template.update(updateStudent,subject.getShortName(),subject.getFullName(),subject.getInfo(),subject.getLecturerId(),subject.getId());
+    template.update(updateSubject,subject.getShortName(),subject.getFullName(),subject.getInfo(),subject.getLecturerId(),subject.getId());
 }
 }

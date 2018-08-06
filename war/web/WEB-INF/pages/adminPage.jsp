@@ -934,9 +934,12 @@
             function createObject() {
                 var  object={
                     id:0,
-                    description:document.getElementById("objectDescriptionCreate").value +document.getElementById("coursSelect").value,
+                    description:document.getElementById("objectDescriptionCreate").value,
                     type:document.getElementById("objectTypeCreate").options[document.getElementById("objectTypeCreate").selectedIndex].text,
                     parentId:document.getElementById("parentTypeCreate").options[document.getElementById("parentTypeCreate").selectedIndex].value};
+                if(object.type=="group"){
+                    object.description+=document.getElementById("coursSelect").value
+                }
                 if(object.type==""||object.description==""||(object.parentId==""&&object.type!="university")){
                     alert("fill everyting");
                     return;

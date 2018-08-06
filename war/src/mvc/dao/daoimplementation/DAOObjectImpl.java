@@ -1,5 +1,6 @@
 package mvc.dao.daoimplementation;
 
+import mvc.beans.Login;
 import mvc.beans.Object;
 import mvc.beans.Student;
 import mvc.beans.Subject;
@@ -10,24 +11,14 @@ import org.springframework.jdbc.core.RowMapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
+
+import static mvc.dao.daoimplementation.SQL_STRINGS.*;
+
 /**
  * Class for work with Object object in database
  */
 public class DAOObjectImpl implements DAOObject {
-public static final String getGroups = "SELECT * FROM OBJECTS WHERE OBJECT_TYPE='group' ORDER BY OBJECT_ID";
-public static final String getStudents = "SELECT * FROM OBJECTS WHERE OBJECT_TYPE='student' ORDER BY OBJECT_ID";
-public static final String getLecturers = "SELECT * FROM OBJECTS WHERE OBJECT_TYPE='lecturer'ORDER BY OBJECT_ID";
-public static final String getCathedras = "SELECT * FROM OBJECTS WHERE OBJECT_TYPE='cathedra'ORDER BY OBJECT_ID";
-public static final String getFaculties = "SELECT * FROM OBJECTS WHERE OBJECT_TYPE='faculty'ORDER BY OBJECT_ID";
-public static final String getUniversities = "SELECT * FROM OBJECTS WHERE OBJECT_TYPE='university'ORDER BY OBJECT_ID";
-public static final String createObject = "INSERT INTO OBJECTS VALUES (OBJECT_SEQUENCE.nextval,?,?,?)";
-public static final String removeObject = "DELETE FROM OBJECTS WHERE OBJECT_ID=?";
-public static final String getObjects = "SELECT a.*, b.OBJECT_DESCRIPTOIN FROM OBJECTS a, OBJECTS b WHERE a.PARENT_ID=b.OBJECT_ID ORDER BY a.OBJECT_ID";
-public static final String getParent = "SELECT * FROM OBJECTS  WHERE OBJECT_ID=(SELECT PARENT_ID FROM OBJECTS  WHERE OBJECT_ID=?) ORDER BY OBJECT_ID";
-public static final String getChildObjects = "SELECT * FROM OBJECTS WHERE PARENT_ID=? ORDER BY OBJECT_ID";
-public static final String updateObject = "UPDATE OBJECTS SET PARENT_ID=?, OBJECT_DESCRIPTOIN = ? WHERE OBJECT_ID=?";
-public static final String showGroupsForSubject = "SELECT * FROM OBJECTS JOIN STUDENT_SUBJECT_LISTS ON (OBJECTS.OBJECT_ID = STUDENT_SUBJECT_LISTS.STUDENT_ID) " +
-        "JOIN SUBJECTS ON (SUBJECTS.SUBJECT_ID=STUDENT_SUBJECT_LISTS.SUBJECT_ID) WHERE SUBJECTS.SUBJECT_ID=?";
+
 
 private JdbcTemplate template;
 
@@ -55,7 +46,7 @@ public List<Object> getGrops() {
  */
 @Override
 public List<Object> getStudents() {
-    List<Object> objects = template.query(getStudents, new ObjectMapper());
+    List<Object> objects = template.query(getStudentsObjects, new ObjectMapper());
     return objects;
 }
 
@@ -106,9 +97,9 @@ public List<Object> getUniversities() {
 @Override
 public void createObject(Object object) {
     if(object.getParentId()==0)
-        template.update(createObject,object.getDescription(), object.getType(), null);
+        template.update(createObject,object.getDescription(), object.getType(), null,null,null);
     else
-        template.update(createObject,object.getDescription(), object.getType(), object.getParentId());
+        template.update(createObject,object.getDescription(), object.getType(), object.getParentId(),null,null);
     }
 
 /**
@@ -180,6 +171,22 @@ public List<Object> showGroupsForSubject(Subject subject) {
         }
         return groups;
     }
+
+/**
+ * get admin by specific login and password
+ * @param login bean which contain login and password
+ * @return object of admin
+ */
+@Override
+public Object validateAdmin(Login login) {
+    List<Object> list = template.query(validateAdmin, new ObjectMapper(),login.getNickname(),login.getPassword());
+    Object object = null;
+    if(list.size() != 0) {
+        object= list.get(0);
+    }
+    return object;
+}
+
 static class ObjectMapper implements RowMapper<Object> {
         public Object mapRow(ResultSet rs, int arg1) throws SQLException {
             int id = rs.getInt("object_id");

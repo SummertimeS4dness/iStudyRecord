@@ -15,21 +15,13 @@ import java.util.List;
 import java.util.Locale;
 import org.apache.log4j.Logger;
 
+import static mvc.dao.daoimplementation.SQL_STRINGS.*;
+
+
 public class DAOMarkImpl implements DAOMark {
     private final static Logger logger = Logger.getLogger(DAOMarkImpl.class);
 
-public static final String createMark = "INSERT INTO MARKS VALUES (MARK_SEQUENCE.nextval,?,?,?,?,?)";
-public static final String removeMark = "DELETE FROM MARKS WHERE MARK_ID=?";
-public static final String getMarksForGroup = "SELECT * from MARKS WHERE SUBJECT_ID=?";
-public static final String getMarksForStudent = "SELECT * from MARKS JOIN LESSONS ON (MARKS.LESSON_ID=LESSONS.LESSON_ID) " +
-        "JOIN SUBJECTS ON (LESSONS.SUBJECT_ID = SUBJECTS.SUBJECT_ID) WHERE STUDENT_ID=?";
-public static final String getMarksForLecturer = "SELECT * from MARKS WHERE LECTURER_ID=?";
-public static final String getMarksForStudentAndSubject = "SELECT * from MARKS WHERE SUBJECT_ID=? AND STUDENT_ID=?";
-public static final String getMarksForLecturerAndSubject = "SELECT * from MARKS WHERE SUBJECT_ID=? AND LECTURER_ID=?";
-public static final String getMarksForGroupAndSubject = "SELECT * from MARKS JOIN OBJECTS ON (MARKS.STUDENT_ID=OBJECTS.OBJECT_ID) JOIN STUDENT_INFO ON" +
-        " (OBJECTS.OBJECT_ID=STUDENT_INFO.STUDENT_ID) JOIN LESSONS ON (MARKS.LESSON_ID=LESSONS.LESSON_ID) WHERE " +
-        "MARKS.SUBJECT_ID=? AND PARENT_ID=?";
-public static final String updateMark = "UPDATE MARKS SET SCORE=? WHERE MARK_ID=?";
+
 
 private JdbcTemplate template;
 

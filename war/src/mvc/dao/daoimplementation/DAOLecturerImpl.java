@@ -10,6 +10,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+import static mvc.dao.daoimplementation.SQL_STRINGS.*;
+
 /**
  * Class for work with Lecturer object in database
  */
@@ -17,24 +19,6 @@ public class DAOLecturerImpl implements DAOLecturer {
 private JdbcTemplate template;
 
 
-public static final String selectID = "(SELECT OBJECT_SEQUENCE.nextval FROM DUAL)";
-public static final String objectInsert = "insert into OBJECTS values(?,?,?,?)";
-public static final String createLecturer = "INSERT INTO LECTURERS VALUES (?,?,?,?,?,?,?,?)";
-public static final String removeLecturer = "DELETE FROM OBJECTS WHERE OBJECT_ID=?";
-public static final String getLecturerForSubject = "SELECT * FROM LECTURERS JOIN SUBJECTS ON (SUBJECTS.LECTURER_ID=LECTURERS.LECTURER_ID)" +
-		"WHERE SUBJECT_ID=?";
-public static final String getGetLecturersForSubject ="SELECT * FROM LECTURERS JOIN SUBJECTS ON (SUBJECTS.LECTURER_ID=LECTURERS.LECTURER_ID)" +
-		"WHERE SUBJECT_ID=?";
-public static final String getLecturerForMark = "SELECT * FROM LECTURERS JOIN MARKS ON (MARKS.LECTURER_ID=LECTURERS.LECTURER_ID)" +
-		"WHERE MARKS.LECTURER_ID=?";
-public static final String getLecturerForLesson = "SELECT * FROM LECTURERS JOIN LESSONS ON (LESSONS.LECTURER_ID=LECTURERS.LECTURER_ID)" +
-		"WHERE LESSON_ID=?";
-public static final String getLecturersForStudent = "SELECT * FROM LECTURERS JOIN STUDENT_SUBJECT_LISTS on(LECTURERS.LECTURER_ID= STUDENT_SUBJECT_LISTS.LECTURER_ID)" +
-		"WHERE STUDENT_ID = ?";
-public static final String getlecturers = "SELECT * FROM LECTURERS";
-public static final String validateLecturer  = "SELECT * FROM LECTURERS WHERE LECTURER_LOGIN = ? AND LECTURER_PASSWORD=?";
-public static final String updateLecturer = "UPDATE LECTURERS SET LECTURER_LOGIN =?,LECTURER_PASSWORD=?,LECTURER_NAME=?,LECTURER_INFO=?,LECTURER_DEGREE=?,LECTURER_WORKS=?,LECTURER_INTERESTS=? WHERE LECTURER_ID=?";
-public static final String getLecturerById = "SELECT * FROM LECTURERS WHERE LECTURER_ID=?";
 
 /**
  * set jdbc template
@@ -59,9 +43,9 @@ public void createLecturer(Lecturer lecturer, Object object) {
 	}).get(0);
 	int parentId=object.getParentId();
 	if(parentId==0)
-		template.update(objectInsert,id,object.getDescription(),object.getType(), null);
+		template.update(objectInsert,id,object.getDescription(),object.getType(), null,null,null);
 	else
-		template.update(objectInsert,id,object.getDescription(),object.getType(), object.getParentId());
+		template.update(objectInsert,id,object.getDescription(),object.getType(), object.getParentId(),null,null);
 	template.update(createLecturer,id, lecturer.getLogin(), lecturer.getPassword(), lecturer.getName()
 			, lecturer.getInfo(), lecturer.getDegree(), lecturer.getWorks(), lecturer.getInterests());
 	

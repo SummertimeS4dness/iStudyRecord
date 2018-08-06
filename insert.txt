@@ -1,24 +1,25 @@
-INSERT INTO OBJECTS VALUES ('1','university1','university',null);
-INSERT INTO OBJECTS VALUES ('2','faculty1','faculty','1');
-INSERT INTO OBJECTS VALUES ('3','cathedra1','cathedra','2');
-INSERT INTO OBJECTS VALUES ('4','cathedra2','cathedra','2');
-INSERT INTO OBJECTS VALUES ('5','group1 cours(1)','group','2');
-INSERT INTO OBJECTS VALUES ('6','group2 cours(2)','group','2');
+INSERT INTO OBJECTS VALUES ('1','university1','university',null, null, null);
+INSERT INTO OBJECTS VALUES ('2','faculty1','faculty','1', null, null);
+INSERT INTO OBJECTS VALUES ('3','cathedra1','cathedra','2', null, null);
+INSERT INTO OBJECTS VALUES ('4','cathedra2','cathedra','2', null, null);
+INSERT INTO OBJECTS VALUES ('5','group1 cours(1)','group','2', null, null);
+INSERT INTO OBJECTS VALUES ('6','group2 cours(2)','group','2', null, null);
+INSERT INTO OBJECTS VALUES ('77','admin','admin','2', admin, admin);
 
-INSERT INTO OBJECTS VALUES('7','lecturer1','lecturer','3');
+INSERT INTO OBJECTS VALUES('7','lecturer1','lecturer','3', null, null);
 INSERT INTO LECTURERS VALUES ('7','lecturer1','lecturer1','lecturer1','info1','degree1','works1','interests1');
-INSERT INTO OBJECTS VALUES('8','lecturer2','lecturer','3');
+INSERT INTO OBJECTS VALUES('8','lecturer2','lecturer','3', null, null);
 INSERT INTO LECTURERS VALUES ('8','lecturer2','lecturer2','lecturer2','info2','degree2','works2','interests2');
-INSERT INTO OBJECTS VALUES('9','lecturer3','lecturer','4');
+INSERT INTO OBJECTS VALUES('9','lecturer3','lecturer','4', null, null);
 INSERT INTO LECTURERS VALUES ('9','lecturer3','lecturer3','lecturer3','info3','degree3','works3','interests3');
 
-INSERT INTO OBJECTS VALUES('10','student1','student','5');
+INSERT INTO OBJECTS VALUES('10','student1','student','5', null, null);
 INSERT INTO STUDENT_INFO VALUES ('10','student1','student1','student1','1');
-INSERT INTO OBJECTS VALUES('11','student2','student','5');
+INSERT INTO OBJECTS VALUES('11','student2','student','5', null, null);
 INSERT INTO STUDENT_INFO VALUES ('11','student2','student2','student2', '0');
-INSERT INTO OBJECTS VALUES('12','student3','student','6');
+INSERT INTO OBJECTS VALUES('12','student3','student','6', null, null);
 INSERT INTO STUDENT_INFO VALUES ('12','student3','student3','student3', '1');
-INSERT INTO OBJECTS VALUES('13','student4','student','6');
+INSERT INTO OBJECTS VALUES('13','student4','student','6', null, null);
 INSERT INTO STUDENT_INFO VALUES ('13','student4','student4','student4', '0');
 
 INSERT INTO SUBJECTS VALUES ('1','subj1','subject1','info1','7');

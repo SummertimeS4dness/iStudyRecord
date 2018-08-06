@@ -18,25 +18,15 @@ import java.util.List;
 import java.util.Locale;
 import org.apache.log4j.Logger;
 
+import static mvc.dao.daoimplementation.SQL_STRINGS.*;
+
 /**
  * Class for work with Lesson object in database
  */
 public class DAOLessonImpl implements DAOLesson {
 private final static Logger logger = Logger.getLogger(DAOLessonImpl.class);
 
-public static final String updateLessonDate = "UPDATE LESSONS SET LESSON_DATE =TO_DATE(TO_CHAR(?),'YYYY-MM-DD HH24:MI') WHERE LESSON_ID=?";
-public static final String addLesson = "INSERT INTO LESSONS VALUES (LESSON_SEQUENCE.nextval,TO_DATE(TO_CHAR(?),'YYYY-MM-DD HH24:MI'),?,?)";
-public static final String removeLesson = "DELETE FROM LESSONS WHERE LESSON_ID=?";
-public static final String allLessons = "SELECT * FROM LESSONS";
-public static final String getLessonForStudent = "SELECT * FROM LESSONS JOIN STUDENT_SUBJECT_LISTS ON" +
-        " (LESSONS.SUBJECT_ID=STUDENT_SUBJECT_LISTS.SUBJECT_ID) JOIN SUBJECTS ON (STUDENT_SUBJECT_LISTS.SUBJECT_ID=SUBJECTS.SUBJECT_ID)" +
-        " JOIN LECTURERS ON (SUBJECTS.LECTURER_ID=LECTURERS.LECTURER_ID) WHERE STUDENT_ID=?";
-public static final String getLessonForLecturer = "SELECT * FROM LESSONS WHERE LESSONS.LECTURER_ID=?";
-public static final String getLessonForSubject = "SELECT * FROM LESSONS WHERE LESSONS.SUBJECT_ID=?";
-public static final String getLessonForGroup = "SELECT * FROM LESSONS  JOIN STUDENT_SUBJECT_LISTS  ON (LESSONS.SUBJECT_ID=STUDENT_SUBJECT_LISTS.SUBJECT_ID )" +
-        "JOIN LECTURERS ON (LECTURERS.LECTURER_ID=LESSONS.LECTURER_ID) " +
-        "JOIN SUBJECTS ON (LESSONS.SUBJECT_ID=SUBJECTS.SUBJECT_ID)" +
-        " WHERE STUDENT_ID IN (SELECT OBJECT_ID FROM OBJECTS WHERE PARENT_ID=?)";
+
 private JdbcTemplate template;
 
 

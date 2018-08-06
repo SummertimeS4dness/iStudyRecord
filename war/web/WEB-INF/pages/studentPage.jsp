@@ -214,7 +214,7 @@
     </head>
     <body>
         <h1>Hello, ${name}. Your group - ${group}, starosta - ${starosta}</h1>
-        <input type="search" class="light-table-filter" data-table="order-table" placeholder="Filter">
+        <input type="search" class="light-table-filter" data-table="order-table" placeholder="Input something to search">
         <button class="accordion" onclick="getProfile()">Edit profile data</button>
         <div class="panel">
             <table id="student">

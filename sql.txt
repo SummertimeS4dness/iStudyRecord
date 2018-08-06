@@ -12,6 +12,8 @@ begin
       "OBJECT_DESCRIPTOIN" Varchar2 (20) NOT NULL ,
       "OBJECT_TYPE" Varchar2 (20) NOT NULL ,
       "PARENT_ID" number(30) REFERENCES OBJECTS (OBJECT_ID) on DELETE CASCADE,
+      "ADMIN_LOGIN" Varchar2 (20) DEFAULT NULL,
+      "ADMIN_PASSWORD" Varchar2 (20) DEFAULT NULL,
       primary key ("OBJECT_ID")
     )';
     execute immediate v_sql;

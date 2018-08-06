@@ -5,7 +5,6 @@ import mvc.beans.Login;
 import mvc.beans.Object;
 import mvc.beans.Student;
 import mvc.beans.Subject;
-import mvc.dao.daointerfaces.DAOObject;
 import mvc.dao.daointerfaces.DAOStudent;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -13,30 +12,15 @@ import org.springframework.jdbc.core.RowMapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+
+import static mvc.dao.daoimplementation.SQL_STRINGS.*;
+
 /**
  * Class for work with Student object in database
  */
 public class DAOStudentImpl implements DAOStudent {
 
-public static final String selectID = "(SELECT OBJECT_SEQUENCE.nextval FROM DUAL)";
-public static final String objectInsert = "insert into OBJECTS values(?,?,?,?)";
-public static final String createStudent = "insert into STUDENT_INFO values(?,?,?,?)";
-public static final String removeStudent = "DELETE FROM OBJECTS WHERE OBJECT_ID = ?";
-public static final String getStudents = "SELECT * FROM STUDENT_INFO ORDER BY STUDENT_ID";
-public static final String validateStudent = "SELECT * FROM STUDENT_INFO WHERE STUDENT_LOGIN = ? AND STUDENT_PASSWORD=? ORDER BY STUDENT_ID";
-public static final String registerStudentForSubject = "INSERT INTO STUDENT_SUBJECT_LISTS VALUES(?,?,?)";
-public static final String getStudentsOnSubject = "select * from STUDENT_INFO JOIN STUDENT_SUBJECT_LISTS ON " +
-        "(STUDENT_INFO.STUDENT_ID=STUDENT_SUBJECT_LISTS.STUDENT_ID) WHERE SUBJECT_ID=?";
-public static final String getStudentForGroup = "SELECT * FROM STUDENT_INFO JOIN OBJECTS ON " +
-        "(STUDENT_INFO.STUDENT_ID=OBJECTS.OBJECT_ID) WHERE PARENT_ID=?";
-public static final String removeStudentFromSubject = "DELETE FROM STUDENT_SUBJECT_LISTS WHERE STUDENT_ID=? AND SUBJECT_ID=?";
-public static final String updateStudent = "UPDATE STUDENT_INFO SET STUDENT_NAME=?, STUDENT_LOGIN=?,STUDENT_PASSWORD=? WHERE STUDENT_ID=?";
-public static final String setStarosta1 = "UPDATE STUDENT_INFO SET  IS_STAROSTA = 0 WHERE STUDENT_ID IN (SELECT OBJECT_ID FROM OBJECTS WHERE PARENT_ID=?)";
-public static final String setStarosta2 = "UPDATE STUDENT_INFO SET IS_STAROSTA=? WHERE STUDENT_ID=?";
-public static final String selectParentForStudent = "SELECT * FROM OBJECTS WHERE OBJECT_ID=(SELECT PARENT_ID FROM OBJECTS WHERE OBJECT_ID=?)ORDER BY OBJECT_ID";
-public static final String showStarostaForStudent = "SELECT * FROM STUDENT_INFO JOIN OBJECTS ON (STUDENT_INFO.STUDENT_ID = OBJECTS.OBJECT_ID) " +
-            "WHERE OBJECTS.PARENT_ID=(SELECT PARENT_ID FROM OBJECTS WHERE OBJECT_ID=?) AND STUDENT_INFO.IS_STAROSTA=1";
-public static final String getStudentById = "SELECT * FROM STUDENT_INFO WHERE STUDENT_ID=?";
+
 
 
 private JdbcTemplate template;
@@ -64,10 +48,10 @@ public void createStudent(Student student, Object object) {
         }).get(0);
         int parentId=object.getParentId();
         if(parentId==0)
-        template.update(objectInsert,id,object.getDescription(),object.getType(), null);
+        template.update(objectInsert,id,object.getDescription(),object.getType(), null,null);
         else
-        template.update(objectInsert,id,object.getDescription(),object.getType(), object.getParentId());
-        template.update(createStudent,id, student.getName(), student.getLogin(), student.getPassword());
+        template.update(objectInsert,id,object.getDescription(),object.getType(), object.getParentId(),null, null);
+        template.update(createStudent,id, student.getName(), student.getLogin(), student.getPassword(),0);
     }
 
 /**

@@ -159,7 +159,6 @@ public class Controllers {
         return daoStudent.getStudentsForGroup(object);
     }
 
-
     @RequestMapping(value = "/lecturerSchedule", method = RequestMethod.GET, produces = {"application/json"}, headers = "Accept=*/*")
     @ResponseBody
     public List<Lesson> showScheduleForLecturer() {
@@ -240,10 +239,10 @@ public class Controllers {
 
     @RequestMapping(value = "/subjects", method = RequestMethod.GET, produces = {"application/json"}, headers = "Accept=*/*")
     @ResponseBody
-    public List<Subject> showSubjects() throws IOException {
+    public List<Subject> showSubjects(){
         return daoSubject.getSubjects();
     }
-
+//end 1 part
     @RequestMapping(value = "/registerStudent", method = RequestMethod.GET)
     public ModelAndView registerStudent() {
         ModelAndView mav = new ModelAndView("registerStudent");
@@ -313,7 +312,8 @@ public class Controllers {
                 mav.addObject("message", "Username or Password is wrong!");
             }
         } else if ("admin".equals(type)) {
-            if (login.getPassword().equals("admin") && login.getNickname().equals("admin")) {
+            Object object = daoObject.validateAdmin(login);
+            if (object!=null) {
                 mav = new ModelAndView("redirect:/adminPage");
             } else {
                 mav = new ModelAndView("login");
@@ -485,13 +485,6 @@ public class Controllers {
         daoObject.createObject(object);
     }
 
-    //    @RequestMapping(value = "/aaa", method = RequestMethod.GET, consumes = "application/json" ,headers = "Accept=*/*")
-//    @ResponseBody
-//    public List<Lesson> scheduleForGroup(@RequestParam("groupID") int id) {
-//        System.out.println("here");
-//        List<Lesson> lessonForGroup = daoLesson.getLessonForGroup(new Object(id));
-//        return lessonForGroup;
-//    }
     @RequestMapping(value = "/lessonsForGroup", method = RequestMethod.GET, consumes = "application/json", produces = {"application/json"}, headers = "Accept=*/*")
     @ResponseBody
     public List<Lesson> scheduleForGroup(@RequestParam("id") int id) {

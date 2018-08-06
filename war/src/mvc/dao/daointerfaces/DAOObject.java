@@ -1,5 +1,6 @@
 package mvc.dao.daointerfaces;
 
+import mvc.beans.Login;
 import mvc.beans.Object;
 import mvc.beans.Subject;
 
@@ -74,4 +75,11 @@ public interface DAOObject {
  * @return all groups on subject
  */
 	public List<Object> showGroupsForSubject(Subject subject);
+
+/**
+ * get admin by specific login and password
+ * @param login bean which contain login and password
+ * @return object of admin
+ */
+public Object validateAdmin(Login login);
 }

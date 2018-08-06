@@ -12,6 +12,6 @@ import org.springframework.web.servlet.view.RedirectView;
 public class GlobalExceptionHandler {
 @ExceptionHandler(Exception.class)
 public void handleIOException(Exception ex) throws Exception {
-	//logger here
+	ex.printStackTrace();
 }
 }
