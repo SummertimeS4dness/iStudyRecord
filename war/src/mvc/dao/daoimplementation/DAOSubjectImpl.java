@@ -12,6 +12,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+/**
+ * Class for work with Subject object in database
+ */
 public class DAOSubjectImpl implements DAOSubject {
 public static final String createSubject = "INSERT INTO SUBJECTS VALUES (SUBJECT_SEQUENCE.nextval,?,?,?,?)";
 public static final String removeSubject = "DELETE FROM SUBJECTS WHERE SUBJECT_ID=?";
@@ -26,50 +29,87 @@ public static final String getLecturerName = "SELECT LECTURER_NAME FROM LECTURER
 public static final String updateStudent = "UPDATE SUBJECTS SET SUBJECT_SHORT_NAME=?,SUBJECT_FULL_NAME=?,SUBJECT_INFO =?,LECTURER_ID=? WHERE SUBJECT_ID=?";
 private JdbcTemplate template;
 
-    public void setTemplate(JdbcTemplate template) {
+/**
+ * set jdbc template
+ * @param template template to set
+ */
+public void setTemplate(JdbcTemplate template) {
         this.template = template;
     }
 
-    @Override
-    public void createSubject(Subject subject) {
+/**
+ * create subject in database
+ * @param subject subject to create
+ */
+@Override
+public void createSubject(Subject subject) {
         template.update(createSubject,  subject.getShortName(), subject.getFullName(), subject.getInfo(), subject.getLecturerId());
     }
 
-    @Override
-    public void removeSubject(Subject subject) {
+/**
+ * remove subject from database
+ * @param subject subject to remove
+ */
+@Override
+public void removeSubject(Subject subject) {
         template.update(removeSubject, subject.getId());
     }
 
-    @Override
-    public List<Subject> getSubjects() {
+/**
+ * get all subjects
+ * @return all subjects
+ */
+@Override
+public List<Subject> getSubjects() {
         List<Subject> subjects = template.query(getSubjects, new SubjecttMapper());
         return subjects;
     }
 
-    @Override
-    public List<Subject> showSubjectsForStudent(Student student) {
+/**
+ * get all subjects for student
+ * @param student students to get subject for
+ * @return all subjects for student
+ */
+@Override
+public List<Subject> showSubjectsForStudent(Student student) {
         List<Subject> subjects = template.query(showSubjectsForStudent, new SubjecttMapper(),student.getId());
         return subjects;
     }
 
-    @Override
-    public List<Subject> showSubjectsForLecturer(Lecturer lecturer) {
+/**
+ * get all subjects for lecturer
+ * @param lecturer lecturer to get subject for
+ * @return all subjects for lecturer
+ */
+@Override
+public List<Subject> showSubjectsForLecturer(Lecturer lecturer) {
         List<Subject> subjects = template.query(showSubjectFroLecturer, new SubjecttMapper(), lecturer.getId());
         return subjects;
     }
-    @Override
-    public List<Subject> showSubjectsForGroup(Object object) {
+
+/**
+ * get all subjects for group
+ * @param object group to get subjects for
+ * @return
+ */
+@Override
+public List<Subject> showSubjectsForGroup(Object object) {
         List<Subject> subjects = template.query(showSubjectsForGroup, new SubjecttMapper(),object.getId());
         return subjects;
     }
 
-    @Override
-    public String getSubjectById(int id) {
+/**
+ * get subject by specific id
+ * @param id id for subject to get
+ * @return subject with id
+ */
+@Override
+public String getSubjectById(int id) {
         List<Subject> subject = template.query(getSubjectById, new SubjecttMapper(), id);
         return subject.get(0).getFullName();
     }
 
-    class SubjecttMapper implements RowMapper<Subject> {
+class SubjecttMapper implements RowMapper<Subject> {
         public static final String getStudentsAmount = "SELECT COUNT(STUDENT_ID) FROM STUDENT_SUBJECT_LISTS WHERE SUBJECT_ID = ? GROUP BY SUBJECT_ID";
     
         public Subject mapRow(ResultSet rs, int arg1) throws SQLException {
@@ -98,6 +138,11 @@ private JdbcTemplate template;
             return subject;
         }
     }
+
+/**
+ * update subject in database
+ * @param subject subject to update
+ */
 @Override
 public void updateSubject(Subject subject) {
     template.update(updateStudent,subject.getShortName(),subject.getFullName(),subject.getInfo(),subject.getLecturerId(),subject.getId());

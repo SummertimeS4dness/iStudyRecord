@@ -18,9 +18,11 @@ import java.util.List;
 import java.util.Locale;
 import org.apache.log4j.Logger;
 
-
+/**
+ * Class for work with Lesson object in database
+ */
 public class DAOLessonImpl implements DAOLesson {
-    private final static Logger logger = Logger.getLogger(DAOLessonImpl.class);
+private final static Logger logger = Logger.getLogger(DAOLessonImpl.class);
 
 public static final String updateLessonDate = "UPDATE LESSONS SET LESSON_DATE =TO_DATE(TO_CHAR(?),'YYYY-MM-DD HH24:MI') WHERE LESSON_ID=?";
 public static final String addLesson = "INSERT INTO LESSONS VALUES (LESSON_SEQUENCE.nextval,TO_DATE(TO_CHAR(?),'YYYY-MM-DD HH24:MI'),?,?)";
@@ -37,51 +39,91 @@ public static final String getLessonForGroup = "SELECT * FROM LESSONS  JOIN STUD
         " WHERE STUDENT_ID IN (SELECT OBJECT_ID FROM OBJECTS WHERE PARENT_ID=?)";
 private JdbcTemplate template;
 
-    
-    
-    public void setTemplate(JdbcTemplate template) {
+
+/**
+ * set jdbc template
+ * @param template template to set
+ */
+public void setTemplate(JdbcTemplate template) {
         this.template = template;
     }
 
-    @Override
-    public void addLesson(Lesson lesson) {
+/**
+ * add lesson to database
+  * @param lesson lesson to add
+ */
+@Override
+public void addLesson(Lesson lesson) {
         template.update(addLesson, lesson.getStringDate(), lesson.getSubjectId(), lesson.getLecturerId());
     }
 
-    @Override
-    public void updateLessonDate(Lesson lesson) {
+/**
+ * update date of the lesson in database
+  * @param lesson lesson with new date to update
+ */
+@Override
+public void updateLessonDate(Lesson lesson) {
         template.update(updateLessonDate,lesson.getStringDate(),lesson.getLessonId());
     }
 
+/**
+ * remove lesson from database
+  * @param lesson lesson to remove
+ */
 @Override
-    public void removeLesson(Lesson lesson) {
+public void removeLesson(Lesson lesson) {
         template.update(removeLesson, lesson.getLessonId());
     }
 
-    @Override
-    public List<Lesson> allLessons() {
+/**
+ * get all lesson from database
+  * @return all lessons
+ */
+@Override
+public List<Lesson> allLessons() {
         List<Lesson> lessons = template.query(allLessons, new LessonMapper());
         return lessons;
     }
 
-    @Override
-    public List<Lesson> getLessonForStudent(Student student) {
+/**
+ * get all lessons for student
+  * @param student student to get lessons for
+ * @return all lessons for student
+ */
+@Override
+public List<Lesson> getLessonForStudent(Student student) {
         List<Lesson> lessons = template.query(getLessonForStudent, new LessonMapper1(),student.getId());
         return lessons;
     }
 
-    @Override
-    public List<Lesson> getLessonForLecturer(Lecturer lecturer) {
+/**
+ * get all lessons for lecturer
+ * @param lecturer lecturer to get lessons for
+ * @return all lessons for lecturer
+ */
+@Override
+public List<Lesson> getLessonForLecturer(Lecturer lecturer) {
         List<Lesson> lessons = template.query(getLessonForLecturer, new LessonMapper2(),lecturer.getId());
         return lessons;
     }
 
-    @Override
-    public List<Lesson> getLessonForSubject(Subject subject) {
+/**
+ * get all lessons for subject
+  * @param subject subject to get lessons for
+ * @return all lessons for subject
+ */
+@Override
+public List<Lesson> getLessonForSubject(Subject subject) {
         List<Lesson> lessons = template.query(getLessonForSubject, new LessonMapper2(),subject.getId());
         return lessons;
     }
 
+
+/**
+ * get all lessons for group
+  * @param object group to get lessons for
+ * @return all lessons for group
+ */
 @Override
 public List<Lesson> getLessonForGroup(Object object) {
     List<Lesson> lessons = template.query(getLessonForGroup,new LessonMapperWithSubjectAndLecturer(),object.getId());
@@ -98,7 +140,7 @@ class LessonMapper implements RowMapper<Lesson> {
             return lesson;
         }
     }
-    class LessonMapper1 implements RowMapper<Lesson> {
+class LessonMapper1 implements RowMapper<Lesson> {
         public Lesson mapRow(ResultSet rs, int arg1) throws SQLException {
             int lessonId = rs.getInt("lesson_id");
             String lessonDate = rs.getString("lesson_date");
@@ -125,7 +167,7 @@ class LessonMapper implements RowMapper<Lesson> {
             return lesson;
         }
     }
-    class LessonMapper2 implements RowMapper<Lesson> {
+class LessonMapper2 implements RowMapper<Lesson> {
         public Lesson mapRow(ResultSet rs, int arg1) throws SQLException {
             String lessonDate = rs.getString("lesson_date");
             String lessonId = rs.getString("lesson_id");
@@ -159,7 +201,7 @@ class LessonMapper implements RowMapper<Lesson> {
             return lesson;
         }
     }
-    class LessonMapperWithSubjectAndLecturer implements RowMapper<Lesson>{
+class LessonMapperWithSubjectAndLecturer implements RowMapper<Lesson>{
         @Override
         public Lesson mapRow(ResultSet resultSet, int i) throws SQLException {
             int lessonId = resultSet.getInt("lesson_id");

@@ -10,6 +10,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+/**
+ * Class for work with Lecturer object in database
+ */
 public class DAOLecturerImpl implements DAOLecturer {
 private JdbcTemplate template;
 
@@ -31,12 +34,21 @@ public static final String getLecturersForStudent = "SELECT * FROM LECTURERS JOI
 public static final String getlecturers = "SELECT * FROM LECTURERS";
 public static final String validateLecturer  = "SELECT * FROM LECTURERS WHERE LECTURER_LOGIN = ? AND LECTURER_PASSWORD=?";
 public static final String updateLecturer = "UPDATE LECTURERS SET LECTURER_LOGIN =?,LECTURER_PASSWORD=?,LECTURER_NAME=?,LECTURER_INFO=?,LECTURER_DEGREE=?,LECTURER_WORKS=?,LECTURER_INTERESTS=? WHERE LECTURER_ID=?";
-    public static final String getLecturerById = "SELECT * FROM LECTURERS WHERE LECTURER_ID=?";
+public static final String getLecturerById = "SELECT * FROM LECTURERS WHERE LECTURER_ID=?";
 
-
+/**
+ * set jdbc template
+ * @param template template to set
+ */
 public void setTemplate(JdbcTemplate template) {
 	this.template = template;
 }
+
+/**
+ * create lecturer and object in database
+ * @param lecturer lecturer to create
+ * @param object object to create
+ */
 @Override
 public void createLecturer(Lecturer lecturer, Object object) {
 	int id = template.query(selectID, new RowMapper<Integer>() {
@@ -55,48 +67,94 @@ public void createLecturer(Lecturer lecturer, Object object) {
 	
 	
 }
+
+/**
+ * remove student from database
+ * @param lecturer lecturer to remove
+ */
 @Override
 public void removeLecturer(Lecturer lecturer) {
 	template.update(removeLecturer, lecturer.getId());
 }
+
+/**
+ * get lecturer on subject
+ * @param subject subject to get lecturer on
+ * @return lecturer on subject
+ */
 @Override
 public Lecturer getLecturerForSubject(Subject subject) {
 	List<Lecturer> lecturers = template.query(getLecturerForSubject, new LecturerMapper(),subject.getId());
 	return lecturers.get(0);
 }
+
+/**
+ * get all lecturers on subject
+ * @param subject subject to get lecturers on
+ * @return all lecturers on subject
+ */
 @Override
 public List<Lecturer> getLecturersForSubject(Subject subject) {
 	List<Lecturer> lecturers = template.query(getGetLecturersForSubject, new LecturerMapper(), subject.getId());
 	return lecturers;
 }
+
+/**
+ * get lecturer which putted mark
+ * @param mark mark which lecturer putted
+ * @return lecturer which putted mark
+ */
 @Override
 public Lecturer getLecturerForMark(Mark mark) {
 	List<Lecturer> lecturers = template.query(getLecturerForMark, new LecturerMapper(),mark.getId());
 	return lecturers.get(0);
 }
+
+/**
+ * get lecturer for the lesson
+ * @param lesson lesson which lecturer do
+ * @return lecturer which do lesson
+ */
 @Override
 public Lecturer getLecturerForLesson(Lesson lesson) {
 	List<Lecturer> lecturers = template.query(getLecturerForLesson, new LecturerMapper(),lesson.getLessonId());
 	return lecturers.get(0);
 }
+
+/**
+ * get all lecturers for student
+ * @param student student for which we take all lecturers
+ * @return all lecturers for student
+ */
 @Override
 public List<Lecturer> getLecturersForStudent(Student student) {
 	List<Lecturer> lecturers = template.query(getLecturersForStudent, new LecturerMapper(),student.getId());
 	return lecturers;
 }
+
+/**
+ * get all lecturers
+ * @return all lecturers
+ */
 @Override
 public List<Lecturer> getLecturers() {
 	List<Lecturer> lecturers = template.query(getlecturers , new LecturerMapper());
 	return lecturers;
 }
 
-	@Override
-	public Lecturer getLecturerById(int id) {
+/**
+ * get lecturer with specific id
+ * @param id id for lecturer
+ * @return lecturer with id
+ */
+@Override
+public Lecturer getLecturerById(int id) {
         List<Lecturer> lecturer = template.query(getLecturerById, new LecturerMapper(), Integer.toString(id));
         return lecturer.get(0);
 	}
 
-	class LecturerMapper implements RowMapper<Lecturer> {
+
+class LecturerMapper implements RowMapper<Lecturer> {
 	public Lecturer mapRow(ResultSet rs, int arg1) throws SQLException {
 		int id = rs.getInt("lecturer_id");
 		String login = rs.getString("lecturer_login");
@@ -114,6 +172,12 @@ public List<Lecturer> getLecturers() {
 		return lecturer;
 	}
 }
+
+/**
+ * get lecturer with specific login and password
+ * @param login bean which contain login and password
+ * @return lecturer with login and password
+ */
 @Override
 public Lecturer validateLecturer(Login login) {
 	List<Lecturer> list = template.query(validateLecturer, new LecturerMapper(),login.getNickname(),login.getPassword());
@@ -123,6 +187,11 @@ public Lecturer validateLecturer(Login login) {
 	}
 	return lecturer;
 }
+
+/**
+ * update lecturer in database
+ * @param lecturer lecturer to update
+ */
 @Override
 public void updateLecturer(Lecturer lecturer) {
 	template.update(updateLecturer,lecturer.getLogin(),lecturer.getPassword(),lecturer.getName(),lecturer.getInfo(),lecturer.getDegree(),lecturer.getWorks(),lecturer.getInterests(),lecturer.getId());

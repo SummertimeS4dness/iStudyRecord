@@ -29,16 +29,25 @@ public static final String getMarksForLecturerAndSubject = "SELECT * from MARKS 
 public static final String getMarksForGroupAndSubject = "SELECT * from MARKS JOIN OBJECTS ON (MARKS.STUDENT_ID=OBJECTS.OBJECT_ID) JOIN STUDENT_INFO ON" +
         " (OBJECTS.OBJECT_ID=STUDENT_INFO.STUDENT_ID) JOIN LESSONS ON (MARKS.LESSON_ID=LESSONS.LESSON_ID) WHERE " +
         "MARKS.SUBJECT_ID=? AND PARENT_ID=?";
-    public static final String updateMark = "UPDATE MARKS SET SCORE=? WHERE MARK_ID=?";
+public static final String updateMark = "UPDATE MARKS SET SCORE=? WHERE MARK_ID=?";
 
 private JdbcTemplate template;
 
-    public void setTemplate(JdbcTemplate template) {
+/**
+ * set jdbc template
+ * @param template template to set
+ */
+public void setTemplate(JdbcTemplate template) {
         this.template = template;
     }
 
-    @Override
-    public String createMark(Mark mark) {
+/**
+ * create mark in database
+ * @param mark mark to create
+ * @return result of creating
+ */
+@Override
+public String createMark(Mark mark) {
         String toReturn = "OK";
         try {
             template.update(createMark, mark.getLessonId(), mark.getScore(), mark.getSubjectId(), mark.getStudentId(), mark.getLecturerId());
@@ -49,49 +58,90 @@ private JdbcTemplate template;
         return toReturn;
     }
 
-    @Override
-    public void removeMark(Mark mark) {
+/**
+ * remove mark from database
+ * @param mark mark to remove
+ */
+@Override
+public void removeMark(Mark mark) {
         template.update(removeMark, mark.getId());
     }
 
-    @Override
-    public void updateMark(Mark mark) {
+/**
+ * update mark in database
+ * @param mark mark to update
+ */
+@Override
+public void updateMark(Mark mark) {
         template.update(updateMark, mark.getScore(), mark.getId());
     }
 
-    @Override
-    public List<Mark> getMarksForSubject(Subject subject) {
+/**
+ * get all marks for subject
+ * @param subject subjects to get marks on
+ * @return all marks for subject
+ */
+@Override
+public List<Mark> getMarksForSubject(Subject subject) {
         List<Mark> marks = template.query(getMarksForGroup, new MarkMapper(),subject.getId());
         return marks;
     }
 
-    @Override
-    public List<Mark> getMarksForStudent(Student student) {
+/**
+ * get all marks for student
+ * @param student student to get marks for
+ * @return all marks for student
+ */
+@Override
+public List<Mark> getMarksForStudent(Student student) {
         System.out.println(student.getId());
         List<Mark> marks = template.query(getMarksForStudent, new MarkMapper1(),student.getId());
         return marks;
     }
 
-    @Override
-    public List<Mark> getMarksForLecturer(Lecturer lecturer) {
+/**
+ * get all marks putted by lecturer
+ * @param lecturer lecturer to get all marks
+ * @return all marks putted by lecturer
+ */
+@Override
+public List<Mark> getMarksForLecturer(Lecturer lecturer) {
         List<Mark> marks = template.query(getMarksForLecturer, new MarkMapper(),lecturer.getId());
         return marks;
     }
 
-    @Override
-    public List<Mark> getMarksForStudentAndSubject(Student student, Subject subject) {
+/**
+ * get all marks for student on subject
+ * @param student student to get marks for
+ * @param subject subject to get marks for
+ * @return marks for student on subject
+ */
+@Override
+public List<Mark> getMarksForStudentAndSubject(Student student, Subject subject) {
         List<Mark> marks = template.query(getMarksForStudentAndSubject, new MarkMapper(),subject.getId(),student.getId());
         return marks;
     }
 
-    @Override
-    public List<Mark> getMarksForLecturerAndSubject(Lecturer lecturer, Subject subject) {
+/**
+ * get all marks putted by lecturer on subject
+ * @param lecturer lecturer to get marks
+ * @param subject subject to get marks for
+ * @return marks putted by lecturer on subject
+ */
+@Override
+public List<Mark> getMarksForLecturerAndSubject(Lecturer lecturer, Subject subject) {
         List<Mark> marks = template.query(getMarksForLecturerAndSubject, new MarkMapper(),subject.getId(),lecturer.getId());
         return marks;
     }
 
-    @Override
-    public List<Mark> getMarksForGroupAndSubject(Subject subject, Object object) {
+/**
+ * get all marks for group on subject
+ * @param subject subject to get marks on
+ * @param object group to get marks for
+ * @return all marks for group on subject
+ */
+@Override
+public List<Mark> getMarksForGroupAndSubject(Subject subject, Object object) {
         List<Mark> marks = template.query(getMarksForGroupAndSubject, new MarkMapper2(),subject.getId(),object.getId());
         return marks;
     }
@@ -108,7 +158,6 @@ private JdbcTemplate template;
             return mark;
         }
     }
-
     class MarkMapper1 implements RowMapper<Mark> {
         public Mark mapRow(ResultSet rs, int arg1) throws SQLException {
             int id = rs.getInt("mark_id");

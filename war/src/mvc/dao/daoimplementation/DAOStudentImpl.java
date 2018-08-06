@@ -13,8 +13,11 @@ import org.springframework.jdbc.core.RowMapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-
+/**
+ * Class for work with Student object in database
+ */
 public class DAOStudentImpl implements DAOStudent {
+
 public static final String selectID = "(SELECT OBJECT_SEQUENCE.nextval FROM DUAL)";
 public static final String objectInsert = "insert into OBJECTS values(?,?,?,?)";
 public static final String createStudent = "insert into STUDENT_INFO values(?,?,?,?)";
@@ -31,19 +34,28 @@ public static final String updateStudent = "UPDATE STUDENT_INFO SET STUDENT_NAME
 public static final String setStarosta1 = "UPDATE STUDENT_INFO SET  IS_STAROSTA = 0 WHERE STUDENT_ID IN (SELECT OBJECT_ID FROM OBJECTS WHERE PARENT_ID=?)";
 public static final String setStarosta2 = "UPDATE STUDENT_INFO SET IS_STAROSTA=? WHERE STUDENT_ID=?";
 public static final String selectParentForStudent = "SELECT * FROM OBJECTS WHERE OBJECT_ID=(SELECT PARENT_ID FROM OBJECTS WHERE OBJECT_ID=?)ORDER BY OBJECT_ID";
-    public static final String showStarostaForStudent = "SELECT * FROM STUDENT_INFO JOIN OBJECTS ON (STUDENT_INFO.STUDENT_ID = OBJECTS.OBJECT_ID) " +
+public static final String showStarostaForStudent = "SELECT * FROM STUDENT_INFO JOIN OBJECTS ON (STUDENT_INFO.STUDENT_ID = OBJECTS.OBJECT_ID) " +
             "WHERE OBJECTS.PARENT_ID=(SELECT PARENT_ID FROM OBJECTS WHERE OBJECT_ID=?) AND STUDENT_INFO.IS_STAROSTA=1";
-    public static final String getStudentById = "SELECT * FROM STUDENT_INFO WHERE STUDENT_ID=?";
+public static final String getStudentById = "SELECT * FROM STUDENT_INFO WHERE STUDENT_ID=?";
 
 
 private JdbcTemplate template;
 
-    public void setTemplate(JdbcTemplate template) {
+/**
+ * set jdbc template
+ * @param template template to set
+ */
+public void setTemplate(JdbcTemplate template) {
         this.template = template;
     }
 
-    @Override
-    public void createStudent(Student student, Object object) {
+/**
+ * create student in database
+ * @param student student to create
+ * @param object object to create
+ */
+@Override
+public void createStudent(Student student, Object object) {
         int id = template.query(selectID, new RowMapper<Integer>() {
             @Override
             public Integer mapRow(ResultSet resultSet, int i) throws SQLException {
@@ -58,20 +70,32 @@ private JdbcTemplate template;
         template.update(createStudent,id, student.getName(), student.getLogin(), student.getPassword());
     }
 
-
-    @Override
-    public void removeStudent(Student student) {
+/**
+ * remove student from database
+ * @param student student to remove
+ */
+@Override
+public void removeStudent(Student student) {
         template.update(removeStudent, student.getId());
     }
-    
-    @Override
-    public List<Student> getStudents() {
+
+/**
+ * get all students
+ * @return all students
+ */
+@Override
+public List<Student> getStudents() {
         List<Student> users = template.query(getStudents, new StudentMapper());
         return users;
     }
 
-    @Override
-    public Student validateStudent(Login login) {
+/**
+ * get student with specific login and password
+ * @param login bean which contain login and password
+ * @return student with login and password
+ */
+@Override
+public Student validateStudent(Login login) {
         List<Student> list = template.query(validateStudent, new StudentMapper(),login.getNickname(),login.getPassword());
         Student student = null;
         if(list.size() != 0) {
@@ -80,50 +104,90 @@ private JdbcTemplate template;
         return student;
     }
 
-    @Override
-    public void registerStudentForSubject(Student student, Subject subject) {
+/**
+ * register student for subject
+ * @param student student to register
+ * @param subject subject to register on
+ */
+@Override
+public void registerStudentForSubject(Student student, Subject subject) {
         template.update(registerStudentForSubject, subject.getId(), student.getId(), subject.getLecturerId());
     }
 
-    @Override
-    public List<Student> getStudentsOnSubject(Subject subject) {
+/**
+ * get all student on subject
+ * @param subject subjects to get students on
+ * @return all students on subject
+ */
+@Override
+public List<Student> getStudentsOnSubject(Subject subject) {
         List<Student> users = template.query(getStudentsOnSubject, new StudentMapper(),subject.getId());
         return users;
     }
 
-    @Override
-    public List<Student> getStudentsForGroup(Object object) {
+/**
+ * get all students in group
+ * @param object group to get students in
+ * @return all students in group
+ */
+@Override
+public List<Student> getStudentsForGroup(Object object) {
         List<Student> users = template.query(getStudentForGroup, new StudentMapper(),object.getId());
         return users;
     }
 
+/**
+ * remove students from subject
+ * @param subject subject from which remove student
+ * @param student student to remove from subject
+ */
 @Override
 public void removeStudentFromSubject(Subject subject, Student student) {
     template.update(removeStudentFromSubject,student.getId(),subject.getId());
 }
+
+/**
+ * update student in database
+ * @param student student to update
+ */
 @Override
 public void updateStudent(Student student) {
     template.update(updateStudent,student.getName(),student.getLogin(),student.getPassword(),student.getId());
 }
+
+/**
+ * make student a starosta in group
+ * @param student student to make a starosta
+ */
 @Override
 public void setStarosta(Student student) {
     template.update(setStarosta1,student.getGroupId());
     template.update(setStarosta2,student.getIsStarosta(),student.getId());
 }
 
-    @Override
-    public Student showStarostaForStudent(int id) {
+/**
+ * get starosta for student by specific id of student
+ * @param id id of student
+ * @return starosta for student with id
+ */
+@Override
+public Student showStarostaForStudent(int id) {
         List<Student> starosta = template.query(showStarostaForStudent, new StudentMapper(), Integer.toString(id));
         return starosta.get(0);
     }
 
-    @Override
-    public Student getStudentById(int id) {
+/**
+ * get student by specific id
+ * @param id id of student to get
+ * @return student with id
+ */
+@Override
+public Student getStudentById(int id) {
         List<Student> student = template.query(getStudentById, new StudentMapper(), Integer.toString(id));
         return student.get(0);
     }
 
-    class StudentMapper implements RowMapper<Student> {
+class StudentMapper implements RowMapper<Student> {
         public Student mapRow(ResultSet rs, int arg1) throws SQLException {
             Student student = new Student();
             student.setId(rs.getInt("student_id"));
