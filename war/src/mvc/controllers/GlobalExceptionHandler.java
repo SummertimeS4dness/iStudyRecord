@@ -16,7 +16,7 @@ public class GlobalExceptionHandler {
     private final static Logger logger = Logger.getLogger(GlobalExceptionHandler.class);
 
     /**
-     * Handle exceptions.
+     * Handles exceptions.
      *
      * @param ex exception
      * @throws Exception the exception

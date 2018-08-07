@@ -47,8 +47,8 @@ public class Object {
      * @return bean's parent's description
      */
     public String getParentDescription() {
-    return parentDescription;
-}
+        return parentDescription;
+    }
 
     /**
      * Sets bean's parent's description.
@@ -56,8 +56,8 @@ public class Object {
      * @param parentDescription bean's parent's description
      */
     public void setParentDescription(String parentDescription) {
-    this.parentDescription = parentDescription;
-}
+        this.parentDescription = parentDescription;
+    }
 
     /**
      * Gets bean's id.
@@ -131,29 +131,29 @@ public class Object {
         this.parentId = parentId;
     }
 
-@Override
-public String toString() {
-    return "Object{" +
-            "id=" + id +
-            ", description='" + description + '\'' +
-            ", type='" + type + '\'' +
-            ", parentId=" + parentId +
-            ", parentDescription='" + parentDescription + '\'' +
-            '}';
-}
+    @Override
+    public String toString() {
+        return "Object{" +
+                "id=" + id +
+                ", description='" + description + '\'' +
+                ", type='" + type + '\'' +
+                ", parentId=" + parentId +
+                ", parentDescription='" + parentDescription + '\'' +
+                '}';
+    }
 
-@Override
-public boolean equals(java.lang.Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    
-   Object object = (Object)o;
-    
-    return id == object.id;
-}
+    @Override
+    public boolean equals(java.lang.Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-@Override
-public int hashCode() {
-    return id;
-}
+        Object object = (Object) o;
+
+        return id == object.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return id;
+    }
 }

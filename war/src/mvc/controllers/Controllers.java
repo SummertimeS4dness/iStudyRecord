@@ -8,15 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.view.RedirectView;
 
-import javax.jws.WebParam;
-import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -404,7 +398,7 @@ public class Controllers {
      */
     @RequestMapping(value = "/subjects", method = RequestMethod.GET, produces = {"application/json"}, headers = "Accept=*/*")
     @ResponseBody
-    public List<Subject> showSubjects(){
+    public List<Subject> showSubjects() {
         return daoSubject.getSubjects();
     }
 
@@ -464,7 +458,7 @@ public class Controllers {
             }
         } else if ("admin".equals(type)) {
             Object object = daoObject.validateAdmin(login);
-            if (object!=null) {
+            if (object != null) {
                 mav = new ModelAndView("redirect:/adminPage");
             } else {
                 mav = new ModelAndView("login");

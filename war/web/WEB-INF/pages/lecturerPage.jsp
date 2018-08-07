@@ -1,4 +1,3 @@
-
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page errorPage="errorPage.jsp" %>
 <html>
@@ -27,18 +26,19 @@
                 ]
             });
         }
+
         function saveProfile() {
             var lecturer = {
                 id: ${lecturerID},
-                name:  document.getElementById("lecturerName").value,
-                login:  document.getElementById("lecturerLogin").value,
+                name: document.getElementById("lecturerName").value,
+                login: document.getElementById("lecturerLogin").value,
                 password: document.getElementById("lecturerPassword").value,
-                info:  document.getElementById("lecturerInfo").value,
-                degree:  document.getElementById("lecturerDegree").value,
+                info: document.getElementById("lecturerInfo").value,
+                degree: document.getElementById("lecturerDegree").value,
                 works: document.getElementById("lecturerWorks").value,
-                interests:  document.getElementById("lecturerInterests").value,
+                interests: document.getElementById("lecturerInterests").value,
             };
-            if(lecturer.login==""||lecturer.password==""||lecturer.name==""){
+            if (lecturer.login == "" || lecturer.password == "" || lecturer.name == "") {
                 alert("Fill everything!");
                 return;
             }
@@ -56,6 +56,7 @@
                 }
             });
         }
+
         function getSchedule() {
             $.ajax({
                 type: "GET",
@@ -70,7 +71,7 @@
                         var count = 1;
                         trHTML += '<tr><td colspan="2" align="center"><b>' + obj[0].day + '</b></tr>';
                         for (var i = 0; i < obj.length; i++) {
-                            if(res != obj[i].day) {
+                            if (res != obj[i].day) {
                                 trHTML += '<tr><td colspan="3"><br/></td></tr><tr><td colspan="2" align="center"><b>' + obj[i].day + '</b></td></tr>';
                                 res = obj[i].day;
                                 count = 1;
@@ -101,8 +102,8 @@
         }
 
         function createLesson() {
-            if(document.getElementById("lessonDate").value == "" ||
-                document.getElementById("lessonSubject").options[document.getElementById("lessonSubject").selectedIndex].value =="") {
+            if (document.getElementById("lessonDate").value == "" ||
+                document.getElementById("lessonSubject").options[document.getElementById("lessonSubject").selectedIndex].value == "") {
                 alert("Check your input!")
                 return
             }
@@ -163,9 +164,9 @@
                             $.each(lessons, function (i, les) {
                                 var opts = [];
                                 $('#markYear option').each(
-                                    function() {
+                                    function () {
                                         opts.push($(this).text());
-                                });
+                                    });
                                 if ($.inArray(les.year, opts) == -1) {
                                     $('<option>' + les.year + '</option>').appendTo('#markYear');
                                 }
@@ -178,7 +179,7 @@
                     $('#markMonth').find('option').remove();
                     $('<option disabled selected value></option>').appendTo('#markMonth');
                     $.each(lessons, function (i, les) {
-                        if(les.year == year) {
+                        if (les.year == year) {
                             //alert("from change: " + les.year)
                             var opts = [];
                             $('#markMonth option').each(
@@ -196,7 +197,7 @@
                     $('#markDay').find('option').remove();
                     $('<option disabled selected value></option>').appendTo('#markDay');
                     $.each(lessons, function (i, les) {
-                        if(les.month == month && les.year == year) {
+                        if (les.month == month && les.year == year) {
                             //alert("from change: " + les.year)
                             var opts = [];
                             $('#markDay option').each(
@@ -214,7 +215,7 @@
                     $('#markTime').find('option').remove();
                     $('<option disabled selected value></option>').appendTo('#markTime');
                     $.each(lessons, function (i, les) {
-                        if(les.month == month && les.year == year && les.day == day) {
+                        if (les.month == month && les.year == year && les.day == day) {
                             var opts = [];
                             $('#markTime option').each(
                                 function () {
@@ -237,7 +238,7 @@
                             $('#markGroup').find('option').remove();
                             $('<option disabled selected value></option>').appendTo('#markGroup');
                             $.each(groups, function (i, gr) {
-                                $('<option value="' + gr.id + '">' + gr.description.substring(0,gr.description.indexOf(" cours")) + '</option>').appendTo('#markGroup');
+                                $('<option value="' + gr.id + '">' + gr.description.substring(0, gr.description.indexOf(" cours")) + '</option>').appendTo('#markGroup');
                             });
                         }
                     ]
@@ -270,17 +271,17 @@
         }
 
         function createMark() {
-            var x=document.getElementById("markScore").value;
-            var regex=/^[0-9]+$/;
-            if(/*document.getElementById("markLesson").options[document.getElementById("markLesson").selectedIndex].value == "" ||*/
-                document.getElementById("markYear").options[document.getElementById("markYear").selectedIndex].value == "" ||
-                document.getElementById("markMonth").options[document.getElementById("markMonth").selectedIndex].value == "" ||
-                document.getElementById("markDay").options[document.getElementById("markDay").selectedIndex].value == "" ||
-                document.getElementById("markTime").options[document.getElementById("markTime").selectedIndex].value == "" ||
-                document.getElementById("markGroup").options[document.getElementById("markGroup").selectedIndex].value == "" ||
-                document.getElementById("markSubject").options[document.getElementById("markSubject").selectedIndex].value == "" ||
-                document.getElementById("markStudent").options[document.getElementById("markStudent").selectedIndex].value == "" ||
-                !x.match(regex) || x < 0 || x > 100) {
+            var x = document.getElementById("markScore").value;
+            var regex = /^[0-9]+$/;
+            if (/*document.getElementById("markLesson").options[document.getElementById("markLesson").selectedIndex].value == "" ||*/
+            document.getElementById("markYear").options[document.getElementById("markYear").selectedIndex].value == "" ||
+            document.getElementById("markMonth").options[document.getElementById("markMonth").selectedIndex].value == "" ||
+            document.getElementById("markDay").options[document.getElementById("markDay").selectedIndex].value == "" ||
+            document.getElementById("markTime").options[document.getElementById("markTime").selectedIndex].value == "" ||
+            document.getElementById("markGroup").options[document.getElementById("markGroup").selectedIndex].value == "" ||
+            document.getElementById("markSubject").options[document.getElementById("markSubject").selectedIndex].value == "" ||
+            document.getElementById("markStudent").options[document.getElementById("markStudent").selectedIndex].value == "" ||
+            !x.match(regex) || x < 0 || x > 100) {
                 alert("Check your input!");
                 return
             }
@@ -304,6 +305,7 @@
                 }
             });
         }
+
         function listGroups() {
             $("#marksForGroupTable tr").remove();
             document.getElementById("markEdit").style.visibility = "hidden";
@@ -319,9 +321,9 @@
                         $("#marksForGroupGroup").find('option').remove();
                         $('<option disabled selected value></option>').appendTo('#marksForGroupGroup');
                         $.each(groups, function (i, gr) {
-                        $('<option value="' + gr.id + '">' + gr.description.substring(0,gr.description.indexOf(" cours")) + '</option>').appendTo('#marksForGroupGroup');
-                    });
-                }]
+                            $('<option value="' + gr.id + '">' + gr.description.substring(0, gr.description.indexOf(" cours")) + '</option>').appendTo('#marksForGroupGroup');
+                        });
+                    }]
             });
             $('#marksForGroupGroup').change(function () {
                 var object = {
@@ -353,7 +355,7 @@
                     url: 'getMarksForGroupAndSubject',
                     dataType: "json",
                     contentType: 'application/json; charset=utf-8',
-                    data:{objId:object.objId,subjId:object.subjId},
+                    data: {objId: object.objId, subjId: object.subjId},
                     complete: [function (response) {
                         $("#marksForGroupTable tr").remove();
                         var trHTML = '';
@@ -362,7 +364,7 @@
                         var count = 1;
                         trHTML += '<tr><td colspan="2" align="center"><b>' + count + ". " + obj[0].stringDate + '</b></tr>';
                         for (var i = 0; i < obj.length; i++) {
-                            if(res != obj[i].stringDate) {
+                            if (res != obj[i].stringDate) {
                                 count++;
                                 trHTML += '<tr><td colspan="2"><br/></td></tr><tr><td colspan="2" align="center"><b>'
                                     + count + ". " + obj[i].stringDate + '</b></td></tr>';
@@ -380,6 +382,7 @@
                 });
             });
         }
+
         function onMarkEdit(pos, mass) {
             document.getElementById("markEdit").style.visibility = "visible";
             document.getElementById("markIdd").innerHTML = mass[pos].id;
@@ -388,6 +391,7 @@
             document.getElementById("lesson").innerHTML = mass[pos].stringDate;
             document.getElementById("score").value = mass[pos].score;
         }
+
         function saveMark() {
             var mark = {
                 id: document.getElementById("markIdd").innerHTML,
@@ -407,12 +411,13 @@
                 }
             });
         }
+
         $(document).ready(function () {
             var acc = document.getElementsByClassName("accordion");
             var i;
 
             for (i = 0; i < acc.length; i++) {
-                acc[i].addEventListener("click", function() {
+                acc[i].addEventListener("click", function () {
                     this.classList.toggle("active");
                     var panel = this.nextElementSibling;
                     if (panel.style.display === "block") {
@@ -423,18 +428,19 @@
                 });
             }
         });
-        /*filter*/(function(document) {
+        /*filter*/
+        (function (document) {
             'use strict';
 
-            var LightTableFilter = (function(Arr) {
+            var LightTableFilter = (function (Arr) {
 
                 var _input;
 
                 function _onInputEvent(e) {
                     _input = e.target;
                     var tables = document.getElementsByClassName(_input.getAttribute('data-table'));
-                    Arr.forEach.call(tables, function(table) {
-                        Arr.forEach.call(table.tBodies, function(tbody) {
+                    Arr.forEach.call(tables, function (table) {
+                        Arr.forEach.call(table.tBodies, function (tbody) {
                             Arr.forEach.call(tbody.rows, _filter);
                         });
                     });
@@ -446,16 +452,16 @@
                 }
 
                 return {
-                    init: function() {
+                    init: function () {
                         var inputs = document.getElementsByClassName('light-table-filter');
-                        Arr.forEach.call(inputs, function(input) {
+                        Arr.forEach.call(inputs, function (input) {
                             input.oninput = _onInputEvent;
                         });
                     }
                 };
             })(Array.prototype);
 
-            document.addEventListener('readystatechange', function() {
+            document.addEventListener('readystatechange', function () {
                 if (document.readyState === 'complete') {
                     LightTableFilter.init();
                 }
@@ -507,7 +513,7 @@
         </tr>
         <tr>
             <td><input id="lecturerName" style='width:100%'/></td>
-            <td><input id="lecturerLogin"style='width:100%'/></td>
+            <td><input id="lecturerLogin" style='width:100%'/></td>
             <td><input id="lecturerPassword"/></td>
             <td><input id="lecturerInfo"/></td>
             <td><input id="lecturerDegree"/></td>
@@ -615,7 +621,7 @@
         </thead>
         <tbody></tbody>
     </table>
-    <table id="markEdit" style="visibility: hidden" width="100%" >
+    <table id="markEdit" style="visibility: hidden" width="100%">
         <tr>
             <th>ID</th>
             <th>Subject</th>

@@ -8,11 +8,11 @@
        http://www.springframework.org/schema/context
        http://www.springframework.org/schema/context/spring-context-3.0.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
-    <context:component-scan base-package = "mvc"/>
+    <context:component-scan base-package="mvc"/>
     <mvc:annotation-driven/>
-    <bean class = "org.springframework.web.servlet.view.InternalResourceViewResolver">
-        <property name = "prefix" value = "/WEB-INF/pages/" />
-        <property name = "suffix" value = ".jsp" />
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/pages/"/>
+        <property name="suffix" value=".jsp"/>
     </bean>
 
     <bean id="propertyConfigurer"
@@ -24,34 +24,34 @@
         <property name="url" value="${database.url}"/>
         <property name="username" value="${database.user}"/>
         <property name="password" value="${database.password}"/>
-        <property name="initialSize" value="20" />
-        <property name="maxActive" value="30" />
+        <property name="initialSize" value="20"/>
+        <property name="maxActive" value="30"/>
     </bean>
 
 
-    <bean id = "jdbcTemplate" class = "org.springframework.jdbc.core.JdbcTemplate">
-        <property name = "dataSource" ref = "dataSource"/>
+    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource" ref="dataSource"/>
     </bean>
 
-    <bean id = "daoStudent" class = "mvc.dao.daoimplementation.DAOStudentImpl">
-        <property name = "template" ref = "jdbcTemplate"/>
+    <bean id="daoStudent" class="mvc.dao.daoimplementation.DAOStudentImpl">
+        <property name="template" ref="jdbcTemplate"/>
     </bean>
-    <bean id = "daoObject" class = "mvc.dao.daoimplementation.DAOObjectImpl">
-        <property name = "template" ref = "jdbcTemplate"/>
+    <bean id="daoObject" class="mvc.dao.daoimplementation.DAOObjectImpl">
+        <property name="template" ref="jdbcTemplate"/>
     </bean>
-    <bean id = "daoLecturer" class = "mvc.dao.daoimplementation.DAOLecturerImpl">
-        <property name = "template" ref = "jdbcTemplate"/>
-    </bean>
-
-    <bean id = "daoMark" class = "mvc.dao.daoimplementation.DAOMarkImpl">
-        <property name = "template" ref = "jdbcTemplate"/>
-    </bean>
-    <bean id = "daoSubject" class = "mvc.dao.daoimplementation.DAOSubjectImpl">
-        <property name = "template" ref = "jdbcTemplate"/>
+    <bean id="daoLecturer" class="mvc.dao.daoimplementation.DAOLecturerImpl">
+        <property name="template" ref="jdbcTemplate"/>
     </bean>
 
-    <bean id = "daoLesson" class = "mvc.dao.daoimplementation.DAOLessonImpl">
-        <property name = "template" ref = "jdbcTemplate"/>
+    <bean id="daoMark" class="mvc.dao.daoimplementation.DAOMarkImpl">
+        <property name="template" ref="jdbcTemplate"/>
+    </bean>
+    <bean id="daoSubject" class="mvc.dao.daoimplementation.DAOSubjectImpl">
+        <property name="template" ref="jdbcTemplate"/>
+    </bean>
+
+    <bean id="daoLesson" class="mvc.dao.daoimplementation.DAOLessonImpl">
+        <property name="template" ref="jdbcTemplate"/>
     </bean>
 
 </beans>

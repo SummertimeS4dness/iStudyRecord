@@ -6,7 +6,7 @@ import java.util.Date;
 /**
  * Bean Lesson.
  */
-public class Lesson implements Comparable<Lesson>{
+public class Lesson implements Comparable<Lesson> {
     private String stringDate;
     private Date date;
     private int subjectId;
@@ -22,7 +22,8 @@ public class Lesson implements Comparable<Lesson>{
     /**
      * Instantiates a new Lesson.
      */
-    public Lesson() { }
+    public Lesson() {
+    }
 
     /**
      * Instantiates a new Lesson.
@@ -355,23 +356,23 @@ public class Lesson implements Comparable<Lesson>{
     }
 
     @Override
-public boolean equals(Object a) {
+    public boolean equals(Object a) {
         Lesson o = (Lesson) a;
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    
-    Lesson lesson = (Lesson) o;
-    
-    if (subjectId != lesson.subjectId) return false;
-    if (lecturerId != lesson.lecturerId) return false;
-    return lessonId == lesson.lessonId;
-}
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-@Override
-public int hashCode() {
-    int result = subjectId;
-    result = 31 * result + lecturerId;
-    result = 31 * result + lessonId;
-    return result;
-}
+        Lesson lesson = (Lesson) o;
+
+        if (subjectId != lesson.subjectId) return false;
+        if (lecturerId != lesson.lecturerId) return false;
+        return lessonId == lesson.lessonId;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = subjectId;
+        result = 31 * result + lecturerId;
+        result = 31 * result + lessonId;
+        return result;
+    }
 }

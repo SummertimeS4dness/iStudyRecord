@@ -44,7 +44,10 @@ public class Subject {
     /**
      * Instantiates a new Subject.
      */
-    public Subject() { super();}
+    public Subject() {
+        super();
+    }
+
     /**
      * Gets subject's lecturer's name.
      *
@@ -80,6 +83,7 @@ public class Subject {
     public void setAmount(int amount) {
         this.amount = amount;
     }
+
     /**
      * Gets subject's id.
      *
@@ -170,34 +174,34 @@ public class Subject {
         this.lecturerId = lecturerId;
     }
 
-@Override
-public String toString() {
-    return "Subject{" +
-            "id=" + id +
-            ", shortName='" + shortName + '\'' +
-            ", fullName='" + fullName + '\'' +
-            ", info='" + info + '\'' +
-            ", lecturerId=" + lecturerId +
-            ", amount=" + amount +
-            ", lecturerName='" + lecturerName + '\'' +
-            '}';
-}
+    @Override
+    public String toString() {
+        return "Subject{" +
+                "id=" + id +
+                ", shortName='" + shortName + '\'' +
+                ", fullName='" + fullName + '\'' +
+                ", info='" + info + '\'' +
+                ", lecturerId=" + lecturerId +
+                ", amount=" + amount +
+                ", lecturerName='" + lecturerName + '\'' +
+                '}';
+    }
 
-@Override
-public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    
-    Subject subject = (Subject) o;
-    
-    if (id != subject.id) return false;
-    return lecturerId == subject.lecturerId;
-}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-@Override
-public int hashCode() {
-    int result = id;
-    result = 31 * result + lecturerId;
-    return result;
-}
+        Subject subject = (Subject) o;
+
+        if (id != subject.id) return false;
+        return lecturerId == subject.lecturerId;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + lecturerId;
+        return result;
+    }
 }

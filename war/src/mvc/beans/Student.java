@@ -6,7 +6,7 @@ import java.lang.Object;
  * Bean Student.
  */
 public class Student {
-    
+
     private int id;
     private String login;
     private String password;
@@ -23,11 +23,12 @@ public class Student {
      * @param isStarosta student's starosta's status
      * @param groupId    student's group's id
      */
-    public Student(int id, int isStarosta,int groupId) {
-    this.id = id;
-    this.isStarosta = isStarosta;
-    this.groupId=groupId;
-}
+    public Student(int id, int isStarosta, int groupId) {
+        this.id = id;
+        this.isStarosta = isStarosta;
+        this.groupId = groupId;
+    }
+
     /**
      * Instantiates a new Student.
      *
@@ -38,7 +39,7 @@ public class Student {
      */
     public Student(int id, String login, String password, String name) {
         this.id = id;
-        this.login=login;
+        this.login = login;
         this.password = password;
         this.name = name;
     }
@@ -62,6 +63,7 @@ public class Student {
     public Student() {
         super();
     }
+
     /**
      * Gets student's starosta's status.
      *
@@ -77,8 +79,8 @@ public class Student {
      * @param isStarosta student's starosta's status
      */
     public void setIsStarosta(int isStarosta) {
-    this.isStarosta = isStarosta;
-}
+        this.isStarosta = isStarosta;
+    }
 
     /**
      * Gets student's group.
@@ -86,8 +88,8 @@ public class Student {
      * @return student's group
      */
     public String getGroup() {
-    return group;
-}
+        return group;
+    }
 
     /**
      * Sets student's group.
@@ -95,8 +97,8 @@ public class Student {
      * @param group student's group
      */
     public void setGroup(String group) {
-    this.group = group;
-}
+        this.group = group;
+    }
 
     /**
      * Gets student's group's id.
@@ -104,8 +106,8 @@ public class Student {
      * @return student's group's id
      */
     public int getGroupId() {
-    return groupId;
-}
+        return groupId;
+    }
 
     /**
      * Sets student's group's id.
@@ -113,9 +115,8 @@ public class Student {
      * @param groupId student's group's id
      */
     public void setGroupId(int groupId) {
-    this.groupId = groupId;
-}
-
+        this.groupId = groupId;
+    }
 
 
     /**
@@ -151,8 +152,8 @@ public class Student {
      * @param password student's password
      */
     public void setPassword(String password) {
-            this.password = password;
-        }
+        this.password = password;
+    }
 
     /**
      * Sets student's name.
@@ -190,34 +191,34 @@ public class Student {
         return name;
     }
 
-@Override
-public String toString() {
-    return "Student{" +
-            "id=" + id +
-            ", login='" + login + '\'' +
-            ", password='" + password + '\'' +
-            ", name='" + name + '\'' +
-            ", isStarosta=" + isStarosta +
-            ", group='" + group + '\'' +
-            ", groupId=" + groupId +
-            '}';
-}
+    @Override
+    public String toString() {
+        return "Student{" +
+                "id=" + id +
+                ", login='" + login + '\'' +
+                ", password='" + password + '\'' +
+                ", name='" + name + '\'' +
+                ", isStarosta=" + isStarosta +
+                ", group='" + group + '\'' +
+                ", groupId=" + groupId +
+                '}';
+    }
 
-@Override
-public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    
-    Student student = (Student) o;
-    
-    if (id != student.id) return false;
-    return login.equals(student.login);
-}
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-@Override
-public int hashCode() {
-    int result = id;
-    result = 31 * result + login.hashCode();
-    return result;
-}
+        Student student = (Student) o;
+
+        if (id != student.id) return false;
+        return login.equals(student.login);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + login.hashCode();
+        return result;
+    }
 }

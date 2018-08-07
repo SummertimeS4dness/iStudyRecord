@@ -14,8 +14,8 @@ public class Lecturer {
     private String degree;
     private String works;
     private String interests;
-    
-    
+
+
     private String cathedra;
     private int cathedraId;
 
@@ -25,8 +25,8 @@ public class Lecturer {
      * @return the cathedra
      */
     public String getCathedra() {
-    return cathedra;
-}
+        return cathedra;
+    }
 
     /**
      * Sets lecturer's cathedra.
@@ -34,8 +34,8 @@ public class Lecturer {
      * @param cathedra lecturer's cathedra
      */
     public void setCathedra(String cathedra) {
-    this.cathedra = cathedra;
-}
+        this.cathedra = cathedra;
+    }
 
     /**
      * Gets lecturer's cathedra's id.
@@ -43,8 +43,8 @@ public class Lecturer {
      * @return lecturer's cathedra's id
      */
     public int getCathedraId() {
-    return cathedraId;
-}
+        return cathedraId;
+    }
 
     /**
      * Sets lecturer's cathedra's id.
@@ -52,8 +52,8 @@ public class Lecturer {
      * @param cathedraId lecturer's cathedra's id
      */
     public void setCathedraId(int cathedraId) {
-    this.cathedraId = cathedraId;
-}
+        this.cathedraId = cathedraId;
+    }
 
 
     /**
@@ -264,38 +264,38 @@ public class Lecturer {
         return interests;
     }
 
-@Override
-public String toString() {
-    return "Lecturer{" +
-            "id=" + id +
-            ", login='" + login + '\'' +
-            ", password='" + password + '\'' +
-            ", name='" + name + '\'' +
-            ", info='" + info + '\'' +
-            ", degree='" + degree + '\'' +
-            ", works='" + works + '\'' +
-            ", interests='" + interests + '\'' +
-            ", cathedra='" + cathedra + '\'' +
-            ", cathedraId=" + cathedraId +
-            '}';
-}
+    @Override
+    public String toString() {
+        return "Lecturer{" +
+                "id=" + id +
+                ", login='" + login + '\'' +
+                ", password='" + password + '\'' +
+                ", name='" + name + '\'' +
+                ", info='" + info + '\'' +
+                ", degree='" + degree + '\'' +
+                ", works='" + works + '\'' +
+                ", interests='" + interests + '\'' +
+                ", cathedra='" + cathedra + '\'' +
+                ", cathedraId=" + cathedraId +
+                '}';
+    }
 
-@Override
-public boolean equals(Object a) {
-    Lecturer o=(Lecturer) a;
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    
-    Lecturer lecturer = (Lecturer) o;
-    
-    if (id != lecturer.id) return false;
-    return login.equals(lecturer.login);
-}
+    @Override
+    public boolean equals(Object a) {
+        Lecturer o = (Lecturer) a;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-@Override
-public int hashCode() {
-    int result = id;
-    result = 31 * result + login.hashCode();
-    return result;
-}
+        Lecturer lecturer = (Lecturer) o;
+
+        if (id != lecturer.id) return false;
+        return login.equals(lecturer.login);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + login.hashCode();
+        return result;
+    }
 }
