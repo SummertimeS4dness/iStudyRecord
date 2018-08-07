@@ -8,9 +8,19 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
 
+/**
+ * Global exception handler class.
+ */
 @ControllerAdvice
 public class GlobalExceptionHandler {
     private final static Logger logger = Logger.getLogger(GlobalExceptionHandler.class);
+
+    /**
+     * Handle exceptions.
+     *
+     * @param ex exception
+     * @throws Exception the exception
+     */
     @ExceptionHandler(Exception.class)
     public void handleIOException(Exception ex) throws Exception {
         Writer result = new StringWriter();
