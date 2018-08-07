@@ -2,7 +2,6 @@ package mvc.dao.daoimplementation;
 
 import mvc.beans.Login;
 import mvc.beans.Object;
-import mvc.beans.Student;
 import mvc.beans.Subject;
 import mvc.dao.daointerfaces.DAOObject;
 import org.springframework.jdbc.core.JdbcTemplate;
