@@ -11,7 +11,7 @@ begin
       "OBJECT_ID" Number NOT NULL ,
       "OBJECT_DESCRIPTOIN" NVARCHAR2 (60) NOT NULL ,
       "OBJECT_TYPE" NVARCHAR2 (60) NOT NULL ,
-      "PARENT_ID" number(90) REFERENCES OBJECTS (OBJECT_ID) on DELETE CASCADE,
+      "PARENT_ID" number(30) REFERENCES OBJECTS (OBJECT_ID) on DELETE CASCADE,
       "ADMIN_LOGIN" NVARCHAR2 (60) DEFAULT NULL,
       "ADMIN_PASSWORD" NVARCHAR2 (60) DEFAULT NULL,
       primary key ("OBJECT_ID")
@@ -72,7 +72,7 @@ begin
   THEN
     v_sql:='
       Create table "SUBJECTS" (
-        "SUBJECT_ID" NUMBER (60) NOT NULL ,
+        "SUBJECT_ID" NUMBER (30) NOT NULL ,
         "SUBJECT_SHORT_NAME" NVARCHAR2 (90) NOT NULL ,
         "SUBJECT_FULL_NAME" NVARCHAR2 (300) NOT NULL ,
         "SUBJECT_INFO" NVARCHAR2 (100) NOT NULL ,
@@ -98,7 +98,7 @@ begin
   THEN
     v_sql:='
         Create table "STUDENT_SUBJECT_LISTS" (
-          "SUBJECT_ID" NUMBER (60) NOT NULL ,
+          "SUBJECT_ID" NUMBER (30) NOT NULL ,
           "STUDENT_ID" Number NOT NULL ,
           "LECTURER_ID" Number,
           primary key ("SUBJECT_ID","STUDENT_ID","LECTURER_ID")
@@ -118,7 +118,7 @@ begin
           Create table "LESSONS" (
             "LESSON_ID" Number NOT NULL ,
             "LESSON_DATE" Date,
-            "SUBJECT_ID" NUMBER (60) NOT NULL ,
+            "SUBJECT_ID" NUMBER (30) NOT NULL ,
             "LECTURER_ID" Number,
             primary key ("LESSON_ID","SUBJECT_ID","LECTURER_ID")
           )';
@@ -162,6 +162,4 @@ begin
     execute immediate v_sql;
   END IF;
 end;
-
-
-
+​
