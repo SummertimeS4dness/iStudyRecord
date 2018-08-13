@@ -17,7 +17,12 @@ begin
       primary key ("OBJECT_ID")
     )';
     execute immediate v_sql;
-    v_sql:='CREATE SEQUENCE object_sequence START WITH 100';
+  END IF;
+
+  SELECT count(*) into nCount FROM USER_SEQUENCES WHERE SEQUENCE_NAME='OBJECT_SEQUENCE';
+  IF(nCount <= 0)
+  THEN
+    v_sql:='CREATE SEQUENCE OBJECT_SEQUENCE START WITH 100';
     execute immediate v_sql;
   END IF;
 
@@ -75,12 +80,18 @@ begin
         primary key ("SUBJECT_ID","LECTURER_ID")
       )';
     execute immediate v_sql;
-    v_sql:='CREATE SEQUENCE subject_sequence START WITH 100';
-    execute immediate v_sql;
     v_sql:='Alter table "SUBJECTS" add  foreign key ("LECTURER_ID") references "LECTURERS" ("LECTURER_ID")';
     execute immediate v_sql;
   END IF;
 
+
+
+  SELECT count(*) into nCount FROM USER_SEQUENCES WHERE SEQUENCE_NAME = 'SUBJECT_SEQUENCE';
+  IF(nCount <= 0)
+  THEN
+    v_sql:='CREATE SEQUENCE SUBJECT_SEQUENCE START WITH 100';
+    execute immediate v_sql;
+  END IF;
 
   SELECT count(*) into nCount FROM user_tables where table_name =  'STUDENT_SUBJECT_LISTS';
   IF(nCount <= 0)
@@ -112,13 +123,17 @@ begin
             primary key ("LESSON_ID","SUBJECT_ID","LECTURER_ID")
           )';
     execute immediate v_sql;
-    v_sql:='CREATE SEQUENCE lesson_sequence START WITH 100';
-    execute immediate v_sql;
     v_sql:='Alter table "LESSONS" add  foreign key ("SUBJECT_ID","LECTURER_ID") references "SUBJECTS" ("SUBJECT_ID","LECTURER_ID")';
     execute immediate v_sql;
 
   END IF;
 
+  SELECT count(*) into nCount FROM USER_SEQUENCES WHERE SEQUENCE_NAME =  'LESSON_SEQUENCE';
+  IF(nCount <= 0)
+  THEN
+    v_sql:='CREATE SEQUENCE LESSON_SEQUENCE START WITH 100';
+    execute immediate v_sql;
+  END IF;
 
   SELECT count(*) into nCount FROM user_tables where table_name =  'MARKS';
   IF(nCount <= 0)
@@ -134,11 +149,16 @@ begin
               primary key ("MARK_ID","LESSON_ID","SUBJECT_ID","STUDENT_ID","LECTURER_ID")
             )';
     execute immediate v_sql;
-    v_sql:='CREATE SEQUENCE mark_sequence START WITH 100';
-    execute immediate v_sql;
     v_sql:='Alter table "MARKS" add  foreign key ("LESSON_ID","SUBJECT_ID","LECTURER_ID") references "LESSONS" ("LESSON_ID","SUBJECT_ID","LECTURER_ID")';
     execute immediate v_sql;
     v_sql:='Alter table "MARKS" add  foreign key ("STUDENT_ID") references "STUDENT_INFO" ("STUDENT_ID") on DELETE CASCADE';
+    execute immediate v_sql;
+  END IF;
+
+  SELECT count(*) into nCount FROM USER_SEQUENCES WHERE SEQUENCE_NAME =  'MARK_SEQUENCE';
+  IF(nCount <= 0)
+  THEN
+    v_sql:='CREATE SEQUENCE MARK_SEQUENCE START WITH 100';
     execute immediate v_sql;
   END IF;
 end;
