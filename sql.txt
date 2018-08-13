@@ -9,11 +9,11 @@ begin
     v_sql:='
     Create table "OBJECTS" (
       "OBJECT_ID" Number NOT NULL ,
-      "OBJECT_DESCRIPTOIN" Varchar2 (20) NOT NULL ,
-      "OBJECT_TYPE" Varchar2 (20) NOT NULL ,
-      "PARENT_ID" number(30) REFERENCES OBJECTS (OBJECT_ID) on DELETE CASCADE,
-      "ADMIN_LOGIN" Varchar2 (20) DEFAULT NULL,
-      "ADMIN_PASSWORD" Varchar2 (20) DEFAULT NULL,
+      "OBJECT_DESCRIPTOIN" NVARCHAR2 (60) NOT NULL ,
+      "OBJECT_TYPE" NVARCHAR2 (60) NOT NULL ,
+      "PARENT_ID" number(90) REFERENCES OBJECTS (OBJECT_ID) on DELETE CASCADE,
+      "ADMIN_LOGIN" NVARCHAR2 (60) DEFAULT NULL,
+      "ADMIN_PASSWORD" NVARCHAR2 (60) DEFAULT NULL,
       primary key ("OBJECT_ID")
     )';
     execute immediate v_sql;
@@ -33,9 +33,9 @@ begin
     v_sql:='
     Create table "STUDENT_INFO" (
       "STUDENT_ID" Number NOT NULL ,
-      "STUDENT_NAME" Varchar2 (20) NOT NULL ,
-      "STUDENT_LOGIN" Varchar2 (20) NOT NULL ,
-      "STUDENT_PASSWORD" Varchar2 (20) NOT NULL ,
+      "STUDENT_NAME" NVARCHAR2 (60) NOT NULL ,
+      "STUDENT_LOGIN" NVARCHAR2 (60) NOT NULL ,
+      "STUDENT_PASSWORD" NVARCHAR2 (60) NOT NULL ,
       "IS_STAROSTA" NUMBER DEFAULT 0 ,
       primary key ("STUDENT_ID")
     ) ';
@@ -52,13 +52,13 @@ begin
     v_sql:='
     Create table "LECTURERS" (
       "LECTURER_ID" Number NOT NULL ,
-      "LECTURER_LOGIN" Varchar2 (20) NOT NULL ,
-      "LECTURER_PASSWORD" Varchar2 (20) NOT NULL ,
-      "LECTURER_NAME" Varchar2 (20) NOT NULL ,
-      "LECTURER_INFO" Varchar2 (20),
-      "LECTURER_DEGREE" Varchar2 (20),
-      "LECTURER_WORKS" Varchar2 (20),
-      "LECTURER_INTERESTS" Varchar2 (20),
+      "LECTURER_LOGIN" NVARCHAR2 (60) NOT NULL ,
+      "LECTURER_PASSWORD" NVARCHAR2 (60) NOT NULL ,
+      "LECTURER_NAME" NVARCHAR2 (60) NOT NULL ,
+      "LECTURER_INFO" NVARCHAR2 (60),
+      "LECTURER_DEGREE" NVARCHAR2 (60),
+      "LECTURER_WORKS" NVARCHAR2 (60),
+      "LECTURER_INTERESTS" NVARCHAR2 (60),
       primary key ("LECTURER_ID")
     )';
     execute immediate v_sql;
@@ -72,10 +72,10 @@ begin
   THEN
     v_sql:='
       Create table "SUBJECTS" (
-        "SUBJECT_ID" NUMBER (20) NOT NULL ,
-        "SUBJECT_SHORT_NAME" Varchar2 (30) NOT NULL ,
-        "SUBJECT_FULL_NAME" Varchar2 (100) NOT NULL ,
-        "SUBJECT_INFO" Varchar2 (100) NOT NULL ,
+        "SUBJECT_ID" NUMBER (60) NOT NULL ,
+        "SUBJECT_SHORT_NAME" NVARCHAR2 (90) NOT NULL ,
+        "SUBJECT_FULL_NAME" NVARCHAR2 (300) NOT NULL ,
+        "SUBJECT_INFO" NVARCHAR2 (100) NOT NULL ,
         "LECTURER_ID" Number,
         primary key ("SUBJECT_ID","LECTURER_ID")
       )';
@@ -98,7 +98,7 @@ begin
   THEN
     v_sql:='
         Create table "STUDENT_SUBJECT_LISTS" (
-          "SUBJECT_ID" NUMBER (20) NOT NULL ,
+          "SUBJECT_ID" NUMBER (60) NOT NULL ,
           "STUDENT_ID" Number NOT NULL ,
           "LECTURER_ID" Number,
           primary key ("SUBJECT_ID","STUDENT_ID","LECTURER_ID")
@@ -118,7 +118,7 @@ begin
           Create table "LESSONS" (
             "LESSON_ID" Number NOT NULL ,
             "LESSON_DATE" Date,
-            "SUBJECT_ID" NUMBER (20) NOT NULL ,
+            "SUBJECT_ID" NUMBER (60) NOT NULL ,
             "LECTURER_ID" Number,
             primary key ("LESSON_ID","SUBJECT_ID","LECTURER_ID")
           )';
@@ -142,7 +142,7 @@ begin
             Create table "MARKS" (
               "MARK_ID" NUMBER (20) NOT NULL ,
               "LESSON_ID" Number NOT NULL ,
-              "SCORE" Varchar2 (20),
+              "SCORE" NVARCHAR2 (60),
               "SUBJECT_ID" number (20) NOT NULL ,
               "STUDENT_ID" Number NOT NULL ,
               "LECTURER_ID" Number,
