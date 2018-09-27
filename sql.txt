@@ -1,0 +1,165 @@
+declare
+  nCount NUMBER;
+  v_sql LONG;
+
+begin
+  SELECT count(*) into nCount FROM user_tables where table_name =  'OBJECTS';
+  IF(nCount <= 0)
+  THEN
+    v_sql:='
+    Create table "OBJECTS" (
+      "OBJECT_ID" Number NOT NULL ,
+      "OBJECT_DESCRIPTOIN" NVARCHAR2 (60) NOT NULL ,
+      "OBJECT_TYPE" NVARCHAR2 (60) NOT NULL ,
+      "PARENT_ID" number(30) REFERENCES OBJECTS (OBJECT_ID) on DELETE CASCADE,
+      "ADMIN_LOGIN" NVARCHAR2 (60) DEFAULT NULL,
+      "ADMIN_PASSWORD" NVARCHAR2 (60) DEFAULT NULL,
+      primary key ("OBJECT_ID")
+    )';
+    execute immediate v_sql;
+  END IF;
+
+  SELECT count(*) into nCount FROM USER_SEQUENCES WHERE SEQUENCE_NAME='OBJECT_SEQUENCE';
+  IF(nCount <= 0)
+  THEN
+    v_sql:='CREATE SEQUENCE OBJECT_SEQUENCE START WITH 100';
+    execute immediate v_sql;
+  END IF;
+
+
+  SELECT count(*) into nCount FROM user_tables where table_name =  'STUDENT_INFO';
+  IF(nCount <= 0)
+  THEN
+    v_sql:='
+    Create table "STUDENT_INFO" (
+      "STUDENT_ID" Number NOT NULL ,
+      "STUDENT_NAME" NVARCHAR2 (60) NOT NULL ,
+      "STUDENT_LOGIN" NVARCHAR2 (60) NOT NULL ,
+      "STUDENT_PASSWORD" NVARCHAR2 (60) NOT NULL ,
+      "IS_STAROSTA" NUMBER DEFAULT 0 ,
+      primary key ("STUDENT_ID")
+    ) ';
+    execute immediate v_sql;
+    v_sql:='Alter table "STUDENT_INFO" add  foreign key ("STUDENT_ID") references "OBJECTS" ("OBJECT_ID") ON DELETE CASCADE  ';
+    execute immediate v_sql;
+
+  END IF;
+
+
+  SELECT count(*) into nCount FROM user_tables where table_name =  'LECTURERS';
+  IF(nCount <= 0)
+  THEN
+    v_sql:='
+    Create table "LECTURERS" (
+      "LECTURER_ID" Number NOT NULL ,
+      "LECTURER_LOGIN" NVARCHAR2 (60) NOT NULL ,
+      "LECTURER_PASSWORD" NVARCHAR2 (60) NOT NULL ,
+      "LECTURER_NAME" NVARCHAR2 (60) NOT NULL ,
+      "LECTURER_INFO" NVARCHAR2 (60),
+      "LECTURER_DEGREE" NVARCHAR2 (60),
+      "LECTURER_WORKS" NVARCHAR2 (60),
+      "LECTURER_INTERESTS" NVARCHAR2 (60),
+      primary key ("LECTURER_ID")
+    )';
+    execute immediate v_sql;
+    v_sql:='Alter table "LECTURERS" add  foreign key ("LECTURER_ID") references "OBJECTS" ("OBJECT_ID") ON DELETE CASCADE';
+    execute immediate v_sql;
+  END IF;
+
+
+  SELECT count(*) into nCount FROM user_tables where table_name = 'SUBJECTS';
+  IF(nCount <= 0)
+  THEN
+    v_sql:='
+      Create table "SUBJECTS" (
+        "SUBJECT_ID" NUMBER (30) NOT NULL ,
+        "SUBJECT_SHORT_NAME" NVARCHAR2 (90) NOT NULL ,
+        "SUBJECT_FULL_NAME" NVARCHAR2 (300) NOT NULL ,
+        "SUBJECT_INFO" NVARCHAR2 (100) NOT NULL ,
+        "LECTURER_ID" Number,
+        primary key ("SUBJECT_ID","LECTURER_ID")
+      )';
+    execute immediate v_sql;
+    v_sql:='Alter table "SUBJECTS" add  foreign key ("LECTURER_ID") references "LECTURERS" ("LECTURER_ID")';
+    execute immediate v_sql;
+  END IF;
+
+
+
+  SELECT count(*) into nCount FROM USER_SEQUENCES WHERE SEQUENCE_NAME = 'SUBJECT_SEQUENCE';
+  IF(nCount <= 0)
+  THEN
+    v_sql:='CREATE SEQUENCE SUBJECT_SEQUENCE START WITH 100';
+    execute immediate v_sql;
+  END IF;
+
+  SELECT count(*) into nCount FROM user_tables where table_name =  'STUDENT_SUBJECT_LISTS';
+  IF(nCount <= 0)
+  THEN
+    v_sql:='
+        Create table "STUDENT_SUBJECT_LISTS" (
+          "SUBJECT_ID" NUMBER (30) NOT NULL ,
+          "STUDENT_ID" Number NOT NULL ,
+          "LECTURER_ID" Number,
+          primary key ("SUBJECT_ID","STUDENT_ID","LECTURER_ID")
+        )';
+    execute immediate v_sql;
+    v_sql:='Alter table "STUDENT_SUBJECT_LISTS" add  foreign key ("SUBJECT_ID","LECTURER_ID") references "SUBJECTS" ("SUBJECT_ID","LECTURER_ID") ON DELETE CASCADE';
+    execute immediate v_sql;
+    v_sql:='Alter table "STUDENT_SUBJECT_LISTS" add  foreign key ("STUDENT_ID") references "STUDENT_INFO" ("STUDENT_ID") ON DELETE CASCADE';
+    execute immediate v_sql;
+  END IF;
+
+
+  SELECT count(*) into nCount FROM user_tables where table_name =  'LESSONS';
+  IF(nCount <= 0)
+  THEN
+    v_sql:='
+          Create table "LESSONS" (
+            "LESSON_ID" Number NOT NULL ,
+            "LESSON_DATE" Date,
+            "SUBJECT_ID" NUMBER (30) NOT NULL ,
+            "LECTURER_ID" Number,
+            primary key ("LESSON_ID","SUBJECT_ID","LECTURER_ID")
+          )';
+    execute immediate v_sql;
+    v_sql:='Alter table "LESSONS" add  foreign key ("SUBJECT_ID","LECTURER_ID") references "SUBJECTS" ("SUBJECT_ID","LECTURER_ID")';
+    execute immediate v_sql;
+
+  END IF;
+
+  SELECT count(*) into nCount FROM USER_SEQUENCES WHERE SEQUENCE_NAME =  'LESSON_SEQUENCE';
+  IF(nCount <= 0)
+  THEN
+    v_sql:='CREATE SEQUENCE LESSON_SEQUENCE START WITH 100';
+    execute immediate v_sql;
+  END IF;
+
+  SELECT count(*) into nCount FROM user_tables where table_name =  'MARKS';
+  IF(nCount <= 0)
+  THEN
+    v_sql:='
+            Create table "MARKS" (
+              "MARK_ID" NUMBER (20) NOT NULL ,
+              "LESSON_ID" Number NOT NULL ,
+              "SCORE" NVARCHAR2 (60),
+              "SUBJECT_ID" number (20) NOT NULL ,
+              "STUDENT_ID" Number NOT NULL ,
+              "LECTURER_ID" Number,
+              primary key ("MARK_ID","LESSON_ID","SUBJECT_ID","STUDENT_ID","LECTURER_ID")
+            )';
+    execute immediate v_sql;
+    v_sql:='Alter table "MARKS" add  foreign key ("LESSON_ID","SUBJECT_ID","LECTURER_ID") references "LESSONS" ("LESSON_ID","SUBJECT_ID","LECTURER_ID")';
+    execute immediate v_sql;
+    v_sql:='Alter table "MARKS" add  foreign key ("STUDENT_ID") references "STUDENT_INFO" ("STUDENT_ID") on DELETE CASCADE';
+    execute immediate v_sql;
+  END IF;
+
+  SELECT count(*) into nCount FROM USER_SEQUENCES WHERE SEQUENCE_NAME =  'MARK_SEQUENCE';
+  IF(nCount <= 0)
+  THEN
+    v_sql:='CREATE SEQUENCE MARK_SEQUENCE START WITH 100';
+    execute immediate v_sql;
+  END IF;
+end;
+/
